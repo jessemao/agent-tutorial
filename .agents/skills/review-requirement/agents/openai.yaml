@@ -1,0 +1,4 @@
+interface:
+  display_name: "需求审核"
+  short_description: "在编码前审核需求歧义、验收条件、责任边界以及完成证据"
+  default_prompt: "Use $review-requirement to audit this request before coding."

@@ -1,0 +1,9 @@
+target/
+*.log
+.idea/
+.vscode/
+.DS_Store
+.ppt-build/
+.worktrees/
+output/*
+!output/AI_Coding_V0.7_两天课程_Agent优先版.pptx

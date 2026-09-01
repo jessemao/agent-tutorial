@@ -1,0 +1,327 @@
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO] 
+[INFO] training-wms                                                       [pom]
+[INFO] platform-contracts                                                 [jar]
+[INFO] platform-web-starter                                               [jar]
+[INFO] business-wms                                                       [jar]
+[INFO] training-server                                                    [jar]
+[INFO] 
+[INFO] -------------------< com.acme.training:training-wms >-------------------
+[INFO] Building training-wms 0.1.0-SNAPSHOT                               [1/5]
+[INFO]   from pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ training-wms ---
+[INFO] 
+[INFO] ----------------< com.acme.training:platform-contracts >----------------
+[INFO] Building platform-contracts 0.1.0-SNAPSHOT                         [2/5]
+[INFO]   from platform-contracts/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ platform-contracts ---
+[INFO] Deleting /workspace/platform-contracts/target
+[INFO] 
+[INFO] --- resources:3.2.0:resources (default-resources) @ platform-contracts ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Using 'UTF-8' encoding to copy filtered properties files.
+[INFO] skip non existing resourceDirectory /workspace/platform-contracts/src/main/resources
+[INFO] skip non existing resourceDirectory /workspace/platform-contracts/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.10.1:compile (default-compile) @ platform-contracts ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 7 source files to /workspace/platform-contracts/target/classes
+[INFO] 
+[INFO] --- resources:3.2.0:testResources (default-testResources) @ platform-contracts ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Using 'UTF-8' encoding to copy filtered properties files.
+[INFO] skip non existing resourceDirectory /workspace/platform-contracts/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.10.1:testCompile (default-testCompile) @ platform-contracts ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- surefire:2.22.2:test (default-test) @ platform-contracts ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] --- jar:3.2.2:jar (default-jar) @ platform-contracts ---
+[INFO] Building jar: /workspace/platform-contracts/target/platform-contracts-0.1.0-SNAPSHOT.jar
+[INFO] 
+[INFO] ---------------< com.acme.training:platform-web-starter >---------------
+[INFO] Building platform-web-starter 0.1.0-SNAPSHOT                       [3/5]
+[INFO]   from platform-web-starter/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ platform-web-starter ---
+[INFO] Deleting /workspace/platform-web-starter/target
+[INFO] 
+[INFO] --- resources:3.2.0:resources (default-resources) @ platform-web-starter ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Using 'UTF-8' encoding to copy filtered properties files.
+[INFO] skip non existing resourceDirectory /workspace/platform-web-starter/src/main/resources
+[INFO] skip non existing resourceDirectory /workspace/platform-web-starter/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.10.1:compile (default-compile) @ platform-web-starter ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 5 source files to /workspace/platform-web-starter/target/classes
+[INFO] 
+[INFO] --- resources:3.2.0:testResources (default-testResources) @ platform-web-starter ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Using 'UTF-8' encoding to copy filtered properties files.
+[INFO] skip non existing resourceDirectory /workspace/platform-web-starter/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.10.1:testCompile (default-testCompile) @ platform-web-starter ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 2 source files to /workspace/platform-web-starter/target/test-classes
+[INFO] 
+[INFO] --- surefire:2.22.2:test (default-test) @ platform-web-starter ---
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running com.acme.training.platform.reuse.DefaultIdempotencyGuardTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.231 s - in com.acme.training.platform.reuse.DefaultIdempotencyGuardTest
+[INFO] Running com.acme.training.platform.reuse.DefaultAuditRecorderTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 s - in com.acme.training.platform.reuse.DefaultAuditRecorderTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- jar:3.2.2:jar (default-jar) @ platform-web-starter ---
+[INFO] Building jar: /workspace/platform-web-starter/target/platform-web-starter-0.1.0-SNAPSHOT.jar
+[INFO] 
+[INFO] -------------------< com.acme.training:business-wms >-------------------
+[INFO] Building business-wms 0.1.0-SNAPSHOT                               [4/5]
+[INFO]   from business-wms/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ business-wms ---
+[INFO] Deleting /workspace/business-wms/target
+[INFO] 
+[INFO] --- resources:3.2.0:resources (default-resources) @ business-wms ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Using 'UTF-8' encoding to copy filtered properties files.
+[INFO] skip non existing resourceDirectory /workspace/business-wms/src/main/resources
+[INFO] skip non existing resourceDirectory /workspace/business-wms/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.10.1:compile (default-compile) @ business-wms ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 41 source files to /workspace/business-wms/target/classes
+[INFO] 
+[INFO] --- resources:3.2.0:testResources (default-testResources) @ business-wms ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Using 'UTF-8' encoding to copy filtered properties files.
+[INFO] skip non existing resourceDirectory /workspace/business-wms/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.10.1:testCompile (default-testCompile) @ business-wms ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- surefire:2.22.2:test (default-test) @ business-wms ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] --- jar:3.2.2:jar (default-jar) @ business-wms ---
+[INFO] Building jar: /workspace/business-wms/target/business-wms-0.1.0-SNAPSHOT.jar
+[INFO] 
+[INFO] -----------------< com.acme.training:training-server >------------------
+[INFO] Building training-server 0.1.0-SNAPSHOT                            [5/5]
+[INFO]   from training-server/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ training-server ---
+[INFO] Deleting /workspace/training-server/target
+[INFO] 
+[INFO] --- resources:3.2.0:resources (default-resources) @ training-server ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Using 'UTF-8' encoding to copy filtered properties files.
+[INFO] Copying 1 resource
+[INFO] Copying 0 resource
+[INFO] 
+[INFO] --- compiler:3.10.1:compile (default-compile) @ training-server ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 3 source files to /workspace/training-server/target/classes
+[INFO] 
+[INFO] --- resources:3.2.0:testResources (default-testResources) @ training-server ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Using 'UTF-8' encoding to copy filtered properties files.
+[INFO] Copying 1 resource
+[INFO] 
+[INFO] --- compiler:3.10.1:testCompile (default-testCompile) @ training-server ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 4 source files to /workspace/training-server/target/test-classes
+[INFO] 
+[INFO] --- surefire:2.22.2:test (default-test) @ training-server ---
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running com.acme.training.InventoryRegressionTest
+14:37:38.722 [main] DEBUG org.springframework.test.context.BootstrapUtils - Instantiating CacheAwareContextLoaderDelegate from class [org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate]
+14:37:38.736 [main] DEBUG org.springframework.test.context.BootstrapUtils - Instantiating BootstrapContext using constructor [public org.springframework.test.context.support.DefaultBootstrapContext(java.lang.Class,org.springframework.test.context.CacheAwareContextLoaderDelegate)]
+14:37:38.805 [main] DEBUG org.springframework.test.context.BootstrapUtils - Instantiating TestContextBootstrapper for test class [com.acme.training.InventoryRegressionTest] from class [org.springframework.boot.test.context.SpringBootTestContextBootstrapper]
+14:37:38.893 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper - Neither @ContextConfiguration nor @ContextHierarchy found for test class [com.acme.training.InventoryRegressionTest], using SpringBootContextLoader
+14:37:38.900 [main] DEBUG org.springframework.test.context.support.AbstractContextLoader - Did not detect default resource location for test class [com.acme.training.InventoryRegressionTest]: class path resource [com/acme/training/InventoryRegressionTest-context.xml] does not exist
+14:37:38.906 [main] DEBUG org.springframework.test.context.support.AbstractContextLoader - Did not detect default resource location for test class [com.acme.training.InventoryRegressionTest]: class path resource [com/acme/training/InventoryRegressionTestContext.groovy] does not exist
+14:37:38.907 [main] INFO org.springframework.test.context.support.AbstractContextLoader - Could not detect default resource locations for test class [com.acme.training.InventoryRegressionTest]: no resource found for suffixes {-context.xml, Context.groovy}.
+14:37:38.908 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.acme.training.InventoryRegressionTest]: InventoryRegressionTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+14:37:39.050 [main] DEBUG org.springframework.test.context.support.ActiveProfilesUtils - Could not find an 'annotation declaring class' for annotation type [org.springframework.test.context.ActiveProfiles] and class [com.acme.training.InventoryRegressionTest]
+14:37:39.188 [main] DEBUG org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider - Identified candidate component class: file [/workspace/training-server/target/classes/com/acme/training/TrainingWmsApplication.class]
+14:37:39.192 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.acme.training.TrainingWmsApplication for test class com.acme.training.InventoryRegressionTest
+14:37:39.326 [main] DEBUG org.springframework.boot.test.context.SpringBootTestContextBootstrapper - @TestExecutionListeners is not present for class [com.acme.training.InventoryRegressionTest]: using defaults.
+14:37:39.327 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper - Loaded default TestExecutionListener class names from location [META-INF/spring.factories]: [org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener, org.springframework.boot.test.mock.mockito.ResetMocksTestExecutionListener, org.springframework.boot.test.autoconfigure.restdocs.RestDocsTestExecutionListener, org.springframework.boot.test.autoconfigure.web.client.MockRestServiceServerResetTestExecutionListener, org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrintOnlyOnFailureTestExecutionListener, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverTestExecutionListener, org.springframework.boot.test.autoconfigure.webservices.client.MockWebServiceServerTestExecutionListener, org.springframework.test.context.web.ServletTestExecutionListener, org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener, org.springframework.test.context.event.ApplicationEventsTestExecutionListener, org.springframework.test.context.support.DependencyInjectionTestExecutionListener, org.springframework.test.context.support.DirtiesContextTestExecutionListener, org.springframework.test.context.transaction.TransactionalTestExecutionListener, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener, org.springframework.test.context.event.EventPublishingTestExecutionListener]
+14:37:39.353 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper - Using TestExecutionListeners: [org.springframework.test.context.web.ServletTestExecutionListener@1984b1f, org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener@3bd323e9, org.springframework.test.context.event.ApplicationEventsTestExecutionListener@39ac0c0a, org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener@c7ba306, org.springframework.boot.test.autoconfigure.SpringBootDependencyInjectionTestExecutionListener@4ff8d125, org.springframework.test.context.support.DirtiesContextTestExecutionListener@6d167f58, org.springframework.test.context.transaction.TransactionalTestExecutionListener@3403e2ac, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener@65b104b9, org.springframework.test.context.event.EventPublishingTestExecutionListener@6c4980d3, org.springframework.boot.test.mock.mockito.ResetMocksTestExecutionListener@327bcebd, org.springframework.boot.test.autoconfigure.restdocs.RestDocsTestExecutionListener@19c65cdc, org.springframework.boot.test.autoconfigure.web.client.MockRestServiceServerResetTestExecutionListener@74bf1791, org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrintOnlyOnFailureTestExecutionListener@54504ecd, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverTestExecutionListener@38b27cdc, org.springframework.boot.test.autoconfigure.webservices.client.MockWebServiceServerTestExecutionListener@1339e7aa]
+14:37:39.359 [main] DEBUG org.springframework.test.context.support.AbstractDirtiesContextTestExecutionListener - Before test class: context [DefaultTestContext@62010f5c testClass = InventoryRegressionTest, testInstance = [null], testMethod = [null], testException = [null], mergedContextConfiguration = [WebMergedContextConfiguration@51fadaff testClass = InventoryRegressionTest, locations = '{}', classes = '{class com.acme.training.TrainingWmsApplication}', contextInitializerClasses = '[]', activeProfiles = '{}', propertySourceLocations = '{}', propertySourceProperties = '{org.springframework.boot.test.context.SpringBootTestContextBootstrapper=true}', contextCustomizers = set[[ImportsContextCustomizer@401f7633 key = [org.springframework.boot.test.autoconfigure.web.servlet.MockMvcWebDriverAutoConfiguration, org.springframework.boot.test.autoconfigure.web.servlet.MockMvcAutoConfiguration, org.springframework.boot.autoconfigure.security.oauth2.client.servlet.OAuth2ClientAutoConfiguration, org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration, org.springframework.boot.autoconfigure.security.servlet.SecurityFilterAutoConfiguration, org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration, org.springframework.boot.autoconfigure.security.oauth2.resource.servlet.OAuth2ResourceServerAutoConfiguration, org.springframework.boot.test.autoconfigure.web.servlet.MockMvcSecurityConfiguration, org.springframework.boot.test.autoconfigure.web.servlet.MockMvcWebClientAutoConfiguration, org.springframework.boot.test.autoconfigure.web.reactive.WebTestClientAutoConfiguration]], org.springframework.boot.test.context.filter.ExcludeFilterContextCustomizer@1a18644, org.springframework.boot.test.json.DuplicateJsonObjectContextCustomizerFactory$DuplicateJsonObjectContextCustomizer@4738a206, org.springframework.boot.test.mock.mockito.MockitoContextCustomizer@0, org.springframework.boot.test.web.client.TestRestTemplateContextCustomizer@2ed2d9cb, org.springframework.boot.test.autoconfigure.actuate.metrics.MetricsExportContextCustomizerFactory$DisableMetricExportContextCustomizer@7c711375, org.springframework.boot.test.autoconfigure.properties.PropertyMappingContextCustomizer@4b3fa0b3, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverContextCustomizerFactory$Customizer@21282ed8, org.springframework.boot.test.context.SpringBootTestArgs@1, org.springframework.boot.test.context.SpringBootTestWebEnvironment@4b4523f8], resourceBasePath = 'src/main/webapp', contextLoader = 'org.springframework.boot.test.context.SpringBootContextLoader', parent = [null]], attributes = map['org.springframework.test.context.web.ServletTestExecutionListener.activateListener' -> true]], class annotated with @DirtiesContext [false] with mode [null].
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::               (v2.7.18)
+
+2026-08-31 14:37:40.116  INFO 151 --- [           main] c.acme.training.InventoryRegressionTest  : Starting InventoryRegressionTest using Java 17.0.15 on 9e114752d44d with PID 151 (started by root in /workspace/training-server)
+2026-08-31 14:37:40.119  INFO 151 --- [           main] c.acme.training.InventoryRegressionTest  : The following 1 profile is active: "mysql-verification"
+2026-08-31 14:37:42.803  INFO 151 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-08-31 14:37:42.978  INFO 151 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 165 ms. Found 7 JPA repository interfaces.
+2026-08-31 14:37:45.054  INFO 151 --- [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-08-31 14:37:45.120  INFO 151 --- [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.15.Final
+2026-08-31 14:37:45.333  INFO 151 --- [           main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2026-08-31 14:37:45.589  INFO 151 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-08-31 14:37:45.908  INFO 151 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-08-31 14:37:45.952  INFO 151 --- [           main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2026-08-31 14:37:47.230  INFO 151 --- [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2026-08-31 14:37:47.244  INFO 151 --- [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-08-31 14:37:52.046  INFO 151 --- [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-08-31 14:37:52.047  INFO 151 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-08-31 14:37:52.066  INFO 151 --- [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 2 endpoint(s) beneath base path '/actuator'
+2026-08-31 14:37:52.118  INFO 151 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 71 ms
+2026-08-31 14:37:52.237  INFO 151 --- [           main] c.acme.training.InventoryRegressionTest  : Started InventoryRegressionTest in 12.812 seconds (JVM running for 15.634)
+2026-08-31 14:37:53.881  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=RECEIVE type=INVENTORY id=RC-804
+2026-08-31 14:37:54.111  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=TRANSFER type=INVENTORY id=TR-804
+2026-08-31 14:37:54.189  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=RECEIVE type=INVENTORY id=RC-804
+2026-08-31 14:37:54.258  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=RECEIVE type=INVENTORY id=RC-804
+2026-08-31 14:37:54.407  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=RECEIVE type=INVENTORY id=RC-801
+2026-08-31 14:37:54.480  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=RECEIVE type=INVENTORY id=RC-802
+2026-08-31 14:37:54.508  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=RECEIVE type=INVENTORY id=RC-802
+2026-08-31 14:37:54.576  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=RECEIVE type=INVENTORY id=RC-805
+2026-08-31 14:37:54.631  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=CREATE type=SHIPMENT id=SO-805
+2026-08-31 14:37:54.692  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=RESERVE type=INVENTORY id=SO-805
+2026-08-31 14:37:54.693  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=RESERVE type=SHIPMENT id=SO-805
+2026-08-31 14:37:54.741  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=RECEIVE type=INVENTORY id=RC-803
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 16.209 s - in com.acme.training.InventoryRegressionTest
+[INFO] Running com.acme.training.WmsFlowIntegrationTest
+2026-08-31 14:37:54.782  INFO 151 --- [           main] .b.t.c.SpringBootTestContextBootstrapper : Neither @ContextConfiguration nor @ContextHierarchy found for test class [com.acme.training.WmsFlowIntegrationTest], using SpringBootContextLoader
+2026-08-31 14:37:54.785  INFO 151 --- [           main] o.s.t.c.support.AbstractContextLoader    : Could not detect default resource locations for test class [com.acme.training.WmsFlowIntegrationTest]: no resource found for suffixes {-context.xml, Context.groovy}.
+2026-08-31 14:37:54.785  INFO 151 --- [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.acme.training.WmsFlowIntegrationTest]: WmsFlowIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-08-31 14:37:54.806  INFO 151 --- [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.acme.training.TrainingWmsApplication for test class com.acme.training.WmsFlowIntegrationTest
+2026-08-31 14:37:54.815  INFO 151 --- [           main] .b.t.c.SpringBootTestContextBootstrapper : Loaded default TestExecutionListener class names from location [META-INF/spring.factories]: [org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener, org.springframework.boot.test.mock.mockito.ResetMocksTestExecutionListener, org.springframework.boot.test.autoconfigure.restdocs.RestDocsTestExecutionListener, org.springframework.boot.test.autoconfigure.web.client.MockRestServiceServerResetTestExecutionListener, org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrintOnlyOnFailureTestExecutionListener, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverTestExecutionListener, org.springframework.boot.test.autoconfigure.webservices.client.MockWebServiceServerTestExecutionListener, org.springframework.test.context.web.ServletTestExecutionListener, org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener, org.springframework.test.context.event.ApplicationEventsTestExecutionListener, org.springframework.test.context.support.DependencyInjectionTestExecutionListener, org.springframework.test.context.support.DirtiesContextTestExecutionListener, org.springframework.test.context.transaction.TransactionalTestExecutionListener, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener, org.springframework.test.context.event.EventPublishingTestExecutionListener]
+2026-08-31 14:37:54.816  INFO 151 --- [           main] .b.t.c.SpringBootTestContextBootstrapper : Using TestExecutionListeners: [org.springframework.test.context.web.ServletTestExecutionListener@a8ef0c2, org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener@46c5747f, org.springframework.test.context.event.ApplicationEventsTestExecutionListener@6eaa8abf, org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener@4fe91eed, org.springframework.boot.test.autoconfigure.SpringBootDependencyInjectionTestExecutionListener@329cef32, org.springframework.test.context.support.DirtiesContextTestExecutionListener@5f171392, org.springframework.test.context.transaction.TransactionalTestExecutionListener@655295bd, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener@62cbe18c, org.springframework.test.context.event.EventPublishingTestExecutionListener@377b7798, org.springframework.boot.test.mock.mockito.ResetMocksTestExecutionListener@50177966, org.springframework.boot.test.autoconfigure.restdocs.RestDocsTestExecutionListener@2199e1a4, org.springframework.boot.test.autoconfigure.web.client.MockRestServiceServerResetTestExecutionListener@1c63b39a, org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrintOnlyOnFailureTestExecutionListener@7048d039, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverTestExecutionListener@1bff4b1f, org.springframework.boot.test.autoconfigure.webservices.client.MockWebServiceServerTestExecutionListener@75051d05]
+2026-08-31 14:37:54.853  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=RECEIVE type=INVENTORY id=RC-201
+2026-08-31 14:37:54.920  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=CREATE type=STOCKTAKE id=CT-201
+2026-08-31 14:37:54.983  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=COUNT_ADJUST type=INVENTORY id=CT-201
+2026-08-31 14:37:55.036  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=RECEIVE type=INVENTORY id=RC-202
+2026-08-31 14:37:55.049  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=CREATE type=SHIPMENT id=SO-202
+2026-08-31 14:37:55.078  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=RESERVE type=INVENTORY id=SO-202
+2026-08-31 14:37:55.078  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=RESERVE type=SHIPMENT id=SO-202
+2026-08-31 14:37:55.172  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=RECEIVE type=INVENTORY id=RC-103
+2026-08-31 14:37:55.204  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=CREATE type=SHIPMENT id=SO-103
+2026-08-31 14:37:55.425  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=CREATE type=SHIPMENT id=SO-105
+2026-08-31 14:37:55.462  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=CANCEL type=SHIPMENT id=SO-105
+2026-08-31 14:37:55.526  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=RECEIVE type=INVENTORY id=RC-205
+2026-08-31 14:37:55.773  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=RECEIVE type=INVENTORY id=RC-106
+2026-08-31 14:37:55.787  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=CREATE type=SHIPMENT id=SO-106
+2026-08-31 14:37:55.815  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=RESERVE type=INVENTORY id=SO-106
+2026-08-31 14:37:55.815  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=RESERVE type=SHIPMENT id=SO-106
+2026-08-31 14:37:55.855  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=RELEASE type=INVENTORY id=SO-106
+2026-08-31 14:37:55.856  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=CANCEL type=SHIPMENT id=SO-106
+2026-08-31 14:37:55.907  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=CREATE type=SHIPMENT id=SO-108
+2026-08-31 14:37:56.001  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=RECEIVE type=INVENTORY id=RC-107
+2026-08-31 14:37:56.010  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=CREATE type=SHIPMENT id=SO-107
+2026-08-31 14:37:56.037  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=RESERVE type=INVENTORY id=SO-107
+2026-08-31 14:37:56.037  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=RESERVE type=SHIPMENT id=SO-107
+2026-08-31 14:37:56.060  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=SHIP type=INVENTORY id=SO-107
+2026-08-31 14:37:56.060  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=SHIP type=SHIPMENT id=SO-107
+2026-08-31 14:37:56.097  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=RECEIVE type=INVENTORY id=RC-101
+2026-08-31 14:37:56.104  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=CREATE type=SHIPMENT id=SO-101
+2026-08-31 14:37:56.127  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=RESERVE type=INVENTORY id=SO-101
+2026-08-31 14:37:56.127  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=RESERVE type=SHIPMENT id=SO-101
+2026-08-31 14:37:56.148  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=RELEASE type=INVENTORY id=SO-101
+2026-08-31 14:37:56.148  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=CANCEL type=SHIPMENT id=SO-101
+2026-08-31 14:37:56.183  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=RECEIVE type=INVENTORY id=RC-203
+2026-08-31 14:37:56.197  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=CREATE type=STOCKTAKE id=CT-203
+2026-08-31 14:37:56.210  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=RECEIVE type=INVENTORY id=RC-203
+2026-08-31 14:37:56.274  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=RECEIVE type=INVENTORY id=RC-110
+2026-08-31 14:37:56.310  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=TRANSFER type=INVENTORY id=TR-110
+2026-08-31 14:37:56.382  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=RECEIVE type=INVENTORY id=RC-109
+2026-08-31 14:37:56.430  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=TRANSFER type=INVENTORY id=TR-109
+2026-08-31 14:37:56.462  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=RECEIVE type=INVENTORY id=RC-204
+2026-08-31 14:37:56.479  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=CREATE type=STOCKTAKE id=CT-204
+2026-08-31 14:37:56.508  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=COUNT_ADJUST type=INVENTORY id=CT-204
+2026-08-31 14:37:56.573  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=RECEIVE type=INVENTORY id=RC-111
+2026-08-31 14:37:56.646  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=RECEIVE type=INVENTORY id=RC-206
+2026-08-31 14:37:56.661  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=CREATE type=STOCKTAKE id=CT-206
+2026-08-31 14:37:56.698  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=COUNT_ADJUST type=INVENTORY id=CT-206
+2026-08-31 14:37:56.737  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=RECEIVE type=INVENTORY id=RC-102
+[INFO] Tests run: 18, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.971 s - in com.acme.training.WmsFlowIntegrationTest
+[INFO] Running com.acme.training.InventoryConcurrencyTest
+2026-08-31 14:37:56.764  INFO 151 --- [           main] .b.t.c.SpringBootTestContextBootstrapper : Neither @ContextConfiguration nor @ContextHierarchy found for test class [com.acme.training.InventoryConcurrencyTest], using SpringBootContextLoader
+2026-08-31 14:37:56.766  INFO 151 --- [           main] o.s.t.c.support.AbstractContextLoader    : Could not detect default resource locations for test class [com.acme.training.InventoryConcurrencyTest]: no resource found for suffixes {-context.xml, Context.groovy}.
+2026-08-31 14:37:56.767  INFO 151 --- [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.acme.training.InventoryConcurrencyTest]: InventoryConcurrencyTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-08-31 14:37:56.773  INFO 151 --- [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.acme.training.TrainingWmsApplication for test class com.acme.training.InventoryConcurrencyTest
+2026-08-31 14:37:56.777  INFO 151 --- [           main] .b.t.c.SpringBootTestContextBootstrapper : Loaded default TestExecutionListener class names from location [META-INF/spring.factories]: [org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener, org.springframework.boot.test.mock.mockito.ResetMocksTestExecutionListener, org.springframework.boot.test.autoconfigure.restdocs.RestDocsTestExecutionListener, org.springframework.boot.test.autoconfigure.web.client.MockRestServiceServerResetTestExecutionListener, org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrintOnlyOnFailureTestExecutionListener, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverTestExecutionListener, org.springframework.boot.test.autoconfigure.webservices.client.MockWebServiceServerTestExecutionListener, org.springframework.test.context.web.ServletTestExecutionListener, org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener, org.springframework.test.context.event.ApplicationEventsTestExecutionListener, org.springframework.test.context.support.DependencyInjectionTestExecutionListener, org.springframework.test.context.support.DirtiesContextTestExecutionListener, org.springframework.test.context.transaction.TransactionalTestExecutionListener, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener, org.springframework.test.context.event.EventPublishingTestExecutionListener]
+2026-08-31 14:37:56.777  INFO 151 --- [           main] .b.t.c.SpringBootTestContextBootstrapper : Using TestExecutionListeners: [org.springframework.test.context.web.ServletTestExecutionListener@26c24e5, org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener@29509774, org.springframework.test.context.event.ApplicationEventsTestExecutionListener@9198fe3, org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener@6cc9f35d, org.springframework.boot.test.autoconfigure.SpringBootDependencyInjectionTestExecutionListener@f61b92d, org.springframework.test.context.support.DirtiesContextTestExecutionListener@22277482, org.springframework.test.context.transaction.TransactionalTestExecutionListener@670481b2, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener@4474c514, org.springframework.test.context.event.EventPublishingTestExecutionListener@465eb466, org.springframework.boot.test.mock.mockito.ResetMocksTestExecutionListener@5fc44b4b, org.springframework.boot.test.autoconfigure.restdocs.RestDocsTestExecutionListener@1c8e4810, org.springframework.boot.test.autoconfigure.web.client.MockRestServiceServerResetTestExecutionListener@7e3062f0, org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrintOnlyOnFailureTestExecutionListener@4dfe14d4, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverTestExecutionListener@309d9033, org.springframework.boot.test.autoconfigure.webservices.client.MockWebServiceServerTestExecutionListener@5ebd80f8]
+2026-08-31 14:37:56.804  INFO 151 --- [pool-1-thread-1] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=RECEIVE type=INVENTORY id=RC-907
+2026-08-31 14:37:57.833  WARN 151 --- [pool-1-thread-2] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Error: 1062, SQLState: 23000
+2026-08-31 14:37:57.834 ERROR 151 --- [pool-1-thread-2] o.h.engine.jdbc.spi.SqlExceptionHelper   : Duplicate entry 'RECEIVE-cross-http-key' for key 'wms_inventory_movement.uk_movement_idempotency'
+2026-08-31 14:37:57.889  INFO 151 --- [pool-2-thread-1] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=RECEIVE type=INVENTORY id=RC-906
+2026-08-31 14:37:58.903  WARN 151 --- [pool-2-thread-2] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Error: 1062, SQLState: 23000
+2026-08-31 14:37:58.904 ERROR 151 --- [pool-2-thread-2] o.h.engine.jdbc.spi.SqlExceptionHelper   : Duplicate entry 'RECEIVE-cross-location-key' for key 'wms_inventory_movement.uk_movement_idempotency'
+2026-08-31 14:37:58.934  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=RECEIVE type=INVENTORY id=RC-901
+2026-08-31 14:37:58.970  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=RECEIVE type=INVENTORY id=RC-905
+2026-08-31 14:37:58.981  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=COUNT_ADJUST type=INVENTORY id=CT-905
+2026-08-31 14:37:59.023  INFO 151 --- [pool-4-thread-1] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=RECEIVE type=INVENTORY id=RC-902
+2026-08-31 14:38:00.071  WARN 151 --- [           main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Error: 1406, SQLState: 22001
+2026-08-31 14:38:00.072 ERROR 151 --- [           main] o.h.engine.jdbc.spi.SqlExceptionHelper   : Data truncation: Data too long for column 'idempotency_key' at row 1
+2026-08-31 14:38:00.103  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=RECEIVE type=INVENTORY id=RC-904
+2026-08-31 14:38:00.116  INFO 151 --- [pool-5-thread-1] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=COUNT_ADJUST type=INVENTORY id=CT-904
+2026-08-31 14:38:01.187  INFO 151 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=RECEIVE type=INVENTORY id=RC-903
+2026-08-31 14:38:01.238  INFO 151 --- [pool-6-thread-1] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=TRANSFER type=INVENTORY id=TR-903
+[INFO] Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 5.505 s - in com.acme.training.InventoryConcurrencyTest
+[INFO] Running com.acme.training.MysqlVerificationEnvironmentTest
+2026-08-31 14:38:02.285  INFO 151 --- [           main] .b.t.c.SpringBootTestContextBootstrapper : Neither @ContextConfiguration nor @ContextHierarchy found for test class [com.acme.training.MysqlVerificationEnvironmentTest], using SpringBootContextLoader
+2026-08-31 14:38:02.287  INFO 151 --- [           main] o.s.t.c.support.AbstractContextLoader    : Could not detect default resource locations for test class [com.acme.training.MysqlVerificationEnvironmentTest]: no resource found for suffixes {-context.xml, Context.groovy}.
+2026-08-31 14:38:02.287  INFO 151 --- [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.acme.training.MysqlVerificationEnvironmentTest]: MysqlVerificationEnvironmentTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-08-31 14:38:02.295  INFO 151 --- [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.acme.training.TrainingWmsApplication for test class com.acme.training.MysqlVerificationEnvironmentTest
+2026-08-31 14:38:02.298  INFO 151 --- [           main] .b.t.c.SpringBootTestContextBootstrapper : Loaded default TestExecutionListener class names from location [META-INF/spring.factories]: [org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener, org.springframework.boot.test.mock.mockito.ResetMocksTestExecutionListener, org.springframework.boot.test.autoconfigure.restdocs.RestDocsTestExecutionListener, org.springframework.boot.test.autoconfigure.web.client.MockRestServiceServerResetTestExecutionListener, org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrintOnlyOnFailureTestExecutionListener, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverTestExecutionListener, org.springframework.boot.test.autoconfigure.webservices.client.MockWebServiceServerTestExecutionListener, org.springframework.test.context.web.ServletTestExecutionListener, org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener, org.springframework.test.context.event.ApplicationEventsTestExecutionListener, org.springframework.test.context.support.DependencyInjectionTestExecutionListener, org.springframework.test.context.support.DirtiesContextTestExecutionListener, org.springframework.test.context.transaction.TransactionalTestExecutionListener, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener, org.springframework.test.context.event.EventPublishingTestExecutionListener]
+2026-08-31 14:38:02.299  INFO 151 --- [           main] .b.t.c.SpringBootTestContextBootstrapper : Using TestExecutionListeners: [org.springframework.test.context.web.ServletTestExecutionListener@197bf5ef, org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener@681ba763, org.springframework.test.context.event.ApplicationEventsTestExecutionListener@19cc697c, org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener@33012e6f, org.springframework.boot.test.autoconfigure.SpringBootDependencyInjectionTestExecutionListener@7593716d, org.springframework.test.context.support.DirtiesContextTestExecutionListener@4086e003, org.springframework.test.context.transaction.TransactionalTestExecutionListener@3a7be6e6, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener@33c590, org.springframework.test.context.event.EventPublishingTestExecutionListener@6ec5c4e2, org.springframework.boot.test.mock.mockito.ResetMocksTestExecutionListener@1934a7c1, org.springframework.boot.test.autoconfigure.restdocs.RestDocsTestExecutionListener@7c9d2ed7, org.springframework.boot.test.autoconfigure.web.client.MockRestServiceServerResetTestExecutionListener@621c7b91, org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrintOnlyOnFailureTestExecutionListener@223e51e4, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverTestExecutionListener@1e08f0cd, org.springframework.boot.test.autoconfigure.webservices.client.MockWebServiceServerTestExecutionListener@b768e4d]
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.026 s - in com.acme.training.MysqlVerificationEnvironmentTest
+2026-08-31 14:38:02.337  INFO 151 --- [ionShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-08-31 14:38:02.347  INFO 151 --- [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-08-31 14:38:02.369  INFO 151 --- [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 32, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- jar:3.2.2:jar (default-jar) @ training-server ---
+[INFO] Building jar: /workspace/training-server/target/training-server-0.1.0-SNAPSHOT.jar
+[INFO] 
+[INFO] --- spring-boot:2.7.18:repackage (repackage) @ training-server ---
+[INFO] Replacing main artifact with repackaged archive
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary for training-wms 0.1.0-SNAPSHOT:
+[INFO] 
+[INFO] training-wms ....................................... SUCCESS [  0.254 s]
+[INFO] platform-contracts ................................. SUCCESS [  3.954 s]
+[INFO] platform-web-starter ............................... SUCCESS [  5.084 s]
+[INFO] business-wms ....................................... SUCCESS [  2.725 s]
+[INFO] training-server .................................... SUCCESS [ 30.332 s]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  43.187 s
+[INFO] Finished at: 2026-08-31T14:38:04Z
+[INFO] ------------------------------------------------------------------------

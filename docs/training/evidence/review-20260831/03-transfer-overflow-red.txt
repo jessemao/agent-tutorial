@@ -1,0 +1,320 @@
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO] 
+[INFO] training-wms                                                       [pom]
+[INFO] platform-contracts                                                 [jar]
+[INFO] platform-web-starter                                               [jar]
+[INFO] business-wms                                                       [jar]
+[INFO] training-server                                                    [jar]
+[INFO] 
+[INFO] -------------------< com.acme.training:training-wms >-------------------
+[INFO] Building training-wms 0.1.0-SNAPSHOT                               [1/5]
+[INFO]   from pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] ----------------< com.acme.training:platform-contracts >----------------
+[INFO] Building platform-contracts 0.1.0-SNAPSHOT                         [2/5]
+[INFO]   from platform-contracts/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.2.0:resources (default-resources) @ platform-contracts ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Using 'UTF-8' encoding to copy filtered properties files.
+[INFO] skip non existing resourceDirectory /workspace/platform-contracts/src/main/resources
+[INFO] skip non existing resourceDirectory /workspace/platform-contracts/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.10.1:compile (default-compile) @ platform-contracts ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- resources:3.2.0:testResources (default-testResources) @ platform-contracts ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Using 'UTF-8' encoding to copy filtered properties files.
+[INFO] skip non existing resourceDirectory /workspace/platform-contracts/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.10.1:testCompile (default-testCompile) @ platform-contracts ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- surefire:2.22.2:test (default-test) @ platform-contracts ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] ---------------< com.acme.training:platform-web-starter >---------------
+[INFO] Building platform-web-starter 0.1.0-SNAPSHOT                       [3/5]
+[INFO]   from platform-web-starter/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.2.0:resources (default-resources) @ platform-web-starter ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Using 'UTF-8' encoding to copy filtered properties files.
+[INFO] skip non existing resourceDirectory /workspace/platform-web-starter/src/main/resources
+[INFO] skip non existing resourceDirectory /workspace/platform-web-starter/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.10.1:compile (default-compile) @ platform-web-starter ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- resources:3.2.0:testResources (default-testResources) @ platform-web-starter ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Using 'UTF-8' encoding to copy filtered properties files.
+[INFO] skip non existing resourceDirectory /workspace/platform-web-starter/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.10.1:testCompile (default-testCompile) @ platform-web-starter ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- surefire:2.22.2:test (default-test) @ platform-web-starter ---
+[INFO] 
+[INFO] -------------------< com.acme.training:business-wms >-------------------
+[INFO] Building business-wms 0.1.0-SNAPSHOT                               [4/5]
+[INFO]   from business-wms/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.2.0:resources (default-resources) @ business-wms ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Using 'UTF-8' encoding to copy filtered properties files.
+[INFO] skip non existing resourceDirectory /workspace/business-wms/src/main/resources
+[INFO] skip non existing resourceDirectory /workspace/business-wms/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.10.1:compile (default-compile) @ business-wms ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- resources:3.2.0:testResources (default-testResources) @ business-wms ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Using 'UTF-8' encoding to copy filtered properties files.
+[INFO] skip non existing resourceDirectory /workspace/business-wms/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.10.1:testCompile (default-testCompile) @ business-wms ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- surefire:2.22.2:test (default-test) @ business-wms ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] -----------------< com.acme.training:training-server >------------------
+[INFO] Building training-server 0.1.0-SNAPSHOT                            [5/5]
+[INFO]   from training-server/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.2.0:resources (default-resources) @ training-server ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Using 'UTF-8' encoding to copy filtered properties files.
+[INFO] Copying 1 resource
+[INFO] Copying 0 resource
+[INFO] 
+[INFO] --- compiler:3.10.1:compile (default-compile) @ training-server ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- resources:3.2.0:testResources (default-testResources) @ training-server ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Using 'UTF-8' encoding to copy filtered properties files.
+[INFO] skip non existing resourceDirectory /workspace/training-server/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.10.1:testCompile (default-testCompile) @ training-server ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 2 source files to /workspace/training-server/target/test-classes
+[INFO] 
+[INFO] --- surefire:2.22.2:test (default-test) @ training-server ---
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running com.acme.training.InventoryRegressionTest
+14:09:39.576 [main] DEBUG org.springframework.test.context.BootstrapUtils - Instantiating CacheAwareContextLoaderDelegate from class [org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate]
+14:09:39.599 [main] DEBUG org.springframework.test.context.BootstrapUtils - Instantiating BootstrapContext using constructor [public org.springframework.test.context.support.DefaultBootstrapContext(java.lang.Class,org.springframework.test.context.CacheAwareContextLoaderDelegate)]
+14:09:39.703 [main] DEBUG org.springframework.test.context.BootstrapUtils - Instantiating TestContextBootstrapper for test class [com.acme.training.InventoryRegressionTest] from class [org.springframework.boot.test.context.SpringBootTestContextBootstrapper]
+14:09:39.725 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper - Neither @ContextConfiguration nor @ContextHierarchy found for test class [com.acme.training.InventoryRegressionTest], using SpringBootContextLoader
+14:09:39.733 [main] DEBUG org.springframework.test.context.support.AbstractContextLoader - Did not detect default resource location for test class [com.acme.training.InventoryRegressionTest]: class path resource [com/acme/training/InventoryRegressionTest-context.xml] does not exist
+14:09:39.736 [main] DEBUG org.springframework.test.context.support.AbstractContextLoader - Did not detect default resource location for test class [com.acme.training.InventoryRegressionTest]: class path resource [com/acme/training/InventoryRegressionTestContext.groovy] does not exist
+14:09:39.737 [main] INFO org.springframework.test.context.support.AbstractContextLoader - Could not detect default resource locations for test class [com.acme.training.InventoryRegressionTest]: no resource found for suffixes {-context.xml, Context.groovy}.
+14:09:39.738 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.acme.training.InventoryRegressionTest]: InventoryRegressionTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+14:09:39.883 [main] DEBUG org.springframework.test.context.support.ActiveProfilesUtils - Could not find an 'annotation declaring class' for annotation type [org.springframework.test.context.ActiveProfiles] and class [com.acme.training.InventoryRegressionTest]
+14:09:39.999 [main] DEBUG org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider - Identified candidate component class: file [/workspace/training-server/target/classes/com/acme/training/TrainingWmsApplication.class]
+14:09:40.002 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.acme.training.TrainingWmsApplication for test class com.acme.training.InventoryRegressionTest
+14:09:40.165 [main] DEBUG org.springframework.boot.test.context.SpringBootTestContextBootstrapper - @TestExecutionListeners is not present for class [com.acme.training.InventoryRegressionTest]: using defaults.
+14:09:40.167 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper - Loaded default TestExecutionListener class names from location [META-INF/spring.factories]: [org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener, org.springframework.boot.test.mock.mockito.ResetMocksTestExecutionListener, org.springframework.boot.test.autoconfigure.restdocs.RestDocsTestExecutionListener, org.springframework.boot.test.autoconfigure.web.client.MockRestServiceServerResetTestExecutionListener, org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrintOnlyOnFailureTestExecutionListener, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverTestExecutionListener, org.springframework.boot.test.autoconfigure.webservices.client.MockWebServiceServerTestExecutionListener, org.springframework.test.context.web.ServletTestExecutionListener, org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener, org.springframework.test.context.event.ApplicationEventsTestExecutionListener, org.springframework.test.context.support.DependencyInjectionTestExecutionListener, org.springframework.test.context.support.DirtiesContextTestExecutionListener, org.springframework.test.context.transaction.TransactionalTestExecutionListener, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener, org.springframework.test.context.event.EventPublishingTestExecutionListener]
+14:09:40.191 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper - Using TestExecutionListeners: [org.springframework.test.context.web.ServletTestExecutionListener@2d6c53fc, org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener@25f4878b, org.springframework.test.context.event.ApplicationEventsTestExecutionListener@4e423aa2, org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener@7fbdb894, org.springframework.boot.test.autoconfigure.SpringBootDependencyInjectionTestExecutionListener@3081f72c, org.springframework.test.context.support.DirtiesContextTestExecutionListener@3148f668, org.springframework.test.context.transaction.TransactionalTestExecutionListener@6e005dc9, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener@7ceb3185, org.springframework.test.context.event.EventPublishingTestExecutionListener@436c81a3, org.springframework.boot.test.mock.mockito.ResetMocksTestExecutionListener@3561c410, org.springframework.boot.test.autoconfigure.restdocs.RestDocsTestExecutionListener@59e32960, org.springframework.boot.test.autoconfigure.web.client.MockRestServiceServerResetTestExecutionListener@7c214cc0, org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrintOnlyOnFailureTestExecutionListener@5b67bb7e, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverTestExecutionListener@609db546, org.springframework.boot.test.autoconfigure.webservices.client.MockWebServiceServerTestExecutionListener@20f5281c]
+14:09:40.198 [main] DEBUG org.springframework.test.context.support.AbstractDirtiesContextTestExecutionListener - Before test class: context [DefaultTestContext@8e50104 testClass = InventoryRegressionTest, testInstance = [null], testMethod = [null], testException = [null], mergedContextConfiguration = [WebMergedContextConfiguration@37e4d7bb testClass = InventoryRegressionTest, locations = '{}', classes = '{class com.acme.training.TrainingWmsApplication}', contextInitializerClasses = '[]', activeProfiles = '{}', propertySourceLocations = '{}', propertySourceProperties = '{org.springframework.boot.test.context.SpringBootTestContextBootstrapper=true}', contextCustomizers = set[[ImportsContextCustomizer@6f7923a5 key = [org.springframework.boot.test.autoconfigure.web.servlet.MockMvcWebDriverAutoConfiguration, org.springframework.boot.test.autoconfigure.web.servlet.MockMvcAutoConfiguration, org.springframework.boot.autoconfigure.security.oauth2.client.servlet.OAuth2ClientAutoConfiguration, org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration, org.springframework.boot.autoconfigure.security.servlet.SecurityFilterAutoConfiguration, org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration, org.springframework.boot.autoconfigure.security.oauth2.resource.servlet.OAuth2ResourceServerAutoConfiguration, org.springframework.boot.test.autoconfigure.web.servlet.MockMvcSecurityConfiguration, org.springframework.boot.test.autoconfigure.web.servlet.MockMvcWebClientAutoConfiguration, org.springframework.boot.test.autoconfigure.web.reactive.WebTestClientAutoConfiguration]], org.springframework.boot.test.context.filter.ExcludeFilterContextCustomizer@10163d6, org.springframework.boot.test.json.DuplicateJsonObjectContextCustomizerFactory$DuplicateJsonObjectContextCustomizer@247d8ae, org.springframework.boot.test.mock.mockito.MockitoContextCustomizer@0, org.springframework.boot.test.web.client.TestRestTemplateContextCustomizer@7ea9e1e2, org.springframework.boot.test.autoconfigure.actuate.metrics.MetricsExportContextCustomizerFactory$DisableMetricExportContextCustomizer@4bb33f74, org.springframework.boot.test.autoconfigure.properties.PropertyMappingContextCustomizer@4b3fa0b3, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverContextCustomizerFactory$Customizer@2a54a73f, org.springframework.boot.test.context.SpringBootTestArgs@1, org.springframework.boot.test.context.SpringBootTestWebEnvironment@2b2948e2], resourceBasePath = 'src/main/webapp', contextLoader = 'org.springframework.boot.test.context.SpringBootContextLoader', parent = [null]], attributes = map['org.springframework.test.context.web.ServletTestExecutionListener.activateListener' -> true]], class annotated with @DirtiesContext [false] with mode [null].
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::               (v2.7.18)
+
+2026-08-31 14:09:41.119  INFO 77 --- [           main] c.acme.training.InventoryRegressionTest  : Starting InventoryRegressionTest using Java 17.0.15 with PID 77 (started by root in /workspace/training-server)
+2026-08-31 14:09:41.121  INFO 77 --- [           main] c.acme.training.InventoryRegressionTest  : No active profile set, falling back to 1 default profile: "default"
+2026-08-31 14:09:43.908  INFO 77 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-08-31 14:09:44.064  INFO 77 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 136 ms. Found 7 JPA repository interfaces.
+2026-08-31 14:09:45.733  INFO 77 --- [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-08-31 14:09:45.844  INFO 77 --- [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.15.Final
+2026-08-31 14:09:46.230  INFO 77 --- [           main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2026-08-31 14:09:46.595  INFO 77 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-08-31 14:09:46.983  INFO 77 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-08-31 14:09:47.040  INFO 77 --- [           main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.H2Dialect
+2026-08-31 14:09:51.848  INFO 77 --- [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2026-08-31 14:09:51.881  INFO 77 --- [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-08-31 14:09:55.898  INFO 77 --- [           main] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:training-wms'
+2026-08-31 14:09:57.202  INFO 77 --- [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-08-31 14:09:57.202  INFO 77 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-08-31 14:09:57.217  INFO 77 --- [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 2 endpoint(s) beneath base path '/actuator'
+2026-08-31 14:09:57.289  INFO 77 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 87 ms
+2026-08-31 14:09:57.379  INFO 77 --- [           main] c.acme.training.InventoryRegressionTest  : Started InventoryRegressionTest in 17.095 seconds (JVM running for 19.469)
+2026-08-31 14:09:58.944  INFO 77 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=RECEIVE type=INVENTORY id=RC-801
+2026-08-31 14:09:59.160  INFO 77 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=RECEIVE type=INVENTORY id=RC-802
+2026-08-31 14:09:59.176  INFO 77 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=RECEIVE type=INVENTORY id=RC-802
+2026-08-31 14:09:59.217  INFO 77 --- [           main] c.a.t.c.PlatformAdaptersConfiguration    : audit operator=trainer action=TRANSFER type=INVENTORY id=TR-802
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /api/wms/inventory/receive
+       Parameters = {}
+          Headers = [Content-Type:"application/json;charset=UTF-8", X-Operator:"trainer", Content-Length:"115"]
+             Body = {"idempotencyKey":"overflow-source","referenceNo":"RC-802","skuId":802,"warehouseId":1,"locationId":1,"quantity":3}
+    Session Attrs = {}
+
+Handler:
+             Type = com.acme.training.wms.web.InventoryController
+           Method = com.acme.training.wms.web.InventoryController#receive(InventoryRequest)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 200
+    Error message = null
+          Headers = [Content-Type:"application/json"]
+     Content type = application/json
+             Body = {"success":true,"code":"OK","message":"success","data":{"skuId":802,"warehouseId":1,"locationId":1,"availableQuantity":3,"reservedQuantity":0}}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /api/wms/inventory/receive
+       Parameters = {}
+          Headers = [Content-Type:"application/json;charset=UTF-8", X-Operator:"trainer", Content-Length:"133"]
+             Body = {"idempotencyKey":"overflow-target","referenceNo":"RC-802","skuId":802,"warehouseId":1,"locationId":2,"quantity":9223372036854775807}
+    Session Attrs = {}
+
+Handler:
+             Type = com.acme.training.wms.web.InventoryController
+           Method = com.acme.training.wms.web.InventoryController#receive(InventoryRequest)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 200
+    Error message = null
+          Headers = [Content-Type:"application/json"]
+     Content type = application/json
+             Body = {"success":true,"code":"OK","message":"success","data":{"skuId":802,"warehouseId":1,"locationId":2,"availableQuantity":9223372036854775807,"reservedQuantity":0}}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /api/wms/inventory/transfer
+       Parameters = {}
+          Headers = [Content-Type:"application/json;charset=UTF-8", X-Operator:"trainer", Content-Length:"143"]
+             Body = {"idempotencyKey":"overflow-transfer","transferNo":"TR-802","skuId":802,"warehouseId":1,"sourceLocationId":1,"targetLocationId":2,"quantity":1}
+    Session Attrs = {}
+
+Handler:
+             Type = com.acme.training.wms.web.InventoryController
+           Method = com.acme.training.wms.web.InventoryController#transfer(InventoryTransferRequest)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 200
+    Error message = null
+          Headers = [Content-Type:"application/json"]
+     Content type = application/json
+             Body = {"success":true,"code":"OK","message":"success","data":{"transferNo":"TR-802","source":{"skuId":802,"warehouseId":1,"locationId":1,"availableQuantity":2,"reservedQuantity":0},"target":{"skuId":802,"warehouseId":1,"locationId":2,"availableQuantity":-9223372036854775808,"reservedQuantity":0}}}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+[ERROR] Tests run: 2, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 19.89 s <<< FAILURE! - in com.acme.training.InventoryRegressionTest
+[ERROR] transferOverflowRollsBackBothLocations  Time elapsed: 0.119 s  <<< FAILURE!
+java.lang.AssertionError: Status expected:<409> but was:<200>
+	at com.acme.training.InventoryRegressionTest.transferOverflowRollsBackBothLocations(InventoryRegressionTest.java:40)
+
+2026-08-31 14:09:59.355  INFO 77 --- [ionShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-08-31 14:09:59.358  INFO 77 --- [ionShutdownHook] .SchemaDropperImpl$DelayedDropActionImpl : HHH000477: Starting delayed evictData of schema as part of SessionFactory shut-down'
+2026-08-31 14:09:59.388  INFO 77 --- [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-08-31 14:09:59.394  INFO 77 --- [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+[INFO] 
+[INFO] Results:
+[INFO] 
+[ERROR] Failures: 
+[ERROR]   InventoryRegressionTest.transferOverflowRollsBackBothLocations:40 Status expected:<409> but was:<200>
+[INFO] 
+[ERROR] Tests run: 2, Failures: 1, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary for training-wms 0.1.0-SNAPSHOT:
+[INFO] 
+[INFO] training-wms ....................................... SUCCESS [  0.002 s]
+[INFO] platform-contracts ................................. SUCCESS [  1.747 s]
+[INFO] platform-web-starter ............................... SUCCESS [  0.617 s]
+[INFO] business-wms ....................................... SUCCESS [  0.281 s]
+[INFO] training-server .................................... FAILURE [ 24.965 s]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  28.292 s
+[INFO] Finished at: 2026-08-31T14:09:59Z
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-surefire-plugin:2.22.2:test (default-test) on project training-server: There are test failures.
+[ERROR] 
+[ERROR] Please refer to /workspace/training-server/target/surefire-reports for the individual test results.
+[ERROR] Please refer to dump files (if any exist) [date].dump, [date]-jvmRun[N].dump and [date].dumpstream.
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException
+[ERROR] 
+[ERROR] After correcting the problems, you can resume the build with the command
+[ERROR]   mvn <args> -rf :training-server

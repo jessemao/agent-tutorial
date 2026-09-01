@@ -1,0 +1,93 @@
+@baseUrl = http://localhost:8080
+@operator = trainee-01
+
+### 1. 入库 100 件（默认演示数据：warehouseId=1, locationId=1）
+POST {{baseUrl}}/api/wms/inventory/receive
+Content-Type: application/json
+X-Operator: {{operator}}
+
+{
+  "idempotencyKey": "receive-demo-001",
+  "referenceNo": "ASN-001",
+  "skuId": 1001,
+  "warehouseId": 1,
+  "locationId": 1,
+  "quantity": 100
+}
+
+### 2. 创建出库单
+POST {{baseUrl}}/api/wms/shipments
+Content-Type: application/json
+X-Operator: {{operator}}
+
+{
+  "orderNo": "SO-001",
+  "skuId": 1001,
+  "warehouseId": 1,
+  "locationId": 1,
+  "quantity": 30
+}
+
+### 3. 预占库存（把 1 替换为上一步返回的出库单 ID）
+POST {{baseUrl}}/api/wms/shipments/1/reserve
+Content-Type: application/json
+X-Operator: {{operator}}
+
+{
+  "idempotencyKey": "reserve-demo-001"
+}
+
+### 4. 取消并释放预占库存
+POST {{baseUrl}}/api/wms/shipments/1/cancel
+Content-Type: application/json
+X-Operator: {{operator}}
+
+{
+  "idempotencyKey": "cancel-demo-001",
+  "reason": "客户取消"
+}
+
+### 5. 检查库存
+GET {{baseUrl}}/api/wms/inventory/balance?skuId=1001&warehouseId=1&locationId=1
+X-Operator: {{operator}}
+
+### 6. 库内移库（从库位 1 移到库位 2）
+POST {{baseUrl}}/api/wms/inventory/transfer
+Content-Type: application/json
+X-Operator: {{operator}}
+
+{
+  "idempotencyKey": "transfer-demo-001",
+  "transferNo": "TR-001",
+  "skuId": 1001,
+  "warehouseId": 1,
+  "sourceLocationId": 1,
+  "targetLocationId": 2,
+  "quantity": 5
+}
+
+### 7. 创建盘点单（只记录快照，不立即调整库存）
+POST {{baseUrl}}/api/wms/stocktakes
+Content-Type: application/json
+X-Operator: {{operator}}
+
+{
+  "countNo": "COUNT-001",
+  "skuId": 1001,
+  "warehouseId": 1,
+  "locationId": 2,
+  "countedTotalQuantity": 4
+}
+
+### 8. 审批盘点单（把 1 替换为上一步返回的盘点单 ID）
+POST {{baseUrl}}/api/wms/stocktakes/1/approve
+Content-Type: application/json
+X-Operator: {{operator}}
+
+{
+  "idempotencyKey": "count-approve-demo-001"
+}
+
+### 9. 查询盘点结果
+GET {{baseUrl}}/api/wms/stocktakes/1
+X-Operator: {{operator}}

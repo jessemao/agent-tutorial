@@ -1,0 +1,4 @@
+interface:
+  display_name: "代码变更评审"
+  short_description: "按需求和项目规范评审代码变更并输出可定位的证据结论"
+  default_prompt: "Use $review-code-change to review this code change against its requirements."

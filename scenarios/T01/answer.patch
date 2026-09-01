@@ -1,0 +1,13 @@
+diff --git a/business-wms/src/main/java/com/acme/training/wms/outbound/ShipmentService.java b/business-wms/src/main/java/com/acme/training/wms/outbound/ShipmentService.java
+--- a/business-wms/src/main/java/com/acme/training/wms/outbound/ShipmentService.java
++++ b/business-wms/src/main/java/com/acme/training/wms/outbound/ShipmentService.java
+@@ -72,8 +72,7 @@ class ShipmentService implements ShipmentOperations {
+         boolean releaseInventory = order.getStatus() == ShipmentStatus.RESERVED;
+         order.cancel(reason);
+         if (releaseInventory) {
+-            // Training defect T01: shipment state changes, but reserved inventory is not released.
+-            // inventoryOperations.release(inventoryCommand(order, idempotencyKey));
++            inventoryOperations.release(inventoryCommand(order, idempotencyKey));
+         }
+         audit("CANCEL", order);
+         return new ShipmentView(order);

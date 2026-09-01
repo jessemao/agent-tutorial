@@ -1,0 +1,15 @@
+# Explicit, disposable verification only; never falls back to an existing database.
+spring:
+  datasource:
+    url: ${WMS_MYSQL_JDBC_URL}
+    username: ${WMS_MYSQL_USER}
+    password: ${WMS_MYSQL_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      transaction-isolation: TRANSACTION_REPEATABLE_READ
+  jpa:
+    hibernate:
+      ddl-auto: update
+  h2:
+    console:
+      enabled: false

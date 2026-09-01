@@ -1,0 +1,18 @@
+services:
+  classroom:
+    image: training-wms-classroom:0.7
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: docker/classroom/Dockerfile
+    working_dir: /workspace
+    user: "${CLASSROOM_UID:-1000}:${CLASSROOM_GID:-1000}"
+    environment:
+      HOME: /tmp/classroom-home
+      MAVEN_CONFIG: /tmp/classroom-maven
+      MAVEN_ARGS: -s /opt/classroom/settings.xml
+      MAVEN_OPTS: -Dmaven.repo.local=/opt/training-m2/repository
+    volumes:
+      - .:/workspace
+    ports:
+      - "8080:8080"

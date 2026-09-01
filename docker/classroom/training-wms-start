@@ -1,0 +1,9 @@
+#!/bin/sh
+set -eu
+
+# Build the currently mounted task version first. This prevents a
+# learner branch from accidentally running the answer-version artifacts that
+# were used only to warm the image dependency cache.
+mvn -o -B -ntp -DskipTests clean package
+
+exec java -jar training-server/target/training-server-0.1.0-SNAPSHOT.jar
