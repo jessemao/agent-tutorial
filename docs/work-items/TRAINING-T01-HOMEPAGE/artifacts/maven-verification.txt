@@ -1,0 +1,14 @@
+Execution date: 2026-09-02
+Environment: training-wms-classroom:0.7, Linux/amd64, Java 17, H2
+
+Red command:
+mvn -o -q -pl training-server -am -Dtest=TrainingHomepageIntegrationTest -Dsurefire.failIfNoSpecifiedTests=false test
+Old static page result: 3 tests, 2 expected failures (missing south-admin-react marker and /assets/app.js)
+
+Target command on main and group-demo/t01:
+mvn -o -q -pl training-server -am -Dtest=TrainingHomepageIntegrationTest -Dsurefire.failIfNoSpecifiedTests=false test
+Result: 3 tests, 3 passed, 0 failures, 0 errors, 0 skipped
+
+Main full command:
+mvn -o -q clean verify
+Result: 39 tests, 38 passed, 0 failures, 0 errors, 1 skipped optional MySQL-profile guard; exit 0

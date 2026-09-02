@@ -8,8 +8,10 @@ services:
     working_dir: /workspace
     user: "${CLASSROOM_UID:-1000}:${CLASSROOM_GID:-1000}"
     environment:
-      HOME: /tmp/classroom-home
-      MAVEN_CONFIG: /tmp/classroom-maven
+      HOME: /workspace/.classroom-runtime
+      MAVEN_CONFIG: /workspace/.classroom-runtime
+      TMPDIR: /workspace/.classroom-runtime
+      JAVA_TOOL_OPTIONS: -Djava.io.tmpdir=/workspace/.classroom-runtime
       MAVEN_ARGS: -s /opt/classroom/settings.xml
       MAVEN_OPTS: -Dmaven.repo.local=/opt/training-m2/repository
     volumes:

@@ -41,19 +41,21 @@ LABEL org.opencontainers.image.title="Training WMS Classroom Environment" \
 
 ENV MAVEN_OPTS="-Dmaven.repo.local=/opt/training-m2/repository" \
     MAVEN_ARGS="-s /opt/classroom/settings.xml" \
-    MAVEN_CONFIG="/tmp/classroom-maven" \
-    HOME="/tmp/classroom-home"
+    MAVEN_CONFIG="/workspace/.classroom-runtime" \
+    HOME="/workspace/.classroom-runtime" \
+    TMPDIR="/workspace/.classroom-runtime" \
+    JAVA_TOOL_OPTIONS="-Djava.io.tmpdir=/workspace/.classroom-runtime"
 
 COPY --from=dependency-cache /root/.m2/repository /opt/training-m2/repository
 COPY --from=dependency-cache /seed /workspace
 COPY docker/classroom/settings.xml /opt/classroom/settings.xml
 COPY docker/classroom/training-wms-start /usr/local/bin/training-wms-start
 
-RUN mkdir -p /workspace /tmp/classroom-maven /tmp/classroom-home \
+RUN mkdir -p /workspace/.classroom-runtime \
     && chmod -R a+rX /opt/training-m2 \
     && chmod a+r /opt/classroom/settings.xml \
     && chmod a+rx /usr/local/bin/training-wms-start \
-    && chmod 1777 /tmp/classroom-maven /tmp/classroom-home
+    && chmod 1777 /workspace/.classroom-runtime
 
 WORKDIR /workspace
 EXPOSE 8080

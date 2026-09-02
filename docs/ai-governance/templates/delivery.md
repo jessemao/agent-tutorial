@@ -6,6 +6,7 @@
 - Diff 起点与被审版本：
 - 已批准 Spec 路径/版本：
 - Standards ID/版本：
+- 已批准例外 ID（无则写无）：
 - Decision 路径与结论：
 
 ## 测试与评审证据

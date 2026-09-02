@@ -1,0 +1,25 @@
+Execution date: 2026-09-02
+Environment: node:22-bookworm-slim, Linux/amd64 Docker
+
+Install:
+npm install --ignore-scripts
+
+Audit:
+npm audit --audit-level=low
+Result: found 0 vulnerabilities
+
+Build:
+npm run build
+Result: TypeScript and Vite 7.3.6 passed; 3970 modules transformed
+
+Output:
+assets/app.css   3.21 kB / gzip 1.26 kB
+assets/icons.js 15.52 kB / gzip 5.83 kB
+assets/app.js   23.35 kB / gzip 8.87 kB
+assets/antd.js 1006.62 kB / gzip 323.61 kB
+
+Recovery event:
+First node image pull failed with "no space left on device".
+Only dangling, unreferenced image layers were pruned; 926MB reclaimed.
+The classroom image, running container, and data volumes were preserved.
+The same install and build succeeded after retry.

@@ -1,5 +1,9 @@
 # Docker课堂环境使用与交付
 
+> 用途：构建、验证、分发和使用 `linux/amd64` 课堂镜像。  
+> 状态：课程环境说明，不是生产部署手册。  
+> 限制：不得把镜像内测试结果当作当前分支结果；依赖、POM、JDK、起始代码或构建方式变化后必须重建并重新做断网验证。
+
 > 目标：使用一个预热的课堂镜像提供Java 17、Maven 3.9.9和项目依赖，学员无需在主机安装Java/Maven，断网后仍可构建、测试和启动。
 
 ## 1. 设计结论
@@ -42,7 +46,17 @@ export CLASSROOM_GID=$(id -g)
 
 Windows Docker Desktop可使用Compose默认值；如组织策略要求非默认用户，由讲师在T-5联调时统一确认。
 
-### 3.2 离线构建和测试
+### 3.2 宿主持久化运行空间
+
+Compose 将容器的 `HOME`、`MAVEN_CONFIG`、`TMPDIR` 和 Java 临时目录统一指向项目根目录的 `.classroom-runtime/`。该目录位于学员电脑的项目工作区中，经 `/workspace` 挂载后供容器使用，因此容器退出或重建后仍然保留，也不会继续占用容器可写层的 `/tmp`。
+
+- `.classroom-runtime/` 已加入 `.gitignore`，不得提交到仓库。
+- Maven 依赖仍读取镜像内的 `/opt/training-m2/repository`；宿主目录只保存运行期配置、日志和临时文件，不重复复制整套离线依赖。
+- 每个学员工作目录拥有独立运行空间，不应在多个小组之间共享该目录。
+- 删除 `.classroom-runtime/` 只会清理本机课堂缓存，不会删除源码；执行前应停止对应课堂容器。
+- 该设置避免课堂进程持续写满 Docker 容器可写层，但 Docker Engine 已经没有可用空间时，仍需先清理无用镜像、构建缓存或扩大 Docker Desktop 磁盘容量。
+
+### 3.3 离线构建和测试
 
 ```bash
 docker compose -f compose.classroom.yml run --rm classroom
@@ -54,7 +68,7 @@ docker compose -f compose.classroom.yml run --rm classroom
 mvn -o -B -ntp clean verify
 ```
 
-### 3.3 运行指定测试
+### 3.4 运行指定测试
 
 ```bash
 docker compose -f compose.classroom.yml run --rm classroom \
@@ -62,7 +76,7 @@ docker compose -f compose.classroom.yml run --rm classroom \
   -Dtest=WmsFlowIntegrationTest test
 ```
 
-### 3.4 启动训练服务
+### 3.5 启动训练服务
 
 ```bash
 docker compose -f compose.classroom.yml run --rm --service-ports classroom \

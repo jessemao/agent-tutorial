@@ -9,13 +9,22 @@ required_files=(
   "docs/ai-governance/README.md"
   "docs/ai-governance/workflow.md"
   "docs/ai-governance/deliverables.md"
+  "docs/ai-governance/roles-and-approvals.md"
+  "docs/ai-governance/validation.md"
+  "docs/ai-governance/change-management.md"
+  "docs/ai-governance/exceptions.md"
   "docs/ai-governance/standards/architecture.md"
   "docs/ai-governance/standards/clean-code.md"
+  "docs/ai-governance/standards/ai-security.md"
   "docs/ai-governance/standards/testing.md"
   "docs/ai-governance/standards/documentation.md"
+  "docs/work-items/README.md"
+  "docs/ai-governance/templates/work-item.md"
   "docs/ai-governance/templates/task-card.md"
   "docs/ai-governance/templates/spec.md"
   "docs/ai-governance/templates/ticket.md"
+  "docs/ai-governance/templates/design.md"
+  "docs/ai-governance/templates/interface.md"
   "docs/ai-governance/templates/review.md"
   "docs/ai-governance/templates/impact.md"
   "docs/ai-governance/templates/agent-task.md"
@@ -38,8 +47,28 @@ for required_file in "${required_files[@]}"; do
   fi
 done
 
+required_governance_headings=(
+  "docs/ai-governance/roles-and-approvals.md|## 2. 决策权矩阵"
+  "docs/ai-governance/validation.md|## 2. 当前真实能力"
+  "docs/ai-governance/change-management.md|## 4. 在途 Work Item"
+  "docs/ai-governance/exceptions.md|## 1. 当前有效例外"
+  "docs/ai-governance/standards/ai-security.md|## 2. 不可信指令与 Prompt Injection"
+)
+
+for required_governance_heading in "${required_governance_headings[@]}"; do
+  governance_file="${required_governance_heading%%|*}"
+  governance_heading="${required_governance_heading#*|}"
+  if ! rg -Fq "$governance_heading" "$governance_file"; then
+    echo "[BLOCK] required governance heading missing in $governance_file: $governance_heading" >&2
+    exit 1
+  fi
+done
+
 required_heading_pairs=(
+  "docs/ai-governance/templates/work-item.md|## 产物适用性"
   "docs/ai-governance/templates/task-card.md|## 验收条件"
+  "docs/ai-governance/templates/design.md|## 备选方案与取舍"
+  "docs/ai-governance/templates/interface.md|## 错误与边界行为"
   "docs/ai-governance/templates/review.md|## 事实、假设与待确认项"
   "docs/ai-governance/templates/impact.md|## 修改边界"
   "docs/ai-governance/templates/verification.md|## 验收映射"
@@ -59,6 +88,44 @@ for required_heading_pair in "${required_heading_pairs[@]}"; do
     echo "[BLOCK] required heading missing in $template_file: $required_heading" >&2
     exit 1
   fi
+done
+
+for work_item_dir in docs/work-items/*/; do
+  [[ -d "$work_item_dir" ]] || continue
+  work_item_id="$(basename "$work_item_dir")"
+  if [[ ! "$work_item_id" =~ ^[A-Za-z0-9][A-Za-z0-9_-]*$ ]]; then
+    echo "[BLOCK] invalid Work Item ID: $work_item_id" >&2
+    exit 1
+  fi
+  work_item_readme="${work_item_dir}README.md"
+  if [[ ! -s "$work_item_readme" ]]; then
+    echo "[BLOCK] Work Item README is missing or empty: $work_item_readme" >&2
+    exit 1
+  fi
+  for work_item_heading in "## 任务身份" "## 版本与输入" "## 产物适用性" "## 人工批准点"; do
+    if ! rg -Fq "$work_item_heading" "$work_item_readme"; then
+      echo "[BLOCK] required Work Item heading missing in $work_item_readme: $work_item_heading" >&2
+      exit 1
+    fi
+  done
+done
+
+process_filenames=(
+  "spec.md" "design.md" "interface.md"
+  "01_review.md" "02_impact.md" "03_agent-task.md" "04_verification.md"
+  "code-review.md" "05_problem-review.md" "06_decision.md" "07_delivery.md"
+)
+
+for process_filename in "${process_filenames[@]}"; do
+  while IFS= read -r misplaced_file; do
+    [[ -z "$misplaced_file" ]] && continue
+    echo "[BLOCK] task process document is outside docs/work-items/: $misplaced_file" >&2
+    exit 1
+  done < <(
+    find docs/ai-governance docs/training -type f -name "$process_filename" \
+      ! -path "docs/ai-governance/templates/*" -print
+    find . -maxdepth 1 -type f -name "$process_filename" -print
+  )
 done
 
 clean_skills=(clean-comments clean-functions clean-general clean-names clean-tests)
@@ -83,6 +150,17 @@ if rg -ni "baseline|基线|manifest\.sha256|BL-T" \
   AGENTS.md docs/ai-governance platform-contracts/AGENTS.md \
   platform-web-starter/AGENTS.md business-wms/AGENTS.md training-server/AGENTS.md; then
   echo "[BLOCK] removed governance terminology was reintroduced" >&2
+  exit 1
+fi
+
+if rg -n "\.scratch/" AGENTS.md STANDARDS.md docs/ai-governance docs/agents docs/work-items; then
+  echo "[BLOCK] retired Work Item path was reintroduced into current governance documents" >&2
+  exit 1
+fi
+
+if ! rg -Fq 'STD-WMS-0.7-03' STANDARDS.md || \
+   ! rg -Fq 'docs/ai-governance/standards/ai-security.md' STANDARDS.md; then
+  echo "[BLOCK] current Standards ID or AI security routing is missing" >&2
   exit 1
 fi
 

@@ -2,7 +2,7 @@
 
 > 文档状态：课程仓库已落地，后续按评审意见维护  
 > 适用范围：`training-wms` 课程仓库及后续同类 Java / Spring Boot 培训项目  
-> 核心原则：文档提供上下文，Workflow 固定流程，Standards 定义质量目标，Templates 统一产物，Skills 保存可执行设置，自动校验负责拦截，人负责批准和最终裁决。
+> 核心原则：文档提供上下文，Workflow 固定流程，Standards 定义质量目标，Templates 统一产物，Skills 保存可执行设置，自动化与人工门禁分开记录，人负责批准和最终裁决。
 
 ## 1. 目标
 
@@ -18,6 +18,18 @@
 
 ## 2. 各层职责
 
+治理文档按以下权威链路分工：
+
+```text
+Workflow（何时）
+→ Documentation Standard（必须遵守什么）
+→ Deliverables（交付哪些文件）
+→ Templates（每个文件怎么写）
+→ Work Item（当前任务的实例）
+```
+
+下层可以实例化和细化上层，但不得放宽、覆盖或重复维护上层规则。
+
 ### 2.1 `AGENTS.md`：行为控制层
 
 `AGENTS.md` 是强制入口，只规定读取顺序、人工批准点、禁止改代码的条件、可写范围、停止条件和完成条件。它不复制业务需求、代码规则、Skill 步骤或模板字段。
@@ -29,10 +41,11 @@
 1. 仓库根目录 `AGENTS.md`
 2. 从仓库根目录到目标文件所在目录，按路径由远到近读取沿途所有 `AGENTS.md`
 3. `docs/ai-governance/workflow.md`
-4. 当前任务材料与已批准 Spec
-5. `docs/ai-governance/standards/` 中与任务相关的引导文件
-6. 相关架构、API、测试和源码
-7. 被引导文件指定的 Skill
+4. `docs/ai-governance/roles-and-approvals.md`
+5. 当前任务材料与已批准 Spec
+6. `STANDARDS.md` 及适用的分类标准；`standards/ai-security.md` 始终必读
+7. 相关架构、API、测试和源码
+8. 被引导文件指定的 Skill
 
 #### Module 级 `AGENTS.md` 的职责
 
@@ -97,6 +110,7 @@ training-wms/
 | --- | --- | --- |
 | `architecture.md` | 架构质量入口 | 指向分层、依赖方向、模块边界和所有权检查 |
 | `clean-code.md` | Clean Code 引导文件 | 说明适用场景、调用哪个 Skill、输入、输出和验收方式；不保存阈值、检查步骤和规则正文 |
+| `ai-security.md` | AI 安全入口 | 数据分类、不可信指令、工具/外部写入权限和供应链边界 |
 | `testing.md` | 测试质量入口 | 指向测试层级、测试先行、回归和证据检查 |
 | `documentation.md` | 文档质量入口 | 指向任务产物、Spec 审批、版本变更和交付追溯检查 |
 
@@ -120,9 +134,12 @@ Templates 只统一格式，不预填业务答案：
 
 | 模板 | 必填内容 |
 | --- | --- |
+| `work-item.md` | 任务 ID、类型、状态、所有者、代码起点、Standards 和产物适用性 |
 | `task-card.md` | 场景、目标、输入、范围、非目标、验收条件、代码起点和所有者 |
 | `spec.md` | 问题、范围、业务/设计决定、契约、验收条件、风险和审批记录 |
 | `ticket.md` | 可独立验证行为、阻塞关系、修改边界、验收条件和验证命令 |
+| `design.md` | Module/领域/数据/事务/并发设计、备选方案、取舍、回滚和批准 |
+| `interface.md` | HTTP、UI 或 Module 契约、错误语义、兼容、迁移和契约测试 |
 | `review.md` | 事实、假设、待确认项、复现命令、调用链、根因/决策和证据 |
 | `impact.md` | 模块、类/方法、契约、数据、事务、调用方、测试、可改/禁改范围和批准 |
 | `agent-task.md` | 已批准输入、目标代码/方法、测试接缝、执行步骤和停止条件 |
@@ -147,10 +164,25 @@ Skill 不是知识介绍，而是可重复执行的操作包。每个 Skill 必�
 
 五个 Clean Code Skills 是 `/code-review` 的 Standards 专项能力，不能代替 Spec 评审，也不能自行批准例外。上游当前没有 Java 主 Skill，本项目不安装 Python/TypeScript 主 Skill，只使用五个专项 Skill 中语言无关的规则。`/tdd` 可作为 `/implement` 的子能力，不新增课程主入口。
 
+### 2.6 治理控制文档
+
+| 文档 | 回答的问题 |
+| --- | --- |
+| `roles-and-approvals.md` | 谁有权批准业务、设计、契约、例外和最终交付 |
+| `validation.md` | 哪些门禁已自动化，哪些仍需 Agent/人工检查，真实命令和证据是什么 |
+| `change-management.md` | 治理规则、Templates、Skills 和校验门禁如何变更、迁移与回滚 |
+| `exceptions.md` | 哪些 Standards 例外仍有效，何时到期，由谁整改 |
+
 ## 3. 标准产物链
 
 ```text
-evidence/<group>/<task>/
+docs/work-items/<work-item-id>/
+├── README.md
+├── inputs/
+├── spec.md
+├── tickets/
+├── design.md
+├── interface.md
 ├── 01_review.md
 ├── 02_impact.md
 ├── 03_agent-task.md
@@ -158,7 +190,8 @@ evidence/<group>/<task>/
 ├── code-review.md
 ├── 05_problem-review.md
 ├── 06_decision.md
-└── 07_delivery.md
+├── 07_delivery.md
+└── artifacts/
 ```
 
 Review 与 Decision 必须分开：Review 提供事实、问题和建议；Decision 记录人的正式裁决。`07_delivery.md` 记录最终差异、提交、已批准 Spec 路径/版本、Standards ID/版本、测试证据、回滚、风险和后续动作。
@@ -179,20 +212,11 @@ Review 与 Decision 必须分开：Review 提供事实、问题和建议；Decis
 
 Spec 实质变化时新建版本并重新审批；Standards 变化时记录新版本。不得覆盖已被交付记录引用的版本。
 
-## 5. 自动校验层
+## 5. 校验与质量门禁层
 
-| 检查 ID | 检查内容 | 失败处理 |
-| --- | --- | --- |
-| `GOV-DOC-01` | 必需产物、固定标题和字段 | 缺失或空字段时阻断 |
-| `GOV-AGENT-01` | 受影响 Module 的 `AGENTS.md` 是否已读取，局部约束是否与修改范围对应 | 未读取、规则冲突未裁决或局部规则放宽根规则时阻断 |
-| `GOV-VERSION-01` | Spec、Standards、代码起点和被审版本 | 缺失、未批准或不可还原时阻断 |
-| `GOV-TRACE-01` | 验收条件/规则到代码、测试、结果和裁决的追溯 | 无证据的“通过”阻断 |
-| `GOV-ARCH-01` | 分层依赖、所有权和事务边界 | MUST 违反且无例外时阻断 |
-| `GOV-CODE-01` | 调用 Clean Code Skill 执行其版本化规则和设置 | 阻塞项阻断；预警交人工裁决 |
-| `GOV-TEST-01` | 目标测试、回归和全量验证是否对应被审代码 | 失败、未运行或版本不对应时阻断 |
-| `GOV-REVIEW-01` | Spec 与 Standards 两张矩阵是否独立且完整 | 任一轴缺失时阻断 |
+门禁分为 `AUTOMATED`、`ASSISTED`、`MANUAL` 和 `PLANNED`。检查 ID、真实实现状态、命令、证据和失败处理以 `validation.md` 为唯一来源。当前脚本已自动检查治理材料、Template 结构、产物路径、Skill 完整性和废弃术语；架构、代码、测试和追溯仍是工具辅助与人工共同门禁。
 
-自动校验不能代替需求裁决、例外批准和最终放行。
+仓库尚无 CI 配置证明脚本已在远程自动执行。本地脚本通过不能声明“CI 已通过”，自动校验也不能代替需求裁决、例外批准和最终放行。
 
 ## 6. 人与 Agent 的分工
 
@@ -200,7 +224,7 @@ Spec 实质变化时新建版本并重新审批；Standards 变化时记录新�
 | --- | --- | --- |
 | 人 | 提供材料；批准需求、根因、范围和例外；裁决评审发现；最终放行 | 不替 Agent 追调用链、猜根因或填写重复报告 |
 | Agent | 复现/澄清；定位；生成影响分析；批准后实施、测试、评审和汇总 | 不代替人批准 Spec、范围、例外或最终交付 |
-| 自动校验 | 检查文档、字段、版本、依赖、代码规则、测试和追溯关系 | 不自动决定业务含义、例外风险或最终放行 |
+| 自动校验 | 检查已在 `validation.md` 标记为 `AUTOMATED` 的项目 | 不冒充尚未自动化的架构、代码、测试、追溯或人工裁决 |
 
 ## 7. 目标仓库结构
 
@@ -219,17 +243,25 @@ Spec 实质变化时新建版本并重新审批；Standards 变化时记录新�
 │   ├── README.md
 │   ├── workflow.md
 │   ├── deliverables.md
+│   ├── roles-and-approvals.md
+│   ├── validation.md
+│   ├── change-management.md
+│   ├── exceptions.md
 │   ├── skills.md
 │   ├── skills.sha256
 │   ├── standards/
 │   │   ├── architecture.md
 │   │   ├── clean-code.md         # 只做引导；不保存具体规则设置
+│   │   ├── ai-security.md
 │   │   ├── testing.md
 │   │   └── documentation.md
 │   └── templates/
+│       ├── work-item.md
 │       ├── task-card.md
 │       ├── spec.md
 │       ├── ticket.md
+│       ├── design.md
+│       ├── interface.md
 │       ├── review.md
 │       ├── impact.md
 │       ├── agent-task.md
@@ -249,14 +281,16 @@ Spec 实质变化时新建版本并重新审批；Standards 变化时记录新�
 │   ├── clean-general/SKILL.md
 │   ├── clean-names/SKILL.md
 │   └── clean-tests/SKILL.md
-└── scripts/validate-ai-governance.sh # 本地与 CI 共用校验入口
+├── docs/work-items/                 # 单个任务过程产物
+└── scripts/validate-ai-governance.sh # 已实现的本地治理材料校验入口
 ```
 
 ## 8. 当前落地状态
 
 - 根及四个 Maven Module 的 `AGENTS.md` 已建立。
-- Workflow、产物定义、四个 Standards 引导文件和四个 Templates 已建立。
+- Workflow、产物定义、五个 Standards 引导文件和全部过程 Templates 已建立。
+- 角色审批、校验现状、治理变更和例外台账已建立独立权威文档。
 - AIHero 主链路 Skills 已保留在项目级 `.agents/skills/`。
 - 五个 Clean Code 专项 Skills 已从指定上游下载并记录提交与哈希，未修改上游内容。
-- `scripts/validate-ai-governance.sh` 已提供文档、Module 规则、Skill 名称、Skill 哈希和禁用术语检查。
+- `scripts/validate-ai-governance.sh` 已提供治理文档、Module 规则、Template 结构、产物路径、Skill 名称/哈希和禁用术语检查。
 - 代码分层、复杂度、测试执行和 Spec/Standards 符合性仍应继续接入 Maven/CI；当前脚本只验证治理材料和 Skill 完整性。

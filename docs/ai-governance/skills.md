@@ -1,5 +1,8 @@
 # 项目级 Skills 清单与来源
 
+> 用途：记录仓库安装的 Skills、来源、适用边界和调用顺序。  
+> 限制：Skill 是执行流程和检查能力，不是业务权威、人工批准或最终放行主体。
+
 ## 课程主链路
 
 以下 Skills 已安装在 `.agents/skills/`，来源和哈希记录在 `skills-lock.json`：
@@ -39,3 +42,11 @@ AGENTS.md
 ```
 
 Skill 输出是检查建议和证据，不是人工批准。
+
+## 使用限制
+
+- 只有 `skills-lock.json` 和来源哈希匹配的项目级 Skill 才能作为课程固定能力。
+- Skill 缺失、版本不明、读取失败或与 Spec/Standards 冲突时必须停止，不得临时改写 Prompt 假装同一流程。
+- 不得让 `/to-spec` 自行补齐未确认业务语义，也不得让 `/implement` 扩大人工批准范围。
+- `/code-review` 必须固定实际 Diff，并分开输出 Spec 与 Standards 发现；不能用 PASS 代替人工 Decision。
+- 下载的 Clean Code Skills 不得就地修改；Java 只采用能从当前代码证实的语言无关规则。
