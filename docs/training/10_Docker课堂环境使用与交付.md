@@ -1,5 +1,9 @@
 # Docker课堂环境使用与交付
 
+> 用途：构建、验证、分发和使用 `linux/amd64` 课堂镜像。  
+> 状态：课程环境说明，不是生产部署手册。  
+> 限制：不得把镜像内测试结果当作当前分支结果；依赖、POM、JDK、起始代码或构建方式变化后必须重建并重新做断网验证。
+
 > 目标：使用一个预热的课堂镜像提供Java 17、Maven 3.9.9和项目依赖，学员无需在主机安装Java/Maven，断网后仍可构建、测试和启动。
 
 ## 1. 设计结论
@@ -42,7 +46,17 @@ export CLASSROOM_GID=$(id -g)
 
 Windows Docker Desktop可使用Compose默认值；如组织策略要求非默认用户，由讲师在T-5联调时统一确认。
 
-### 3.2 离线构建和测试
+### 3.2 宿主持久化运行空间
+
+Compose 将容器的 `HOME`、`MAVEN_CONFIG`、`TMPDIR` 和 Java 临时目录统一指向项目根目录的 `.classroom-runtime/`。该目录位于学员电脑的项目工作区中，经 `/workspace` 挂载后供容器使用，因此容器退出或重建后仍然保留，也不会继续占用容器可写层的 `/tmp`。
+
+- `.classroom-runtime/` 已加入 `.gitignore`，不得提交到仓库。
+- Maven 依赖仍读取镜像内的 `/opt/training-m2/repository`；宿主目录只保存运行期配置、日志和临时文件，不重复复制整套离线依赖。
+- 每个学员工作目录拥有独立运行空间，不应在多个小组之间共享该目录。
+- 删除 `.classroom-runtime/` 只会清理本机课堂缓存，不会删除源码；执行前应停止对应课堂容器。
+- 该设置避免课堂进程持续写满 Docker 容器可写层，但 Docker Engine 已经没有可用空间时，仍需先清理无用镜像、构建缓存或扩大 Docker Desktop 磁盘容量。
+
+### 3.3 离线构建和测试
 
 ```bash
 docker compose -f compose.classroom.yml run --rm classroom
@@ -54,7 +68,7 @@ docker compose -f compose.classroom.yml run --rm classroom
 mvn -o -B -ntp clean verify
 ```
 
-### 3.3 运行指定测试
+### 3.4 运行指定测试
 
 ```bash
 docker compose -f compose.classroom.yml run --rm classroom \
@@ -62,7 +76,7 @@ docker compose -f compose.classroom.yml run --rm classroom \
   -Dtest=WmsFlowIntegrationTest test
 ```
 
-### 3.4 启动训练服务
+### 3.5 启动训练服务
 
 ```bash
 docker compose -f compose.classroom.yml run --rm --service-ports classroom \
@@ -134,3 +148,11 @@ docker run --rm --network none \
 - 任何起始/答案标签的构建方式变更。
 
 重建后重新执行断网验收，更新镜像标签、导出文件和SHA-256。
+
+## T01—T03 测试与 QA 交接口径
+
+开发仅提交当前任务的 TDD 与必要回归（`02_verification.md`）；代码评审记录于 `03_review.md`。测试团队的工程师独立执行功能、页面/API、异常和回归验证，结果写入 `functional-test.md`；另一团队的 QA 审核规范、需求追溯、覆盖、证据和缺陷闭环，结论写入 `qa-review.md`。业务所有者另行验收，交付负责人在 `04_decision.md` 记录最终裁决。不能用开发全绿替代独立测试，不能用 QA 审核替代业务验收。
+
+各阶段分别记录对象版本、具名负责人及团队、待确认事项、状态、结论时间与证据。测试工程师与 QA 不得由同一人员兼任；缺少负责人由讲师/交付负责人指定，未执行保持待执行，未确认保持待确认，不预填 PASS。修复后先更新开发证据，再由测试工程师重测，QA 审核新证据，必要时重新业务验收。
+
+T01 仍按完整手写 Prompt 操作；职责分离不意味着引入预置 Skill。T02/T03 保留各自命令入口。操作与模板以对应学员卡及 `docs/ai-governance/roles-and-approvals.md` 为准。
