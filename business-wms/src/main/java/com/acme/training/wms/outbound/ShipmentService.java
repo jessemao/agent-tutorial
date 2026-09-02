@@ -80,8 +80,7 @@ class ShipmentService implements ShipmentOperations {
         boolean releaseInventory = order.getStatus() == ShipmentStatus.RESERVED;
         order.cancel(idempotencyKey, normalizedReason);
         if (releaseInventory) {
-            // Training defect T01: shipment state changes, but reserved inventory is not released.
-            // inventoryOperations.release(inventoryCommand(order, idempotencyKey));
+            inventoryOperations.release(inventoryCommand(order, idempotencyKey));
         }
         audit("CANCEL", order);
         return new ShipmentView(order);
