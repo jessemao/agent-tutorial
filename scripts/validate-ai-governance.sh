@@ -14,12 +14,14 @@ required_files=(
   "docs/ai-governance/change-management.md"
   "docs/ai-governance/exceptions.md"
   "docs/ai-governance/standards/architecture.md"
+  "docs/ai-governance/standards/requirements-design.md"
   "docs/ai-governance/standards/clean-code.md"
   "docs/ai-governance/standards/ai-security.md"
   "docs/ai-governance/standards/testing.md"
   "docs/ai-governance/standards/documentation.md"
   "docs/work-items/README.md"
   "docs/ai-governance/templates/work-item.md"
+  "docs/ai-governance/templates/input-evidence.md"
   "docs/ai-governance/templates/task-card.md"
   "docs/ai-governance/templates/spec.md"
   "docs/ai-governance/templates/ticket.md"
@@ -35,6 +37,12 @@ required_files=(
   "platform-web-starter/AGENTS.md"
   "business-wms/AGENTS.md"
   "training-server/AGENTS.md"
+  ".agents/skills/project-system-of-record/SKILL.md"
+  ".agents/skills/project-system-of-record/agents/openai.yaml"
+  ".agents/skills/project-system-of-record/references/lifecycle.md"
+  ".agents/skills/project-system-of-record/references/process-logging.md"
+  ".agents/skills/init-work-item/SKILL.md"
+  ".agents/skills/init-work-item/agents/openai.yaml"
   "skills-lock.json"
 )
 
@@ -51,6 +59,7 @@ required_governance_headings=(
   "docs/ai-governance/change-management.md|## 4. 在途 Work Item"
   "docs/ai-governance/exceptions.md|## 1. 当前有效例外"
   "docs/ai-governance/standards/ai-security.md|## 2. 不可信指令与 Prompt Injection"
+  "docs/ai-governance/standards/requirements-design.md|## 3. Spec 批准前检查"
 )
 
 for required_governance_heading in "${required_governance_headings[@]}"; do
@@ -64,12 +73,15 @@ done
 
 required_heading_pairs=(
   "docs/ai-governance/templates/work-item.md|## 产物适用性"
+  "docs/ai-governance/templates/input-evidence.md|## 证据边界"
   "docs/ai-governance/templates/task-card.md|## 验收条件"
   "docs/ai-governance/templates/design.md|## 备选方案与取舍"
   "docs/ai-governance/templates/interface.md|## 错误与边界行为"
   "docs/ai-governance/templates/analysis.md|## 影响与边界"
   "docs/ai-governance/templates/verification.md|## 验收映射"
   "docs/ai-governance/templates/spec.md|## 审批记录"
+  "docs/ai-governance/templates/spec.md|## 用户旅程与交互决定"
+  "docs/ai-governance/templates/interface.md|## UI 交互契约"
   "docs/ai-governance/templates/ticket.md|## 验收条件"
   "docs/ai-governance/templates/review.md|## Spec 符合性矩阵"
   "docs/ai-governance/templates/review.md|## 问题复盘"
@@ -128,6 +140,8 @@ for work_item_dir in docs/work-items/*/; do
 
   case "$work_item_status" in
     DRAFT|DISCOVERING)
+      forbid_stage_file "functional-test.md"
+      forbid_stage_file "qa-review.md"
       forbid_stage_file "02_verification.md"
       forbid_stage_file "03_review.md"
       forbid_stage_file "04_decision.md"
@@ -149,13 +163,17 @@ for work_item_dir in docs/work-items/*/; do
       forbid_stage_file "04_decision.md"
       ;;
     FUNCTIONAL_TESTING)
+      require_stage_file "01_analysis.md"
       require_stage_file "02_verification.md"
       require_stage_file "03_review.md"
+      forbid_stage_file "qa-review.md"
       forbid_stage_file "04_decision.md"
       ;;
     QA_REVIEWING)
-      require_stage_file "functional-test.md"
+      require_stage_file "01_analysis.md"
+      require_stage_file "02_verification.md"
       require_stage_file "03_review.md"
+      require_stage_file "functional-test.md"
       forbid_stage_file "04_decision.md"
       ;;
     WAITING_FOR_DELIVERY_DECISION)
@@ -194,6 +212,7 @@ for deprecated_process_filename in "${deprecated_process_filenames[@]}"; do
 done
 
 process_filenames=(
+  "functional-test.md" "qa-review.md"
   "spec.md" "design.md" "interface.md"
   "01_analysis.md" "02_verification.md" "03_review.md" "04_decision.md"
   "01_review.md" "02_impact.md" "03_agent-task.md" "04_verification.md"
@@ -220,6 +239,49 @@ for clean_skill in "${clean_skills[@]}"; do
     exit 1
   fi
 done
+
+if ! rg -q '^name: project-system-of-record$' \
+  .agents/skills/project-system-of-record/SKILL.md; then
+  echo "[BLOCK] invalid project-level project-system-of-record Skill" >&2
+  exit 1
+fi
+
+if ! rg -Fq 'project-system-of-record' AGENTS.md; then
+  echo "[BLOCK] AGENTS.md does not require project-system-of-record" >&2
+  exit 1
+fi
+
+if ! rg -Fq 'allow_implicit_invocation: true' \
+  .agents/skills/project-system-of-record/agents/openai.yaml; then
+  echo "[BLOCK] project-system-of-record implicit invocation is disabled" >&2
+  exit 1
+fi
+
+fully_locked_skills=(codebase-design)
+for fully_locked_skill in "${fully_locked_skills[@]}"; do
+  skill_dir=".agents/skills/$fully_locked_skill"
+  skill_file="$skill_dir/SKILL.md"
+  if [[ ! -s "$skill_file" ]] || ! rg -q "^name: $fully_locked_skill$" "$skill_file"; then
+    echo "[BLOCK] invalid fully locked Skill: $skill_file" >&2
+    exit 1
+  fi
+
+  while IFS= read -r locked_skill_file; do
+    [[ -z "$locked_skill_file" ]] && continue
+    if ! rg -Fq "  $locked_skill_file" docs/ai-governance/skills.sha256; then
+      echo "[BLOCK] Skill file is missing from checksum manifest: $locked_skill_file" >&2
+      exit 1
+    fi
+  done < <(find "$skill_dir" -type f -print)
+done
+
+while read -r locked_hash locked_path; do
+  [[ -z "${locked_hash:-}" || -z "${locked_path:-}" ]] && continue
+  if ! rg -Fq "\"$locked_hash\"" skills-lock.json; then
+    echo "[BLOCK] checksum is not recorded in skills-lock.json: $locked_path" >&2
+    exit 1
+  fi
+done < docs/ai-governance/skills.sha256
 
 if command -v sha256sum >/dev/null 2>&1; then
   sha256sum -c docs/ai-governance/skills.sha256

@@ -3,6 +3,8 @@ import { ConfigProvider } from 'antd';
 import zhCN from 'antd/locale/zh_CN';
 import { AppShell } from './components/AppShell';
 import { useTrainingScenario } from './hooks/useTrainingScenario';
+import { useInboundScenario } from './hooks/useInboundScenario';
+import { InboundPage } from './pages/InboundPage';
 import { InventoryPage } from './pages/InventoryPage';
 import { ShipmentPage } from './pages/ShipmentPage';
 import type { ViewKey } from './types';
@@ -10,6 +12,7 @@ import type { ViewKey } from './types';
 export default function App() {
   const [activeView, setActiveView] = useState<ViewKey>('shipment');
   const scenario = useTrainingScenario();
+  const inbound = useInboundScenario();
 
   return (
     <ConfigProvider
@@ -29,8 +32,9 @@ export default function App() {
       }}
     >
       {scenario.messageContext}
+      {inbound.messageContext}
       <AppShell activeView={activeView} onViewChange={setActiveView}>
-        {activeView === 'shipment' ? (
+        {activeView === 'shipment' && (
           <ShipmentPage
             busy={scenario.busy}
             error={scenario.error}
@@ -44,7 +48,22 @@ export default function App() {
             onRefresh={scenario.refreshSelected}
             onSelect={scenario.selectShipment}
           />
-        ) : (
+        )}
+        {activeView === 'inbound' && (
+          <InboundPage
+            busy={inbound.busy}
+            error={inbound.error}
+            inbounds={inbound.inbounds}
+            pendingIdentifiers={inbound.pendingIdentifiers}
+            selectedId={inbound.selectedId}
+            onCreate={inbound.createDemo}
+            onOpenCreate={inbound.openCreate}
+            onReceiveFirstBatch={inbound.receiveFirstBatch}
+            onRefresh={inbound.refreshSelected}
+            onSelect={inbound.selectInbound}
+          />
+        )}
+        {activeView === 'inventory' && (
           <InventoryPage
             busy={scenario.busy}
             error={scenario.error}

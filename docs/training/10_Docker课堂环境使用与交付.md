@@ -4,17 +4,17 @@
 > 状态：课程环境说明，不是生产部署手册。  
 > 限制：不得把镜像内测试结果当作当前分支结果；依赖、POM、JDK、起始代码或构建方式变化后必须重建并重新做断网验证。
 
-> 目标：使用一个预热的课堂镜像提供Java 17、Maven 3.9.9和项目依赖，学员无需在主机安装Java/Maven，断网后仍可构建、测试和启动。
+> 目标：使用一个预热的课堂镜像提供 Java 17、Maven 3.9.9、Node 22 和项目依赖，学员无需在主机安装 Java、Maven 或 Node。
 
 ## 1. 设计结论
 
 - 镜像名：`training-wms-classroom:0.7`。
-- 运行工具链：Eclipse Temurin JDK 17 + Maven 3.9.9。
+- 运行工具链：Eclipse Temurin JDK 17 + Maven 3.9.9 + Node 22。
 - 基础镜像默认从AWS Public ECR的Docker官方镜像源获取，避免依赖单一Docker Hub通道；内容仍为官方Maven/Temurin镜像。
 - 源码编译级别：保持项目 `pom.xml` 现有 Java 8 源码/目标兼容，不因镜像修改业务行为。
 - 镜像内置来自`s2-t01-start`的课程初始代码，不包含Git历史、后续任务答案或客户材料。
 - 学员当前T01—T06工作目录以只有容器运行时可见的bind mount挂载到`/workspace`。
-- 默认命令是真正的Maven离线验收：`mvn -o -B -ntp clean verify`。
+- Compose 长期运行后端和前端开发服务；源码修改由热更新流程自动应用。
 
 ## 2. 制作镜像（有网络准备阶段）
 
@@ -37,14 +37,13 @@ docker compose -f compose.classroom.yml build classroom
 
 ## 3. 学员使用
 
-### 3.1 macOS/Linux设置文件所有者
+### 3.1 一键启动
 
 ```bash
-export CLASSROOM_UID=$(id -u)
-export CLASSROOM_GID=$(id -g)
+./scripts/classroom-up.sh
 ```
 
-Windows Docker Desktop可使用Compose默认值；如组织策略要求非默认用户，由讲师在T-5联调时统一确认。
+脚本自动处理当前用户、镜像检查、Compose 启动和健康等待。重复执行不重建容器。启动后访问 `http://localhost:8080`。
 
 ### 3.2 宿主持久化运行空间
 
@@ -56,36 +55,18 @@ Compose 将容器的 `HOME`、`MAVEN_CONFIG`、`TMPDIR` 和 Java 临时目录统
 - 删除 `.classroom-runtime/` 只会清理本机课堂缓存，不会删除源码；执行前应停止对应课堂容器。
 - 该设置避免课堂进程持续写满 Docker 容器可写层，但 Docker Engine 已经没有可用空间时，仍需先清理无用镜像、构建缓存或扩大 Docker Desktop 磁盘容量。
 
-### 3.3 离线构建和测试
+### 3.3 开发、测试和停止
 
 ```bash
-docker compose -f compose.classroom.yml run --rm classroom
+./scripts/classroom-status.sh
+./scripts/classroom-test.sh T02 baseline
+./scripts/classroom-verify.sh T02
+./scripts/classroom-down.sh
 ```
 
-默认会运行：
+任务卡会给出当前任务的测试范围。前端修改由 Vite 热更新；后端 Java 和配置修改会触发离线编译和 Spring Boot 自动重启。只有 POM、依赖锁文件、Dockerfile、Compose 或环境变量变化时才需要重建镜像或重启环境。
 
-```bash
-mvn -o -B -ntp clean verify
-```
-
-### 3.4 运行指定测试
-
-```bash
-docker compose -f compose.classroom.yml run --rm classroom \
-  mvn -o -B -ntp -pl training-server -am \
-  -Dtest=WmsFlowIntegrationTest test
-```
-
-### 3.5 启动训练服务
-
-```bash
-docker compose -f compose.classroom.yml run --rm --service-ports classroom \
-  training-wms-start
-```
-
-`training-wms-start`先使用`-DskipTests clean package`离线打包当前挂载的学员版本，再直接运行`training-server`产生的Spring Boot JAR。这避免向镜像内的只读Maven缓存写入，也避免学员起始版本误用制镜时的答案构件。
-
-启动后访问`http://localhost:8080/actuator/health`。每个学员工作目录单独运行；同一主机并行多组时需为每组分配不同端口。
+学员不需要直接执行 Docker、Maven 或 Node 命令。如果对实现感兴趣，可阅读 `scripts/classroom-*.sh`、`compose.classroom.yml` 和 `docker/classroom/`。
 
 ## 4. 导出和分发（有网络准备阶段）
 
@@ -130,7 +111,7 @@ docker run --rm --network none \
 - [ ] 镜像中`java -version`为17、`mvn -version`为3.9.9。
 - [ ] 镜像中`/workspace`为`s2-t01-start`初始代码，且不包含`.git`、任务卡和答案。
 - [ ] 镜像标签记录`io.training.course.ref=s2-t01-start`及对应提交号。
-- [ ] 断网挂载`s3-t06-answer`时，`mvn -o clean verify`通过16条业务测试 + 3条平台契约测试。
+- [ ] 仅在讲师恢复环境挂载 `s3-t06-answer` 时，`mvn -o clean verify` 通过16条业务测试 + 3条平台契约测试；学员镜像和工作目录不可见该答案 ref。
 - [ ] 不挂载项目时，T01初始代码显示8条测试中2条预期失败。
 - [ ] 服务在容器中可启动，主机可访问8080健康检查。
 - [ ] 非root学员用户可在挂载目录创建`target/`，课后不产生无法删除的root文件。

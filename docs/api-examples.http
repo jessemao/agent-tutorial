@@ -15,7 +15,35 @@ X-Operator: {{operator}}
   "quantity": 100
 }
 
-### 2. 创建出库单
+### 2. T02：创建计划收货 10 件的入库单
+POST {{baseUrl}}/api/wms/inbounds
+Content-Type: application/json
+X-Operator: {{operator}}
+
+{
+  "orderNo": "IN-T02-001",
+  "skuId": 2001,
+  "warehouseId": 1,
+  "locationId": 1,
+  "plannedQuantity": 10
+}
+
+### 3. T02 起点：尝试首批收货 4 件（把 1 替换为上一步返回的入库单 ID）
+# 当前基线预期返回 WMS_INBOUND_FULL_RECEIPT_REQUIRED；这是旧规则，不是程序故障。
+POST {{baseUrl}}/api/wms/inbounds/1/receive
+Content-Type: application/json
+X-Operator: {{operator}}
+
+{
+  "idempotencyKey": "receive-t02-batch-001",
+  "quantity": 4
+}
+
+### 4. T02：确认入库单和库存未变化
+GET {{baseUrl}}/api/wms/inbounds/1
+X-Operator: {{operator}}
+
+### 5. 创建出库单
 POST {{baseUrl}}/api/wms/shipments
 Content-Type: application/json
 X-Operator: {{operator}}
@@ -28,7 +56,7 @@ X-Operator: {{operator}}
   "quantity": 30
 }
 
-### 3. 预占库存（把 1 替换为上一步返回的出库单 ID）
+### 6. 预占库存（把 1 替换为上一步返回的出库单 ID）
 POST {{baseUrl}}/api/wms/shipments/1/reserve
 Content-Type: application/json
 X-Operator: {{operator}}
@@ -37,7 +65,7 @@ X-Operator: {{operator}}
   "idempotencyKey": "reserve-demo-001"
 }
 
-### 4. 取消并释放预占库存
+### 7. 取消并释放预占库存
 POST {{baseUrl}}/api/wms/shipments/1/cancel
 Content-Type: application/json
 X-Operator: {{operator}}
@@ -47,11 +75,11 @@ X-Operator: {{operator}}
   "reason": "客户取消"
 }
 
-### 5. 检查库存
+### 8. 检查库存
 GET {{baseUrl}}/api/wms/inventory/balance?skuId=1001&warehouseId=1&locationId=1
 X-Operator: {{operator}}
 
-### 6. 库内移库（从库位 1 移到库位 2）
+### 9. 库内移库（从库位 1 移到库位 2）
 POST {{baseUrl}}/api/wms/inventory/transfer
 Content-Type: application/json
 X-Operator: {{operator}}
@@ -66,7 +94,7 @@ X-Operator: {{operator}}
   "quantity": 5
 }
 
-### 7. 创建盘点单（只记录快照，不立即调整库存）
+### 10. 创建盘点单（只记录快照，不立即调整库存）
 POST {{baseUrl}}/api/wms/stocktakes
 Content-Type: application/json
 X-Operator: {{operator}}
@@ -79,7 +107,7 @@ X-Operator: {{operator}}
   "countedTotalQuantity": 4
 }
 
-### 8. 审批盘点单（把 1 替换为上一步返回的盘点单 ID）
+### 11. 审批盘点单（把 1 替换为上一步返回的盘点单 ID）
 POST {{baseUrl}}/api/wms/stocktakes/1/approve
 Content-Type: application/json
 X-Operator: {{operator}}
@@ -88,6 +116,6 @@ X-Operator: {{operator}}
   "idempotencyKey": "count-approve-demo-001"
 }
 
-### 9. 查询盘点结果
+### 12. 查询盘点结果
 GET {{baseUrl}}/api/wms/stocktakes/1
 X-Operator: {{operator}}

@@ -1,0 +1,8 @@
+#!/bin/sh
+set -eu
+
+if [ ! -x node_modules/.bin/vite ]; then
+  cp -R /opt/training-node-modules/. node_modules/
+fi
+
+exec npm run dev -- --host 0.0.0.0

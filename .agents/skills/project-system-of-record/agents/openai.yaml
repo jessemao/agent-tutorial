@@ -1,0 +1,6 @@
+interface:
+  display_name: "项目事实系统"
+  short_description: "让 Codex 自动维护代码仓库、Notion 四库与项目知识"
+  default_prompt: "使用 $project-system-of-record 执行此项目，并持续同步代码仓库、Notion 记录与项目知识。"
+policy:
+  allow_implicit_invocation: true

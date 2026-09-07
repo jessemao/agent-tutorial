@@ -1,5 +1,11 @@
 f17a0de4b34da585ea612240f07e49471e7c60ffbb4f47d43b507df04f4aea46  .agents/skills/clean-comments/SKILL.md
+f3e6f00fa4a8a59acaf60a639b58f3819eba6f6cb65dca2383111f99d8994eb2  .agents/skills/init-work-item/SKILL.md
+c98f59fecc6d38397f16e0ca7e206bd5ca2d3f480e81f73d6ad47a7735e6f72b  .agents/skills/init-work-item/agents/openai.yaml
 7f1f35975a462e707aeafeb942557cfc154d57e590523f506228b9f6fa50ff30  .agents/skills/clean-functions/SKILL.md
 dc8d154f595eb9cb348de417ad55f20e605d3a9b008df7b7f229296ed6cf2085  .agents/skills/clean-general/SKILL.md
 52fe6c7fb857ee90433fc756a3e4b584a3420e88861dba71118eb9cd55001060  .agents/skills/clean-names/SKILL.md
 e0d96647688950fccd7eb5d976263aadcece4c44ecc2516cdc1747f3d39c6cc5  .agents/skills/clean-tests/SKILL.md
+f3dd099ce99289bd213914d8ee3e2429b78309c3957ca4583f7659551b1d53c1  .agents/skills/codebase-design/DEEPENING.md
+8e740bf98446dbd4dfdc132ac4346d9a7eedaf93de6a495889171cf7f99f16bd  .agents/skills/codebase-design/DESIGN-IT-TWICE.md
+2c20617f87ec8af6a434859f381b2f061a69b530444e74eb39e78bb016a6d1e2  .agents/skills/codebase-design/SKILL.md
+edebc9e4fcfe102114012575eaa9600b9b5fd08c311664f389c36e7bc717740f  .agents/skills/codebase-design/agents/openai.yaml

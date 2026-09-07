@@ -1,7 +1,9 @@
 import type {
   InventoryBalance,
+  InboundView,
   ScenarioIdentifiers,
   ShipmentView,
+  TrainingInbound,
   TrainingShipment,
 } from '../types';
 
@@ -12,6 +14,14 @@ export const SCENARIO = Object.freeze({
   locationId: 1,
   operator: 'trainer',
   defaultCancelReason: '客户取消',
+});
+
+export const T02_SCENARIO = Object.freeze({
+  plannedQuantity: 10,
+  firstReceiptQuantity: 4,
+  warehouseId: 1,
+  locationId: 1,
+  operator: 'trainer',
 });
 
 interface ApiResponse<T> {
@@ -66,6 +76,53 @@ export function createIdentifiers(): ScenarioIdentifiers {
   const runId = Array.from(values, (value) => value.toString(16).padStart(8, '0')).join('');
   const skuId = 1_000_000_000_000 + values[0] * 100_000 + (values[1] % 100_000);
   return { runId, skuId, orderNo: `SO-T01-${runId.slice(0, 12).toUpperCase()}` };
+}
+
+export function createInboundIdentifiers(): ScenarioIdentifiers {
+  const values = crypto.getRandomValues(new Uint32Array(3));
+  const runId = Array.from(values, (value) => value.toString(16).padStart(8, '0')).join('');
+  const skuId = 2_000_000_000_000 + values[0] * 100_000 + (values[1] % 100_000);
+  return { runId, skuId, orderNo: `IN-T02-${runId.slice(0, 12).toUpperCase()}` };
+}
+
+export async function createInboundOrder(identifiers: ScenarioIdentifiers): Promise<TrainingInbound> {
+  const created = await request<InboundView>('POST', '/api/wms/inbounds', {
+    orderNo: identifiers.orderNo,
+    skuId: identifiers.skuId,
+    warehouseId: T02_SCENARIO.warehouseId,
+    locationId: T02_SCENARIO.locationId,
+    plannedQuantity: T02_SCENARIO.plannedQuantity,
+  });
+  return {
+    ...identifiers,
+    inboundId: created.id,
+    plannedQuantity: created.plannedQuantity,
+    receivedQuantity: created.receivedQuantity,
+    status: created.status,
+    inventory: { availableQuantity: 0, reservedQuantity: 0 },
+    createdAt: new Date(),
+  };
+}
+
+export async function receiveInbound(inbound: TrainingInbound, quantity: number): Promise<void> {
+  await request<InboundView>('POST', `/api/wms/inbounds/${inbound.inboundId}/receive`, {
+    idempotencyKey: `receive-t02-${inbound.runId}-${quantity}`,
+    quantity,
+  });
+}
+
+export async function refreshInbound(inbound: TrainingInbound): Promise<TrainingInbound> {
+  const [view, inventory] = await Promise.all([
+    request<InboundView>('GET', `/api/wms/inbounds/${inbound.inboundId}`),
+    request<InventoryBalance>('GET', inventoryPath(inbound)),
+  ]);
+  return {
+    ...inbound,
+    plannedQuantity: view.plannedQuantity,
+    receivedQuantity: view.receivedQuantity,
+    status: view.status,
+    inventory,
+  };
 }
 
 export async function prepareDemoShipment(

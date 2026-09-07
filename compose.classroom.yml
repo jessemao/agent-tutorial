@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: docker/classroom/Dockerfile
-    command: ["/usr/local/bin/training-wms-start"]
+    command: ["/workspace/docker/classroom/training-wms-dev"]
     working_dir: /workspace
     user: "${CLASSROOM_UID:-1000}:${CLASSROOM_GID:-1000}"
     environment:
@@ -17,5 +17,19 @@ services:
       MAVEN_OPTS: -Dmaven.repo.local=/opt/training-m2/repository
     volumes:
       - .:/workspace
+  frontend:
+    image: training-wms-classroom:0.7
+    platform: linux/amd64
+    command: ["/workspace/docker/classroom/training-wms-frontend-dev"]
+    working_dir: /workspace/training-server/frontend
+    user: "${CLASSROOM_UID:-1000}:${CLASSROOM_GID:-1000}"
+    environment:
+      HOME: /workspace/.classroom-runtime
+      npm_config_cache: /workspace/.classroom-runtime/npm
+    volumes:
+      - .:/workspace
+      - ./.classroom-runtime/frontend-node-modules:/workspace/training-server/frontend/node_modules
     ports:
-      - "8080:8080"
+      - "8080:5173"
+    depends_on:
+      - classroom

@@ -18,7 +18,7 @@
 | `GOV-TEMPLATE-01` | AUTOMATED | 各 Template 关键章节存在 | `scripts/validate-ai-governance.sh` | 阻断交付 |
 | `GOV-PATH-01` | AUTOMATED | 固定过程文件未写入治理目录、培训目录或仓库根目录 | `scripts/validate-ai-governance.sh` | 阻断交付 |
 | `GOV-STAGE-01` | AUTOMATED | Work Item 状态对应的前置文档存在，未来阶段编号文档没有提前生成 | `scripts/validate-ai-governance.sh`、`deliverables.md` 第 4 节 | 阻断阶段推进 |
-| `GOV-SKILL-01` | AUTOMATED | Clean Code Skills 存在、名称正确且哈希与锁定文件一致 | `scripts/validate-ai-governance.sh`、`skills.sha256` | 阻断交付 |
+| `GOV-SKILL-01` | AUTOMATED | Clean Code Skills 与已标记为完整锁定的课程 Skill 存在、名称正确，且全部随包文件都已进入哈希清单并通过校验 | `scripts/validate-ai-governance.sh`、`skills.sha256`、`skills-lock.json` | 阻断交付 |
 | `GOV-TERM-01` | AUTOMATED | 已废弃治理术语未重新进入现行治理文档 | `scripts/validate-ai-governance.sh` | 阻断交付 |
 | `GOV-WORKITEM-01` | ASSISTED | Work Item ID、任务类型、条件产物及 `N/A` 理由匹配，状态和审批证据真实 | Agent 对照 `deliverables.md`，人审核 | 内容不实或缺失时阻断实施/交付 |
 | `GOV-AGENT-01` | ASSISTED | 受影响 Module 的 `AGENTS.md` 已读取且未与根规则冲突 | `01_analysis.md` 读取清单与人工核对 | 冲突未裁决时阻断 |

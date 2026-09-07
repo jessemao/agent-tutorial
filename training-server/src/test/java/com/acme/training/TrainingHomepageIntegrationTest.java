@@ -39,11 +39,13 @@ class TrainingHomepageIntegrationTest {
     }
 
     @Test
-    void compiledReactApplicationUsesApprovedShipmentAndInventoryApis() throws Exception {
+    void compiledReactApplicationContainsT01AndT02ScenarioApis() throws Exception {
         mockMvc.perform(get("/assets/app.js"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("/api/wms/shipments")))
                 .andExpect(content().string(containsString("/cancel")))
-                .andExpect(content().string(containsString("/api/wms/inventory/balance")));
+                .andExpect(content().string(containsString("/api/wms/inventory/balance")))
+                .andExpect(content().string(containsString("/api/wms/inbounds")))
+                .andExpect(content().string(containsString("/receive")));
     }
 }

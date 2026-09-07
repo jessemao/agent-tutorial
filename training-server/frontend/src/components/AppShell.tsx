@@ -28,6 +28,14 @@ const menuItems: MenuProps['items'] = [
     ],
   },
   {
+    key: 'inbound-group',
+    icon: <InboxOutlined />,
+    label: '入库管理',
+    children: [
+      { key: 'inbound', label: '入库订单' },
+    ],
+  },
+  {
     key: 'warehouse',
     icon: <InboxOutlined />,
     label: '仓储管理',
@@ -42,6 +50,7 @@ const menuItems: MenuProps['items'] = [
 
 const tabLabels: Record<ViewKey, string> = {
   shipment: '出库订单',
+  inbound: '入库订单',
   inventory: '库存明细',
 };
 
@@ -82,10 +91,10 @@ export function AppShell({ activeView, children, onViewChange }: AppShellProps) 
           mode="inline"
           theme="dark"
           selectedKeys={[activeView]}
-          defaultOpenKeys={['outbound', 'warehouse']}
+          defaultOpenKeys={['outbound', 'inbound-group', 'warehouse']}
           items={menuItems}
           onClick={({ key }) => {
-            if (key === 'shipment' || key === 'inventory') onViewChange(key);
+            if (key === 'shipment' || key === 'inbound' || key === 'inventory') onViewChange(key);
             if (mobile) setCollapsed(true);
           }}
         />

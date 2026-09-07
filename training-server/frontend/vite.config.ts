@@ -4,6 +4,14 @@ import react from '@vitejs/plugin-react-swc';
 export default defineConfig({
   plugins: [react()],
   base: '/',
+  server: {
+    port: 5173,
+    proxy: {
+      '/api': 'http://classroom:8080',
+      '/actuator': 'http://classroom:8080',
+      '/h2-console': 'http://classroom:8080',
+    },
+  },
   build: {
     outDir: '../src/main/resources/static',
     emptyOutDir: true,

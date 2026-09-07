@@ -1,0 +1,21 @@
+#!/bin/sh
+set -eu
+
+lock_dir=/workspace/.classroom-runtime/maven.lock
+mkdir -p /workspace/.classroom-runtime
+
+while ! mkdir "$lock_dir" 2>/dev/null; do
+  if [ -r "$lock_dir/pid" ]; then
+    read -r lock_pid < "$lock_dir/pid"
+    if ! kill -0 "$lock_pid" 2>/dev/null; then
+      rm -f "$lock_dir/pid"
+      rmdir "$lock_dir" 2>/dev/null || true
+      continue
+    fi
+  fi
+  sleep 1
+done
+
+echo $$ > "$lock_dir/pid"
+trap 'rm -f "$lock_dir/pid"; rmdir "$lock_dir" 2>/dev/null || true' EXIT INT TERM
+mvn "$@"

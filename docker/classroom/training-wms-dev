@@ -1,0 +1,52 @@
+#!/bin/sh
+set -eu
+
+runtime_dir=/workspace/.classroom-runtime/backend
+stamp="$runtime_dir/source.stamp"
+app_pid=
+
+mkdir -p "$runtime_dir"
+
+stop_app() {
+  if [ -n "${app_pid:-}" ] && kill -0 "$app_pid" 2>/dev/null; then
+    kill "$app_pid"
+    wait "$app_pid" 2>/dev/null || true
+  fi
+  app_pid=
+}
+
+build_and_start() {
+  if ! /workspace/docker/classroom/training-wms-mvn \
+    -o -B -ntp -DskipTests -pl training-server -am package; then
+    return 1
+  fi
+  java -jar training-server/target/training-server-0.1.0-SNAPSHOT.jar &
+  app_pid=$!
+  touch "$stamp"
+}
+
+sources_changed() {
+  find platform-contracts/src platform-web-starter/src business-wms/src training-server/src/main \
+    -path '*/resources/static/*' -prune -o \
+    -type f \( -name '*.java' -o -name '*.yml' -o -name '*.yaml' -o -name '*.properties' \) \
+    -newer "$stamp" -print -quit | grep -q .
+}
+
+trap stop_app INT TERM EXIT
+build_and_start
+
+while :; do
+  sleep 2
+  if [ -n "${app_pid:-}" ] && ! kill -0 "$app_pid" 2>/dev/null; then
+    wait "$app_pid"
+    exit $?
+  fi
+  if sources_changed; then
+    stop_app
+    touch "$stamp"
+    if ! build_and_start; then
+      echo 'Backend build failed; waiting for the next source change.' >&2
+      app_pid=
+    fi
+  fi
+done

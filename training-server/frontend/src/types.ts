@@ -1,4 +1,4 @@
-export type ViewKey = 'shipment' | 'inventory';
+export type ViewKey = 'shipment' | 'inbound' | 'inventory';
 
 export type ShipmentStatus = 'CREATED' | 'RESERVED' | 'SHIPPED' | 'CANCELLED';
 
@@ -26,4 +26,26 @@ export interface TrainingShipment extends ScenarioIdentifiers {
   quantity: number;
   createdAt: Date;
   inventory: InventoryBalance;
+}
+
+export type InboundStatus = 'CREATED' | 'RECEIVED';
+
+export interface InboundView {
+  id: number;
+  orderNo: string;
+  skuId: number;
+  warehouseId: number;
+  locationId: number;
+  plannedQuantity: number;
+  receivedQuantity: number;
+  status: InboundStatus;
+}
+
+export interface TrainingInbound extends ScenarioIdentifiers {
+  inboundId: number;
+  plannedQuantity: number;
+  receivedQuantity: number;
+  status: InboundStatus;
+  inventory: InventoryBalance;
+  createdAt: Date;
 }

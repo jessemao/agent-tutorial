@@ -60,15 +60,13 @@ training-server → business-wms → platform-web-starter → platform-contracts
 - 默认数据库：H2
 - 课堂镜像：`training-wms-classroom:0.7`，`linux/amd64`
 
-优先使用 Docker，避免依赖学员主机环境：
+优先使用课堂脚本，避免依赖学员主机环境：
 
 ```bash
-export CLASSROOM_UID=$(id -u)
-export CLASSROOM_GID=$(id -g)
-docker compose -f compose.classroom.yml run --rm classroom
+./scripts/classroom-up.sh
 ```
 
-镜像默认离线运行 `mvn -o -B -ntp clean verify`。镜像内置 T01 起始代码，不含 Git 历史、任务卡和答案；完整使用与限制见 [Docker 课堂环境说明](docs/training/10_Docker课堂环境使用与交付.md)。
+浏览器访问 `http://localhost:8080`。前端修改自动热更新，后端源码修改自动编译并重启 Spring Boot；不需要重启 Docker。任务测试和最终验证使用 `scripts/classroom-test.sh` 和 `scripts/classroom-verify.sh`。完整使用与限制见 [Docker 课堂环境说明](docs/training/10_Docker课堂环境使用与交付.md)。
 
 主机环境仅作为备用：
 
@@ -121,7 +119,7 @@ Review 只提供发现和建议；Decision 记录人的正式裁决；Delivery �
 - [分层任务包](docs/training/09_T01-T06基础_进阶_备用任务包.md)
 - [离线 AI 与恢复包](docs/training/offline-ai-pack/README.md)
 
-T01、T03—T06 已有对应 `s2-*-start` 与 `s3-*-answer` 标签。仓库中虽然保留旧 `s2-t02-start` / `s3-t02-answer` 标签，但它们属于已废弃的旧 T02 场景，不得用于当前“分批收货”任务；当前 T02 只进行需求、设计、测试骨架和候选方案评审，直到新代码标签另行建立。
+T01 已有 `s2-t01-start` 与 `s3-t01-answer`；T02 已有新的分批收货起点 `s2-t02-start`，答案标签将在本轮实操完成并通过评审后建立。T03—T06 的完整内部仓库保留起点和答案标签，但 T06 课堂分发只暴露 `s2-t06-start`，讲师参考、历史答案证据和 `s3-t06-answer` 必须隔离。学员始终从指定 `s2` 标签创建独立分支，不直接在标签或答案上开发。
 
 PPT 已移出代码仓库，位于工作区上一层的 `培训教程/PPT成品/`；PPT 制作和渲染文件位于 `培训教程/PPT制作文件/`，不属于代码基座提交。
 

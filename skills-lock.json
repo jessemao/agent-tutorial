@@ -1,6 +1,16 @@
 {
   "version": 1,
   "skills": {
+    "init-work-item": {
+      "source": "training-wms",
+      "sourceType": "project",
+      "skillPath": ".agents/skills/init-work-item/SKILL.md",
+      "computedHash": "f3e6f00fa4a8a59acaf60a639b58f3819eba6f6cb65dca2383111f99d8994eb2",
+      "files": {
+        "SKILL.md": "f3e6f00fa4a8a59acaf60a639b58f3819eba6f6cb65dca2383111f99d8994eb2",
+        "agents/openai.yaml": "c98f59fecc6d38397f16e0ca7e206bd5ca2d3f480e81f73d6ad47a7735e6f72b"
+      }
+    },
     "clean-comments": {
       "source": "ertugrul-dmr/clean-code-skills",
       "sourceType": "github",
@@ -41,6 +51,19 @@
       "sourceType": "github",
       "skillPath": "skills/engineering/code-review/SKILL.md",
       "computedHash": "caa9a086baaf9e0f7cd71f64edfa83da6821c05e826b083221f3d02e3d6a1905"
+    },
+    "codebase-design": {
+      "source": "mattpocock/skills",
+      "sourceType": "github",
+      "sourceCommit": "6654f6b60cd9d5be8b54c6fafe44346dabeb3b76",
+      "skillPath": "skills/engineering/codebase-design/SKILL.md",
+      "computedHash": "2c20617f87ec8af6a434859f381b2f061a69b530444e74eb39e78bb016a6d1e2",
+      "files": {
+        "SKILL.md": "2c20617f87ec8af6a434859f381b2f061a69b530444e74eb39e78bb016a6d1e2",
+        "DEEPENING.md": "f3dd099ce99289bd213914d8ee3e2429b78309c3957ca4583f7659551b1d53c1",
+        "DESIGN-IT-TWICE.md": "8e740bf98446dbd4dfdc132ac4346d9a7eedaf93de6a495889171cf7f99f16bd",
+        "agents/openai.yaml": "edebc9e4fcfe102114012575eaa9600b9b5fd08c311664f389c36e7bc717740f"
+      }
     },
     "domain-modeling": {
       "source": "mattpocock/skills",
