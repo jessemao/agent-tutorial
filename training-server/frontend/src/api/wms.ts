@@ -19,6 +19,7 @@ export const SCENARIO = Object.freeze({
 export const T02_SCENARIO = Object.freeze({
   plannedQuantity: 10,
   firstReceiptQuantity: 4,
+  finalReceiptQuantity: 6,
   warehouseId: 1,
   locationId: 1,
   operator: 'trainer',
@@ -106,7 +107,7 @@ export async function createInboundOrder(identifiers: ScenarioIdentifiers): Prom
 
 export async function receiveInbound(inbound: TrainingInbound, quantity: number): Promise<void> {
   await request<InboundView>('POST', `/api/wms/inbounds/${inbound.inboundId}/receive`, {
-    idempotencyKey: `receive-t02-${inbound.runId}-${quantity}`,
+    idempotencyKey: `receive-t02-${inbound.runId}-${inbound.receivedQuantity}`,
     quantity,
   });
 }

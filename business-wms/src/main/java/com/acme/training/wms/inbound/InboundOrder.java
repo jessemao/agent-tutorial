@@ -60,16 +60,15 @@ class InboundOrder {
         this.status = InboundStatus.CREATED;
     }
 
-    void receiveAll(String idempotencyKey, long quantity) {
-        require(status == InboundStatus.CREATED, "WMS_INBOUND_STATE", "inbound order has already been received");
-        require(quantity == plannedQuantity, "WMS_INBOUND_FULL_RECEIPT_REQUIRED",
-                "current inbound flow only accepts the full planned quantity");
-        receivedQuantity = quantity;
-        receiptIdempotencyKey = idempotencyKey;
-        status = InboundStatus.RECEIVED;
+    void receive(long quantity) {
+        require(status != InboundStatus.RECEIVED, "WMS_INBOUND_STATE", "inbound order has already been received");
+        require(quantity <= plannedQuantity - receivedQuantity, "WMS_INBOUND_OVER_RECEIPT",
+                "received quantity exceeds the remaining planned quantity");
+        receivedQuantity += quantity;
+        status = receivedQuantity == plannedQuantity ? InboundStatus.RECEIVED : InboundStatus.PARTIALLY_RECEIVED;
     }
 
-    boolean matchesReceipt(String idempotencyKey, long quantity) {
+    boolean matchesLegacyReceipt(String idempotencyKey, long quantity) {
         return status == InboundStatus.RECEIVED
                 && receiptIdempotencyKey != null
                 && receiptIdempotencyKey.equals(idempotencyKey)
@@ -112,5 +111,9 @@ class InboundOrder {
 
     InboundStatus getStatus() {
         return status;
+    }
+
+    String getReceiptIdempotencyKey() {
+        return receiptIdempotencyKey;
     }
 }

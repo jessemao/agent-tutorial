@@ -15,7 +15,7 @@ interface InboundPageProps {
   selectedId?: number;
   onCreate: () => Promise<boolean>;
   onOpenCreate: () => ScenarioIdentifiers;
-  onReceiveFirstBatch: () => Promise<boolean>;
+  onReceiveNextBatch: () => Promise<boolean>;
   onRefresh: () => Promise<boolean>;
   onSelect: (id: number) => void;
 }
@@ -40,7 +40,9 @@ export function InboundPage(props: InboundPageProps) {
       dataIndex: 'status',
       width: 110,
       render: (status: TrainingInbound['status']) => (
-        <Tag color={status === 'RECEIVED' ? 'green' : 'processing'}>{status === 'RECEIVED' ? '已完成' : '待收货'}</Tag>
+        <Tag color={status === 'RECEIVED' ? 'green' : 'processing'}>
+          {status === 'RECEIVED' ? '已完成' : status === 'PARTIALLY_RECEIVED' ? '部分收货' : '待收货'}
+        </Tag>
       ),
     },
     { title: '计划数量', dataIndex: 'plannedQuantity', width: 110, align: 'right' },
@@ -61,8 +63,11 @@ export function InboundPage(props: InboundPageProps) {
   }
 
   async function confirmReceipt(): Promise<void> {
-    await props.onReceiveFirstBatch();
-    setReceiveOpen(false);
+    try {
+      await props.onReceiveNextBatch();
+    } finally {
+      setReceiveOpen(false);
+    }
   }
 
   return (
@@ -78,8 +83,8 @@ export function InboundPage(props: InboundPageProps) {
       {props.error && (
         <Alert
           className="page-alert"
-          message="当前规则无法登记首批到货"
-          description={`${props.error}；单据仍为待收货，累计实收和库存均为 0。`}
+          message="入库操作未完成"
+          description={`${props.error}；当前累计实收 ${selected?.receivedQuantity ?? 0}，待收 ${selected ? selected.plannedQuantity - selected.receivedQuantity : 0}，有效库存 ${selected?.inventory.availableQuantity ?? 0}。`}
           type="error"
           showIcon
         />
@@ -102,10 +107,10 @@ export function InboundPage(props: InboundPageProps) {
             <Button
               id="open-partial-receipt-dialog"
               icon={<InboxOutlined />}
-              disabled={selected?.status !== 'CREATED'}
+              disabled={!selected || selected.status === 'RECEIVED'}
               onClick={() => setReceiveOpen(true)}
             >
-              登记首批到货
+              {selected?.status === 'PARTIALLY_RECEIVED' ? '登记剩余到货' : '登记首批到货'}
             </Button>
             <Button icon={<ReloadOutlined />} loading={props.busy} onClick={props.onRefresh}>刷新</Button>
           </Space>
@@ -138,13 +143,13 @@ export function InboundPage(props: InboundPageProps) {
         </Descriptions>
       </Modal>
 
-      <Modal title="登记首批到货" open={receiveOpen} okText="确认收货" cancelText="返回" confirmLoading={props.busy} onCancel={() => setReceiveOpen(false)} onOk={confirmReceipt}>
+      <Modal title={selected?.status === 'PARTIALLY_RECEIVED' ? '登记剩余到货' : '登记首批到货'} open={receiveOpen} okText="确认收货" cancelText="返回" confirmLoading={props.busy} onCancel={() => setReceiveOpen(false)} onOk={confirmReceipt}>
         <Descriptions bordered column={1} size="small">
           <Descriptions.Item label="入库单号">{selected?.orderNo}</Descriptions.Item>
           <Descriptions.Item label="计划数量">{T02_SCENARIO.plannedQuantity}</Descriptions.Item>
-          <Descriptions.Item label="本次实收">{T02_SCENARIO.firstReceiptQuantity}</Descriptions.Item>
+          <Descriptions.Item label="本次实收">{selected?.status === 'PARTIALLY_RECEIVED' ? T02_SCENARIO.finalReceiptQuantity : T02_SCENARIO.firstReceiptQuantity}</Descriptions.Item>
         </Descriptions>
-        <Alert className="modal-note" type="info" showIcon message="供应商首车到货 4 件，剩余 6 件稍后到达。" />
+        <Alert className="modal-note" type="info" showIcon message={selected?.status === 'PARTIALLY_RECEIVED' ? '供应商剩余 6 件已到达。' : '供应商首车到货 4 件，剩余 6 件稍后到达。'} />
       </Modal>
     </section>
   );

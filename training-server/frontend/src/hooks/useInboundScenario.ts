@@ -43,20 +43,27 @@ export function useInboundScenario() {
     }
   }
 
-  async function receiveFirstBatch(): Promise<boolean> {
+  async function receiveNextBatch(): Promise<boolean> {
     if (!selected || busy) return false;
     setBusy(true);
     setError(undefined);
+    let receiptError: unknown;
     try {
-      await receiveInbound(selected, T02_SCENARIO.firstReceiptQuantity);
-      replace(await refreshInbound(selected));
-      return true;
+      const quantity = selected.status === 'PARTIALLY_RECEIVED'
+        ? T02_SCENARIO.finalReceiptQuantity
+        : T02_SCENARIO.firstReceiptQuantity;
+      await receiveInbound(selected, quantity);
     } catch (caught) {
+      receiptError = caught;
+    }
+    try {
       replace(await refreshInbound(selected));
+    } catch (caught) {
       return fail(caught);
     } finally {
       setBusy(false);
     }
+    return receiptError === undefined ? true : fail(receiptError);
   }
 
   async function refreshSelected(): Promise<boolean> {
@@ -91,7 +98,7 @@ export function useInboundScenario() {
     messageContext,
     openCreate,
     pendingIdentifiers,
-    receiveFirstBatch,
+    receiveNextBatch,
     refreshSelected,
     selected,
     selectedId,

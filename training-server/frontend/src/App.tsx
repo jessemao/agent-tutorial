@@ -58,7 +58,7 @@ export default function App() {
             selectedId={inbound.selectedId}
             onCreate={inbound.createDemo}
             onOpenCreate={inbound.openCreate}
-            onReceiveFirstBatch={inbound.receiveFirstBatch}
+            onReceiveNextBatch={inbound.receiveNextBatch}
             onRefresh={inbound.refreshSelected}
             onSelect={inbound.selectInbound}
           />

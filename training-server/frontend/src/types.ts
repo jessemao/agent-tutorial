@@ -28,7 +28,7 @@ export interface TrainingShipment extends ScenarioIdentifiers {
   inventory: InventoryBalance;
 }
 
-export type InboundStatus = 'CREATED' | 'RECEIVED';
+export type InboundStatus = 'CREATED' | 'PARTIALLY_RECEIVED' | 'RECEIVED';
 
 export interface InboundView {
   id: number;

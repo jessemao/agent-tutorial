@@ -40,22 +40,23 @@ class T02InboundBaselineIntegrationTest {
     }
 
     @Test
-    void partialQuantityIsRejectedWithoutChangingOrderOrInventory() throws Exception {
+    void partialQuantityIsReceivedAndImmediatelyAvailable() throws Exception {
         long skuId = 2202L;
         long inboundId = createInbound("IN-T02-PARTIAL", skuId, 10);
 
         receive(inboundId, 4, "receive-t02-partial")
-                .andExpect(status().isConflict())
-                .andExpect(jsonPath("$.code").value("WMS_INBOUND_FULL_RECEIPT_REQUIRED"));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.status").value("PARTIALLY_RECEIVED"))
+                .andExpect(jsonPath("$.data.receivedQuantity").value(4));
 
         mockMvc.perform(get("/api/wms/inbounds/{id}", inboundId))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.status").value("CREATED"))
-                .andExpect(jsonPath("$.data.receivedQuantity").value(0));
+                .andExpect(jsonPath("$.data.status").value("PARTIALLY_RECEIVED"))
+                .andExpect(jsonPath("$.data.receivedQuantity").value(4));
 
         inventory(skuId)
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.availableQuantity").value(0))
+                .andExpect(jsonPath("$.data.availableQuantity").value(4))
                 .andExpect(jsonPath("$.data.reservedQuantity").value(0));
     }
 

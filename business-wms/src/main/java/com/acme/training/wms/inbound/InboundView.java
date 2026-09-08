@@ -12,14 +12,18 @@ public final class InboundView {
     private final InboundStatus status;
 
     InboundView(InboundOrder order) {
+        this(order, order.getReceivedQuantity(), order.getStatus());
+    }
+
+    InboundView(InboundOrder order, long receivedQuantity, InboundStatus status) {
         this.id = order.getId();
         this.orderNo = order.getOrderNo();
         this.skuId = order.getSkuId();
         this.warehouseId = order.getWarehouseId();
         this.locationId = order.getLocationId();
         this.plannedQuantity = order.getPlannedQuantity();
-        this.receivedQuantity = order.getReceivedQuantity();
-        this.status = order.getStatus();
+        this.receivedQuantity = receivedQuantity;
+        this.status = status;
     }
 
     public Long getId() {

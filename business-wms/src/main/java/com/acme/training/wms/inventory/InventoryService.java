@@ -4,11 +4,11 @@ import com.acme.training.platform.audit.AuditRecorder;
 import com.acme.training.platform.error.PlatformException;
 import com.acme.training.platform.idempotency.IdempotencyDecision;
 import com.acme.training.platform.idempotency.IdempotencyGuard;
+import com.acme.training.wms.PersistenceConstraints;
 import com.acme.training.wms.masterdata.StorageLocation;
 import com.acme.training.wms.masterdata.StorageLocationRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
@@ -189,18 +189,11 @@ class InventoryService implements InventoryOperations {
         try {
             movementRepository.saveAndFlush(movement);
         } catch (DataIntegrityViolationException exception) {
-            for (Throwable cause = exception; cause != null; cause = cause.getCause()) {
-                if (cause instanceof ConstraintViolationException) {
-                    String name = ((ConstraintViolationException) cause).getConstraintName();
-                    // H2 reports the backing index plus a description; MySQL reports the named key.
-                    if (name != null && name.replace("\"", "").matches(
-                            "(?is)(?:\\w+\\.)?uk_movement_idempotency(?:_index_\\w+)?(?: on .*|$)")) {
-                        PlatformException conflict = new PlatformException("WMS_IDEMPOTENCY_CONFLICT",
-                                "idempotency key was concurrently used with conflicting inventory data");
-                        conflict.initCause(exception);
-                        throw conflict; // Do not continue in the failed transaction; roll back the entire action.
-                    }
-                }
+            if (PersistenceConstraints.hasName(exception, "uk_movement_idempotency")) {
+                PlatformException conflict = new PlatformException("WMS_IDEMPOTENCY_CONFLICT",
+                        "idempotency key was concurrently used with conflicting inventory data");
+                conflict.initCause(exception);
+                throw conflict;
             }
             throw exception;
         }
