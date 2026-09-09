@@ -14,8 +14,6 @@ public interface InventoryOperations {
 
     InventoryBalanceView ship(InventoryCommand command);
 
-    InventoryTransferView transfer(InventoryTransferCommand command);
-
     InventoryBalanceView adjustFromCount(InventoryCountAdjustmentCommand command);
 
     /** Reads a balance without requesting an exclusive lock; missing dimensions return zero quantities. */

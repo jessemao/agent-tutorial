@@ -81,35 +81,6 @@ class InventoryService implements InventoryOperations {
 
     @Override
     @Transactional
-    public InventoryTransferView transfer(InventoryTransferCommand command) {
-        InventoryCommand sourceCommand = transferCommand(command, command.getSourceLocationId());
-        InventoryCommand targetCommand = transferCommand(command, command.getTargetLocationId());
-        // Read both movement records only after taking the ordered location locks.
-        lockAndValidateTransferLocations(command);
-        Optional<InventoryTransferView> replay = transferReplay(command, sourceCommand, targetCommand);
-        if (replay.isPresent()) {
-            return replay.get();
-        }
-        InventoryBalance source = balanceRepository.findLockedBySkuIdAndWarehouseIdAndLocationId(
-                        command.getSkuId(), command.getWarehouseId(), command.getSourceLocationId())
-                .orElseThrow(() -> new PlatformException("WMS_INVENTORY_NOT_FOUND", "source inventory does not exist"));
-        InventoryBalance target = balanceRepository.findLockedBySkuIdAndWarehouseIdAndLocationId(
-                        command.getSkuId(), command.getWarehouseId(), command.getTargetLocationId())
-                .orElseGet(() -> new InventoryBalance(command.getSkuId(), command.getWarehouseId(),
-                        command.getTargetLocationId()));
-
-        source.moveOut(command.getQuantity());
-        target.moveIn(command.getQuantity());
-        balanceRepository.save(source);
-        balanceRepository.save(target);
-        recordMovement(new InventoryMovement("TRANSFER_OUT", sourceCommand, source));
-        recordMovement(new InventoryMovement("TRANSFER_IN", targetCommand, target));
-        auditRecorder.record("TRANSFER", "INVENTORY", command.getTransferNo());
-        return new InventoryTransferView(command.getTransferNo(), source.view(), target.view());
-    }
-
-    @Override
-    @Transactional
     public InventoryBalanceView adjustFromCount(InventoryCountAdjustmentCommand command) {
         InventoryBalance balance = balanceRepository.findLockedBySkuIdAndWarehouseIdAndLocationId(
                         command.getSkuId(), command.getWarehouseId(), command.getLocationId())
@@ -206,42 +177,4 @@ class InventoryService implements InventoryOperations {
         return new InventoryBalance(command.getSkuId(), command.getWarehouseId(), command.getLocationId());
     }
 
-    private void lockAndValidateTransferLocations(InventoryTransferCommand command) {
-        Long first = Math.min(command.getSourceLocationId(), command.getTargetLocationId());
-        Long second = Math.max(command.getSourceLocationId(), command.getTargetLocationId());
-        validateTransferLocation(locationRepository.findLockedById(first)
-                .orElseThrow(() -> new PlatformException("WMS_LOCATION_NOT_FOUND", "storage location does not exist")), command);
-        validateTransferLocation(locationRepository.findLockedById(second)
-                .orElseThrow(() -> new PlatformException("WMS_LOCATION_NOT_FOUND", "storage location does not exist")), command);
-    }
-
-    private void validateTransferLocation(StorageLocation location, InventoryTransferCommand command) {
-        if (!location.isEnabled() || !location.getWarehouseId().equals(command.getWarehouseId())) {
-            throw new PlatformException("WMS_INVALID_LOCATION",
-                    "both transfer locations must be enabled and belong to the warehouse");
-        }
-    }
-
-    private InventoryCommand transferCommand(InventoryTransferCommand command, Long locationId) {
-        return new InventoryCommand(command.getIdempotencyKey(), command.getTransferNo(), command.getSkuId(),
-                command.getWarehouseId(), locationId, command.getQuantity());
-    }
-
-    private Optional<InventoryTransferView> transferReplay(InventoryTransferCommand command,
-                                                          InventoryCommand source, InventoryCommand target) {
-        Optional<InventoryMovement> previousOut = movementRepository
-                .findByOperationTypeAndIdempotencyKey("TRANSFER_OUT", command.getIdempotencyKey());
-        Optional<InventoryMovement> previousIn = movementRepository
-                .findByOperationTypeAndIdempotencyKey("TRANSFER_IN", command.getIdempotencyKey());
-        boolean exists = previousOut.isPresent() || previousIn.isPresent();
-        boolean same = previousOut.isPresent() && previousIn.isPresent()
-                && previousOut.get().matches(source) && previousIn.get().matches(target);
-        if (idempotencyGuard.decide(exists, same, "WMS_IDEMPOTENCY_CONFLICT",
-                "idempotency key was already used with different transfer data")
-                == IdempotencyDecision.SAFE_REPLAY) {
-            return Optional.of(new InventoryTransferView(command.getTransferNo(),
-                    previousOut.get().result(), previousIn.get().result()));
-        }
-        return Optional.empty();
-    }
 }

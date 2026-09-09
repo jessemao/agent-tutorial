@@ -49,7 +49,7 @@
 | --- | --- | --- | --- |
 | T01 Bug | start → discover → execute → review → decision | Bug 调查、`tdd`、`code-review` | 规则明确时无 Spec、无 Tickets |
 | T02 需求调整 | start → discover → execute → review → decision | `/grill-with-docs`、`/to-spec`、`/implement` | 单一切片可无 Tickets |
-| T03 从零新增 | 完整五阶段 | `/grill-with-docs`、`codebase-design`、`/to-spec`、`/to-tickets`、`/implement` | 多纵向 Tickets |
+| T03 从零新增 | 完整五阶段 | `/init-work-item`、`/grill-with-docs`、`/codebase-design`、`/to-spec`、`/to-tickets`、逐票 `/implement` | 多纵向 Tickets |
 | T04 重构 | 完整五阶段 | `/improve-codebase-architecture`、`grilling`、`codebase-design`、`/to-spec`、`/to-tickets`、`/implement` | 纯重构不强造 Red |
 
 ## 6. `work-item-start` 验收用例

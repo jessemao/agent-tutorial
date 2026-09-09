@@ -6,9 +6,9 @@ cd "$repo_dir"
 
 task="${1:-}"
 case "$task" in
-  T01|T02) ;;
+  T01|T02|T03) ;;
   *)
-    echo 'Usage: ./scripts/classroom-verify.sh T01|T02' >&2
+    echo 'Usage: ./scripts/classroom-verify.sh T01|T02|T03' >&2
     exit 2
     ;;
 esac

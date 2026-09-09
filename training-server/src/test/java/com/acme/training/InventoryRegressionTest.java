@@ -38,44 +38,6 @@ class InventoryRegressionTest {
     }
 
     @Test
-    void transferOverflowRollsBackBothLocations() throws Exception {
-        receive(802L, 1L, 3, "overflow-source").andExpect(status().isOk());
-        receive(802L, 2L, Long.MAX_VALUE, "overflow-target").andExpect(status().isOk());
-        transfer(802L, 2L, 1, "overflow-transfer")
-                .andExpect(status().isConflict())
-                .andExpect(jsonPath("$.success").value(false))
-                .andExpect(jsonPath("$.code").value("WMS_INVENTORY_OVERFLOW"));
-        balance(802L, 1L).andExpect(jsonPath("$.data.availableQuantity").value(3));
-        balance(802L, 2L).andExpect(jsonPath("$.data.availableQuantity").value(Long.MAX_VALUE));
-    }
-
-    @Test
-    void sameLocationTransferIsAValidationError() throws Exception {
-        receive(803L, 1L, 10, "same-location-initial").andExpect(status().isOk());
-        transfer(803L, 1L, 2, "same-location-transfer")
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.code").value("INVALID_REQUEST"));
-        balance(803L, 1L).andExpect(jsonPath("$.data.availableQuantity").value(10));
-    }
-
-    @Test
-    void transferReplayReturnsOriginalResultAfterLaterInventoryChanges() throws Exception {
-        receive(804L, 1L, 10, "replay-initial").andExpect(status().isOk());
-        transfer(804L, 2L, 6, "replay-transfer")
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.source.availableQuantity").value(4))
-                .andExpect(jsonPath("$.data.target.availableQuantity").value(6));
-        receive(804L, 1L, 2, "replay-later-source").andExpect(status().isOk());
-        receive(804L, 2L, 3, "replay-later-target").andExpect(status().isOk());
-        transfer(804L, 2L, 6, "replay-transfer")
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.source.availableQuantity").value(4))
-                .andExpect(jsonPath("$.data.target.availableQuantity").value(6));
-        balance(804L, 1L).andExpect(jsonPath("$.data.availableQuantity").value(6));
-        balance(804L, 2L).andExpect(jsonPath("$.data.availableQuantity").value(9));
-    }
-
-    @Test
     void receiveCannotOverflowTotalInventoryWhenSomeQuantityIsReserved() throws Exception {
         receive(805L, 1L, Long.MAX_VALUE, "total-initial").andExpect(status().isOk());
         String response = mockMvc.perform(post("/api/wms/shipments")
@@ -93,15 +55,6 @@ class InventoryRegressionTest {
         balance(805L, 1L)
                 .andExpect(jsonPath("$.data.availableQuantity").value(Long.MAX_VALUE - 1))
                 .andExpect(jsonPath("$.data.reservedQuantity").value(1));
-    }
-
-    private ResultActions transfer(long sku, long target, long quantity, String key) throws Exception {
-        return mockMvc.perform(post("/api/wms/inventory/transfer")
-                .header("X-Operator", "trainer")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"idempotencyKey\":\"" + key + "\",\"transferNo\":\"TR-" + sku
-                        + "\",\"skuId\":" + sku + ",\"warehouseId\":1,\"sourceLocationId\":1,"
-                        + "\"targetLocationId\":" + target + ",\"quantity\":" + quantity + "}"));
     }
 
     private ResultActions receive(long sku, long location, long quantity, String key) throws Exception {

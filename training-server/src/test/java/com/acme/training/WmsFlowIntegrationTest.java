@@ -149,45 +149,6 @@ class WmsFlowIntegrationTest {
     }
 
     @Test
-    void transferMovesAvailableInventoryBetweenLocations() throws Exception {
-        receive(109L, 10, "receive-109");
-
-        transfer(109L, 6, "transfer-109", "TR-109")
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.source.availableQuantity").value(4))
-                .andExpect(jsonPath("$.data.target.availableQuantity").value(6));
-    }
-
-    @Test
-    void repeatedTransferIsIdempotent() throws Exception {
-        receive(110L, 10, "receive-110");
-
-        transfer(110L, 6, "transfer-110", "TR-110").andExpect(status().isOk());
-        transfer(110L, 6, "transfer-110", "TR-110")
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.source.availableQuantity").value(4))
-                .andExpect(jsonPath("$.data.target.availableQuantity").value(6));
-    }
-
-    @Test
-    void insufficientTransferRollsBackBothLocations() throws Exception {
-        receive(111L, 3, "receive-111");
-
-        transfer(111L, 5, "transfer-111", "TR-111")
-                .andExpect(status().isConflict())
-                .andExpect(jsonPath("$.code").value("WMS_INSUFFICIENT_AVAILABLE"));
-
-        mockMvc.perform(get("/api/wms/inventory/balance")
-                        .param("skuId", "111").param("warehouseId", "1").param("locationId", "1"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.availableQuantity").value(3));
-        mockMvc.perform(get("/api/wms/inventory/balance")
-                        .param("skuId", "111").param("warehouseId", "1").param("locationId", "2"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.availableQuantity").value(0));
-    }
-
-    @Test
     void stocktakeChangesInventoryOnlyAfterApproval() throws Exception {
         receive(201L, 10, "receive-201");
 
@@ -339,16 +300,6 @@ class WmsFlowIntegrationTest {
                 .header("X-Operator", "trainer")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"idempotencyKey\":\"" + key + "\"" + reasonJson + "}"));
-    }
-
-    private org.springframework.test.web.servlet.ResultActions transfer(
-            Long skuId, long quantity, String key, String transferNo) throws Exception {
-        return mockMvc.perform(post("/api/wms/inventory/transfer")
-                .header("X-Operator", "trainer")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"idempotencyKey\":\"" + key + "\",\"transferNo\":\"" + transferNo
-                        + "\",\"skuId\":" + skuId + ",\"warehouseId\":1,\"sourceLocationId\":1,"
-                        + "\"targetLocationId\":2,\"quantity\":" + quantity + "}"));
     }
 
     private String inventoryJson(Long skuId, long quantity, String key) {

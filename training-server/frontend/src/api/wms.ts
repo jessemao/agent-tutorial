@@ -72,6 +72,15 @@ function inventoryPath(shipment: Pick<TrainingShipment, 'skuId'>): string {
   return `/api/wms/inventory/balance?${query.toString()}`;
 }
 
+export function queryInventoryBalance(skuId: number, locationId: number = SCENARIO.locationId): Promise<InventoryBalance> {
+  const query = new URLSearchParams({
+    skuId: String(skuId),
+    warehouseId: String(SCENARIO.warehouseId),
+    locationId: String(locationId),
+  });
+  return request<InventoryBalance>('GET', `/api/wms/inventory/balance?${query.toString()}`);
+}
+
 export function createIdentifiers(): ScenarioIdentifiers {
   const values = crypto.getRandomValues(new Uint32Array(3));
   const runId = Array.from(values, (value) => value.toString(16).padStart(8, '0')).join('');

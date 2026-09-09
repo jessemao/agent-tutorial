@@ -22,6 +22,7 @@
 | `GOV-TERM-01` | AUTOMATED | 已废弃治理术语未重新进入现行治理文档 | `scripts/validate-ai-governance.sh` | 阻断交付 |
 | `GOV-WORKITEM-01` | ASSISTED | Work Item ID、任务类型、条件产物及 `N/A` 理由匹配，状态和审批证据真实 | Agent 对照 `deliverables.md`，人审核 | 内容不实或缺失时阻断实施/交付 |
 | `GOV-AGENT-01` | ASSISTED | 受影响 Module 的 `AGENTS.md` 已读取且未与根规则冲突 | `01_analysis.md` 读取清单与人工核对 | 冲突未裁决时阻断 |
+| `GOV-REQ-DESIGN-01` | ASSISTED | 涉及 UI 或人工操作的需求在 Spec 批准前明确完整用户旅程、输入控制、标识生成、结果可见性及依赖能力归属 | `standards/requirements-design.md`、Spec、Interface、Tickets 与批准记录 | 任一关键决定缺失时阻断 Spec 批准 |
 | `GOV-VERSION-01` | ASSISTED | Spec、Standards、代码起点和被审版本可还原 | Work Item 元数据与 Git 查询 | 缺失/不可还原时阻断 |
 | `GOV-TRACE-01` | ASSISTED | Spec/规则到代码、测试、结果和决策的追溯 | `02_verification.md`、`03_review.md`、`04_decision.md` | 无证据的“通过”阻断 |
 | `GOV-ARCH-01` | ASSISTED | 分层依赖、所有权、公开契约和事务边界 | Maven 依赖/代码搜索、架构评审、人工裁决 | MUST 违反时阻断 |

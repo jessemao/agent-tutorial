@@ -5,8 +5,6 @@ import com.acme.training.wms.inventory.InventoryBalanceView;
 import com.acme.training.wms.inventory.InventoryCommand;
 import com.acme.training.wms.inventory.InventoryCountAdjustmentCommand;
 import com.acme.training.wms.inventory.InventoryOperations;
-import com.acme.training.wms.inventory.InventoryTransferCommand;
-import com.acme.training.wms.inventory.InventoryTransferView;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -83,18 +81,6 @@ class InventoryConcurrencyTest {
         InventoryBalanceView replay = overlappingTransactions(() -> inventory.receive(command));
         assertEquals(7, replay.getAvailableQuantity());
         assertEquals(7, inventory.getBalance(902L, 1L, 1L).getAvailableQuantity());
-    }
-
-    @Test
-    void concurrentTransferReplaysAfterTheFirstTransactionCommits() throws Exception {
-        asOperator(() -> inventory.receive(new InventoryCommand("transfer-initial", "RC-903", 903L, 1L, 1L, 10)));
-        InventoryTransferCommand command = new InventoryTransferCommand(
-                "concurrent-transfer", "TR-903", 903L, 1L, 1L, 2L, 6);
-        InventoryTransferView replay = overlappingTransactions(() -> inventory.transfer(command));
-        assertEquals(4, replay.getSource().getAvailableQuantity());
-        assertEquals(6, replay.getTarget().getAvailableQuantity());
-        assertEquals(4, inventory.getBalance(903L, 1L, 1L).getAvailableQuantity());
-        assertEquals(6, inventory.getBalance(903L, 1L, 2L).getAvailableQuantity());
     }
 
     @Test

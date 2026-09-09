@@ -4,8 +4,6 @@ import com.acme.training.platform.web.ApiResponse;
 import com.acme.training.wms.inventory.InventoryBalanceView;
 import com.acme.training.wms.inventory.InventoryCommand;
 import com.acme.training.wms.inventory.InventoryOperations;
-import com.acme.training.wms.inventory.InventoryTransferCommand;
-import com.acme.training.wms.inventory.InventoryTransferView;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,13 +33,6 @@ public class InventoryController {
                                                      @RequestParam Long warehouseId,
                                                      @RequestParam Long locationId) {
         return ApiResponse.success(inventoryOperations.getBalance(skuId, warehouseId, locationId));
-    }
-
-    @PostMapping("/transfer")
-    public ApiResponse<InventoryTransferView> transfer(@Valid @RequestBody InventoryTransferRequest request) {
-        return ApiResponse.success(inventoryOperations.transfer(new InventoryTransferCommand(
-                request.getIdempotencyKey(), request.getTransferNo(), request.getSkuId(), request.getWarehouseId(),
-                request.getSourceLocationId(), request.getTargetLocationId(), request.getQuantity())));
     }
 
     private InventoryCommand toCommand(InventoryRequest request) {

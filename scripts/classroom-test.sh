@@ -14,6 +14,12 @@ case "$task:$scope" in
   T02:baseline)
     test_name='T02InboundBaselineIntegrationTest'
     ;;
+  T03:baseline)
+    test_name='T03BaselineIntegrationTest'
+    ;;
+  T03:target)
+    test_name='T03TransferHappyPathIntegrationTest,T03TransferContractIntegrationTest,T03TransferAtomicityIntegrationTest,InventoryConcurrencyTest'
+    ;;
   T02:target)
     for test_file in \
       training-server/src/test/java/com/acme/training/T02InboundAcceptanceIntegrationTest.java \
@@ -25,16 +31,16 @@ case "$task:$scope" in
     done
     test_name='T02InboundAcceptanceIntegrationTest,T02InboundRollbackIntegrationTest'
     ;;
-  T01:module|T02:module)
+  T01:module|T02:module|T03:module)
     exec docker compose -f compose.classroom.yml exec -T classroom \
       /workspace/docker/classroom/training-wms-mvn -o -B -ntp -pl training-server -am test
     ;;
-  T01:all|T02:all)
+  T01:all|T02:all|T03:all)
     exec docker compose -f compose.classroom.yml exec -T classroom \
       /workspace/docker/classroom/training-wms-mvn -o -B -ntp clean verify
     ;;
   *)
-    echo 'Usage: ./scripts/classroom-test.sh T01|T02 target|baseline|module|all' >&2
+    echo 'Usage: ./scripts/classroom-test.sh T01|T02|T03 target|baseline|module|all' >&2
     exit 2
     ;;
 esac
