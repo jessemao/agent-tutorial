@@ -6,7 +6,6 @@ import com.acme.training.wms.inventory.InventoryCommand;
 import com.acme.training.wms.inventory.InventoryCountAdjustmentCommand;
 import com.acme.training.wms.inventory.InventoryOperations;
 import com.acme.training.wms.inventory.InventoryTransferCommand;
-import com.acme.training.wms.inventory.InventoryTransferOperations;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -43,9 +42,6 @@ class InventoryConcurrencyTest {
 
     @Autowired
     private InventoryOperations inventory;
-
-    @Autowired
-    private InventoryTransferOperations transfers;
 
     @Autowired
     private PlatformTransactionManager transactionManager;
@@ -198,12 +194,12 @@ class InventoryConcurrencyTest {
         try {
             Future<?> leftToRight = workers.submit(() -> asOperator(() -> {
                 await(start);
-                return transfers.transfer(new InventoryTransferCommand(
+                return inventory.transfer(new InventoryTransferCommand(
                         "transfer-909-lr", "TR-909-LR", 909L, 1L, 1L, 2L, 4));
             }));
             Future<?> rightToLeft = workers.submit(() -> asOperator(() -> {
                 await(start);
-                return transfers.transfer(new InventoryTransferCommand(
+                return inventory.transfer(new InventoryTransferCommand(
                         "transfer-909-rl", "TR-909-RL", 909L, 1L, 2L, 1L, 3));
             }));
             start.countDown();

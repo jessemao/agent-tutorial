@@ -80,6 +80,7 @@ class InventoryService implements InventoryOperations {
         }, false);
     }
 
+    @Override
     @Transactional
     public InventoryTransferView transfer(InventoryTransferCommand command) {
         requireValidTransfer(command);
@@ -131,6 +132,7 @@ class InventoryService implements InventoryOperations {
         return new InventoryTransferView(command.getTransferNo(), source.view(), target.view());
     }
 
+    @Override
     @Transactional(readOnly = true)
     public java.util.List<InventoryTransferTaskView> listTransferTasks() {
         return movementRepository.findTransferTasks();

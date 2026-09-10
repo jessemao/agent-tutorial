@@ -34,6 +34,7 @@ training-server → business-wms → platform-web-starter → platform-contracts
 - `adjustFromCount`
 - `getBalance`
 - `getExistingBalance`
+- `listTransferTasks`
 
 库存行锁、余额校验、幂等记录和库存流水属于实现细节。Controller、单据领域和装配层不得直接访问库存 Repository 或修改 `InventoryBalance`。
 
