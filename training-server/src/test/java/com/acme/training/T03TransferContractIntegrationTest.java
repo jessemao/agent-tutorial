@@ -4,6 +4,7 @@ import com.acme.training.platform.audit.AuditRecorder;
 import com.acme.training.platform.error.PlatformException;
 import com.acme.training.wms.inventory.InventoryOperations;
 import com.acme.training.wms.inventory.InventoryTransferCommand;
+import com.acme.training.wms.inventory.InventoryTransferOperations;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -33,6 +34,9 @@ class T03TransferContractIntegrationTest {
     @Autowired
     private InventoryOperations inventoryOperations;
 
+    @Autowired
+    private InventoryTransferOperations inventoryTransferOperations;
+
     @MockBean
     private AuditRecorder auditRecorder;
 
@@ -52,9 +56,9 @@ class T03TransferContractIntegrationTest {
 
     @Test
     void rejectsInvalidTransfersAtTheModuleBoundary() {
-        PlatformException negative = assertThrows(PlatformException.class, () -> inventoryOperations.transfer(
+        PlatformException negative = assertThrows(PlatformException.class, () -> inventoryTransferOperations.transfer(
                 new InventoryTransferCommand("module-negative", "TR-MODULE-NEGATIVE", 9401L, 1L, 1L, 2L, -1)));
-        PlatformException sameLocation = assertThrows(PlatformException.class, () -> inventoryOperations.transfer(
+        PlatformException sameLocation = assertThrows(PlatformException.class, () -> inventoryTransferOperations.transfer(
                 new InventoryTransferCommand("module-same", "TR-MODULE-SAME", 9401L, 1L, 1L, 1L, 1)));
 
         assertEquals("INVALID_REQUEST", negative.getCode());

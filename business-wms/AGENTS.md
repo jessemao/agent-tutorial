@@ -16,6 +16,10 @@
 - `InventoryService` 负责库存锁、余额校验、幂等和库存流水的一致实现。
 - 出库、移库和盘点服务负责各自业务状态，将库存变化委托给 `InventoryOperations`。
 
+T04 教学起点包含一个受控的遗留例外：现有移库调用可暂时经过
+`InventoryTransferOperations` / `LegacyInventoryTransferService`，用于发现和迁移分散入口。
+该例外只允许保持既有行为，不得新增调用方或复制规则；T04 的目标是在保持行为不变的前提下消除它。
+
 ## 3. 依赖边界
 
 - 可以依赖 `platform-contracts` 和 `platform-web-starter`。
@@ -44,7 +48,6 @@
 出现以下情况时停止并请求相关所有者批准：
 
 - 需要修改平台模块、公开契约、错误码、数据库结构或事务语义。
-- 需要绕过 `InventoryOperations` 或直接从 Controller 访问 Repository。
+- 需要在上述 T04 受控遗留例外之外绕过 `InventoryOperations`，或直接从 Controller 访问 Repository。
 - 修改可能破坏库存不变式、幂等、流水完整性或并发安全。
 - 无法建立表达业务风险的测试，或实现范围扩展到未批准领域。
-
