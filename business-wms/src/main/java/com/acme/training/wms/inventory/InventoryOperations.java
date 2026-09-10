@@ -1,5 +1,7 @@
 package com.acme.training.wms.inventory;
 
+import java.util.List;
+
 /**
  * The only public seam for changing inventory.
  * Each command is atomic and idempotent by operation type plus idempotency key.
@@ -13,6 +15,10 @@ public interface InventoryOperations {
     InventoryBalanceView release(InventoryCommand command);
 
     InventoryBalanceView ship(InventoryCommand command);
+
+    InventoryTransferView transfer(InventoryTransferCommand command);
+
+    List<InventoryTransferTaskView> listTransferTasks();
 
     InventoryBalanceView adjustFromCount(InventoryCountAdjustmentCommand command);
 

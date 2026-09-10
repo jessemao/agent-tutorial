@@ -41,7 +41,7 @@ const menuItems: MenuProps['items'] = [
     label: '仓储管理',
     children: [
       { key: 'inventory', label: '库存明细' },
-      { key: 'transfer', label: '移库作业', disabled: true },
+      { key: 'transfer', label: '移库作业' },
     ],
   },
   { key: 'integration', icon: <SwapOutlined />, label: '平台编排', disabled: true },
@@ -52,6 +52,7 @@ const tabLabels: Record<ViewKey, string> = {
   shipment: '出库订单',
   inbound: '入库订单',
   inventory: '库存明细',
+  transfer: '移库作业',
 };
 
 interface AppShellProps {
@@ -94,7 +95,7 @@ export function AppShell({ activeView, children, onViewChange }: AppShellProps) 
           defaultOpenKeys={['outbound', 'inbound-group', 'warehouse']}
           items={menuItems}
           onClick={({ key }) => {
-            if (key === 'shipment' || key === 'inbound' || key === 'inventory') onViewChange(key);
+            if (key === 'shipment' || key === 'inbound' || key === 'inventory' || key === 'transfer') onViewChange(key);
             if (mobile) setCollapsed(true);
           }}
         />

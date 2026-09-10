@@ -7,6 +7,7 @@ import { useInboundScenario } from './hooks/useInboundScenario';
 import { InboundPage } from './pages/InboundPage';
 import { InventoryPage } from './pages/InventoryPage';
 import { ShipmentPage } from './pages/ShipmentPage';
+import { TransferPage } from './pages/TransferPage';
 import type { ViewKey } from './types';
 
 export default function App() {
@@ -72,6 +73,7 @@ export default function App() {
             onRefresh={scenario.refreshSelected}
           />
         )}
+        {activeView === 'transfer' && <TransferPage />}
       </AppShell>
     </ConfigProvider>
   );

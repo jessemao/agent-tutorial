@@ -4,11 +4,9 @@ import com.acme.training.platform.audit.AuditRecorder;
 import com.acme.training.platform.error.PlatformException;
 import com.acme.training.platform.idempotency.IdempotencyDecision;
 import com.acme.training.platform.idempotency.IdempotencyGuard;
-import com.acme.training.wms.PersistenceConstraints;
 import com.acme.training.wms.masterdata.StorageLocation;
 import com.acme.training.wms.masterdata.StorageLocationRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
@@ -19,17 +17,20 @@ class InventoryService implements InventoryOperations {
 
     private final InventoryBalanceRepository balanceRepository;
     private final InventoryMovementRepository movementRepository;
+    private final InventoryMovementStore movementStore;
     private final StorageLocationRepository locationRepository;
     private final AuditRecorder auditRecorder;
     private final IdempotencyGuard idempotencyGuard;
 
     InventoryService(InventoryBalanceRepository balanceRepository,
                      InventoryMovementRepository movementRepository,
+                     InventoryMovementStore movementStore,
                      StorageLocationRepository locationRepository,
                      AuditRecorder auditRecorder,
                      IdempotencyGuard idempotencyGuard) {
         this.balanceRepository = balanceRepository;
         this.movementRepository = movementRepository;
+        this.movementStore = movementStore;
         this.locationRepository = locationRepository;
         this.auditRecorder = auditRecorder;
         this.idempotencyGuard = idempotencyGuard;
@@ -77,6 +78,64 @@ class InventoryService implements InventoryOperations {
                 balance.ship(command.getQuantity());
             }
         }, false);
+    }
+
+    @Override
+    @Transactional
+    public InventoryTransferView transfer(InventoryTransferCommand command) {
+        requireValidTransfer(command);
+        Long firstLocationId = Math.min(command.getSourceLocationId(), command.getTargetLocationId());
+        Long secondLocationId = Math.max(command.getSourceLocationId(), command.getTargetLocationId());
+        StorageLocation firstLocation = lockLocation(firstLocationId);
+        StorageLocation secondLocation = lockLocation(secondLocationId);
+        requireTransferLocation(firstLocation, command.getWarehouseId());
+        requireTransferLocation(secondLocation, command.getWarehouseId());
+
+        Optional<InventoryMovement> previousOut = movementRepository
+                .findByOperationTypeAndIdempotencyKey("TRANSFER_OUT", command.getIdempotencyKey());
+        Optional<InventoryMovement> previousIn = movementRepository
+                .findByOperationTypeAndIdempotencyKey("TRANSFER_IN", command.getIdempotencyKey());
+        boolean previousExists = previousOut.isPresent() || previousIn.isPresent();
+        boolean sameRequest = previousOut.isPresent() && previousIn.isPresent()
+                && previousOut.get().matches(command, command.getSourceLocationId())
+                && previousIn.get().matches(command, command.getTargetLocationId());
+        if (idempotencyGuard.decide(previousExists, sameRequest,
+                "WMS_IDEMPOTENCY_CONFLICT",
+                "idempotency key was already used with different transfer data")
+                == IdempotencyDecision.SAFE_REPLAY) {
+            return new InventoryTransferView(command.getTransferNo(),
+                    previousOut.get().result(), previousIn.get().result());
+        }
+
+        Optional<InventoryBalance> firstBalance = balanceRepository.findLockedBySkuIdAndWarehouseIdAndLocationId(
+                command.getSkuId(), command.getWarehouseId(), firstLocationId);
+        Optional<InventoryBalance> secondBalance = balanceRepository.findLockedBySkuIdAndWarehouseIdAndLocationId(
+                command.getSkuId(), command.getWarehouseId(), secondLocationId);
+        Optional<InventoryBalance> sourceBalance = command.getSourceLocationId().equals(firstLocationId)
+                ? firstBalance : secondBalance;
+        Optional<InventoryBalance> targetBalance = command.getTargetLocationId().equals(firstLocationId)
+                ? firstBalance : secondBalance;
+        InventoryBalance source = sourceBalance
+                .orElseThrow(() -> new PlatformException("WMS_INVENTORY_NOT_FOUND",
+                        "inventory balance does not exist"));
+        InventoryBalance target = targetBalance
+                .orElseGet(() -> new InventoryBalance(command.getSkuId(), command.getWarehouseId(),
+                        command.getTargetLocationId()));
+
+        source.transferOut(command.getQuantity());
+        target.transferIn(command.getQuantity());
+        balanceRepository.save(source);
+        balanceRepository.save(target);
+        recordMovement(new InventoryMovement("TRANSFER_OUT", command, command.getSourceLocationId(), source));
+        recordMovement(new InventoryMovement("TRANSFER_IN", command, command.getTargetLocationId(), target));
+        auditRecorder.record("TRANSFER", "INVENTORY", command.getTransferNo());
+        return new InventoryTransferView(command.getTransferNo(), source.view(), target.view());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public java.util.List<InventoryTransferTaskView> listTransferTasks() {
+        return movementRepository.findTransferTasks();
     }
 
     @Override
@@ -157,16 +216,28 @@ class InventoryService implements InventoryOperations {
     }
 
     private void recordMovement(InventoryMovement movement) {
-        try {
-            movementRepository.saveAndFlush(movement);
-        } catch (DataIntegrityViolationException exception) {
-            if (PersistenceConstraints.hasName(exception, "uk_movement_idempotency")) {
-                PlatformException conflict = new PlatformException("WMS_IDEMPOTENCY_CONFLICT",
-                        "idempotency key was concurrently used with conflicting inventory data");
-                conflict.initCause(exception);
-                throw conflict;
-            }
-            throw exception;
+        movementStore.save(movement);
+    }
+
+    private StorageLocation lockLocation(Long locationId) {
+        return locationRepository.findLockedById(locationId)
+                .orElseThrow(() -> new PlatformException("WMS_LOCATION_NOT_FOUND",
+                        "storage location does not exist"));
+    }
+
+    private void requireTransferLocation(StorageLocation location, Long warehouseId) {
+        if (!location.isEnabled() || !location.getWarehouseId().equals(warehouseId)) {
+            throw new PlatformException("WMS_INVALID_LOCATION",
+                    "storage location is unavailable or belongs to another warehouse");
+        }
+    }
+
+    private void requireValidTransfer(InventoryTransferCommand command) {
+        if (command == null || command.getQuantity() <= 0
+                || command.getSourceLocationId() == null || command.getTargetLocationId() == null
+                || command.getSourceLocationId().equals(command.getTargetLocationId())) {
+            throw new PlatformException("INVALID_REQUEST",
+                    "quantity must be positive and source and target locations must differ");
         }
     }
 

@@ -39,6 +39,12 @@ public class StorageLocation {
         this.enabled = true;
     }
 
+    public static StorageLocation disabled(Long warehouseId, Long areaId, String code) {
+        StorageLocation location = new StorageLocation(warehouseId, areaId, code);
+        location.enabled = false;
+        return location;
+    }
+
     public Long getId() {
         return id;
     }

@@ -78,6 +78,20 @@ class InventoryMovement {
         this.createdAt = Instant.now();
     }
 
+    InventoryMovement(String operationType, InventoryTransferCommand command,
+                      Long locationId, InventoryBalance balance) {
+        this.operationType = operationType;
+        this.idempotencyKey = command.getIdempotencyKey();
+        this.referenceNo = command.getTransferNo();
+        this.skuId = command.getSkuId();
+        this.warehouseId = command.getWarehouseId();
+        this.locationId = locationId;
+        this.quantity = command.getQuantity();
+        this.availableAfter = balance.getAvailableQuantity();
+        this.reservedAfter = balance.getReservedQuantity();
+        this.createdAt = Instant.now();
+    }
+
     InventoryBalanceView result() {
         return new InventoryBalanceView(skuId, warehouseId, locationId, availableAfter, reservedAfter);
     }
@@ -99,5 +113,13 @@ class InventoryMovement {
                 && command.getExpectedReservedQuantity() == reservedAfter
                 && command.getCountedTotalQuantity() == availableAfter + reservedAfter
                 && quantity == command.getCountedTotalQuantity() - command.getExpectedTotalQuantity();
+    }
+
+    boolean matches(InventoryTransferCommand command, Long expectedLocationId) {
+        return referenceNo.equals(command.getTransferNo())
+                && skuId.equals(command.getSkuId())
+                && warehouseId.equals(command.getWarehouseId())
+                && locationId.equals(expectedLocationId)
+                && quantity == command.getQuantity();
     }
 }

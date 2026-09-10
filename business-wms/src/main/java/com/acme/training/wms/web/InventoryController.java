@@ -4,6 +4,9 @@ import com.acme.training.platform.web.ApiResponse;
 import com.acme.training.wms.inventory.InventoryBalanceView;
 import com.acme.training.wms.inventory.InventoryCommand;
 import com.acme.training.wms.inventory.InventoryOperations;
+import com.acme.training.wms.inventory.InventoryTransferCommand;
+import com.acme.training.wms.inventory.InventoryTransferTaskView;
+import com.acme.training.wms.inventory.InventoryTransferView;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/wms/inventory")
@@ -26,6 +30,19 @@ public class InventoryController {
     @PostMapping("/receive")
     public ApiResponse<InventoryBalanceView> receive(@Valid @RequestBody InventoryRequest request) {
         return ApiResponse.success(inventoryOperations.receive(toCommand(request)));
+    }
+
+    @PostMapping("/transfer")
+    public ApiResponse<InventoryTransferView> transfer(@Valid @RequestBody InventoryTransferRequest request) {
+        InventoryTransferCommand command = new InventoryTransferCommand(request.getIdempotencyKey(),
+                request.getTransferNo(), request.getSkuId(), request.getWarehouseId(),
+                request.getSourceLocationId(), request.getTargetLocationId(), request.getQuantity());
+        return ApiResponse.success(inventoryOperations.transfer(command));
+    }
+
+    @GetMapping("/transfers")
+    public ApiResponse<List<InventoryTransferTaskView>> transfers() {
+        return ApiResponse.success(inventoryOperations.listTransferTasks());
     }
 
     @GetMapping("/balance")

@@ -72,6 +72,17 @@ class InventoryBalance {
         reservedQuantity -= quantity;
     }
 
+    void transferOut(long quantity) {
+        require(availableQuantity >= quantity, "WMS_INSUFFICIENT_AVAILABLE", "available inventory is insufficient");
+        availableQuantity -= quantity;
+    }
+
+    void transferIn(long quantity) {
+        require(quantity <= Long.MAX_VALUE - availableQuantity - reservedQuantity, "WMS_INVENTORY_OVERFLOW",
+                "inventory quantity exceeds the supported range");
+        availableQuantity += quantity;
+    }
+
     void adjustToCountedTotal(long countedTotalQuantity) {
         require(countedTotalQuantity >= reservedQuantity, "WMS_COUNT_BELOW_RESERVED",
                 "counted total quantity cannot be lower than reserved quantity");

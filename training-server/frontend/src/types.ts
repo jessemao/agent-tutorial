@@ -1,10 +1,26 @@
-export type ViewKey = 'shipment' | 'inbound' | 'inventory';
+export type ViewKey = 'shipment' | 'inbound' | 'inventory' | 'transfer';
 
 export type ShipmentStatus = 'CREATED' | 'RESERVED' | 'SHIPPED' | 'CANCELLED';
 
 export interface InventoryBalance {
   availableQuantity: number;
   reservedQuantity: number;
+}
+
+export interface InventoryTransferView {
+  transferNo: string;
+  source: InventoryBalance;
+  target: InventoryBalance;
+}
+
+export interface InventoryTransferTask {
+  transferNo: string;
+  skuId: number;
+  warehouseId: number;
+  sourceLocationId: number;
+  targetLocationId: number;
+  quantity: number;
+  createdAt: string;
 }
 
 export interface ShipmentView {

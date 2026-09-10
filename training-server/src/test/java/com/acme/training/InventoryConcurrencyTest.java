@@ -5,6 +5,7 @@ import com.acme.training.wms.inventory.InventoryBalanceView;
 import com.acme.training.wms.inventory.InventoryCommand;
 import com.acme.training.wms.inventory.InventoryCountAdjustmentCommand;
 import com.acme.training.wms.inventory.InventoryOperations;
+import com.acme.training.wms.inventory.InventoryTransferCommand;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -182,6 +183,39 @@ class InventoryConcurrencyTest {
         assertThrows(DataIntegrityViolationException.class, () -> asOperator(() ->
                 inventory.receive(new InventoryCommand(tooLongKey, "RC-908", 908L, 1L, 1L, 7))));
         assertEquals(0, inventory.getBalance(908L, 1L, 1L).getAvailableQuantity());
+    }
+
+    @Test
+    void oppositeTransfersCompleteWithoutDeadlockAndPreserveTotalInventory() throws Exception {
+        asOperator(() -> inventory.receive(new InventoryCommand("transfer-left", "RC-909-L", 909L, 1L, 1L, 10)));
+        asOperator(() -> inventory.receive(new InventoryCommand("transfer-right", "RC-909-R", 909L, 1L, 2L, 10)));
+        CountDownLatch start = new CountDownLatch(1);
+        ExecutorService workers = Executors.newFixedThreadPool(2);
+        try {
+            Future<?> leftToRight = workers.submit(() -> asOperator(() -> {
+                await(start);
+                return inventory.transfer(new InventoryTransferCommand(
+                        "transfer-909-lr", "TR-909-LR", 909L, 1L, 1L, 2L, 4));
+            }));
+            Future<?> rightToLeft = workers.submit(() -> asOperator(() -> {
+                await(start);
+                return inventory.transfer(new InventoryTransferCommand(
+                        "transfer-909-rl", "TR-909-RL", 909L, 1L, 2L, 1L, 3));
+            }));
+            start.countDown();
+            leftToRight.get(10, TimeUnit.SECONDS);
+            rightToLeft.get(10, TimeUnit.SECONDS);
+        } finally {
+            workers.shutdownNow();
+            assertTrue(workers.awaitTermination(10, TimeUnit.SECONDS), "workers did not stop");
+        }
+
+        long left = inventory.getBalance(909L, 1L, 1L).getAvailableQuantity();
+        long right = inventory.getBalance(909L, 1L, 2L).getAvailableQuantity();
+        assertEquals(9, left);
+        assertEquals(11, right);
+        assertEquals(20, left + right);
+        assertTrue(left >= 0 && right >= 0);
     }
 
     private <T> T asOperator(Callable<T> action) throws Exception {

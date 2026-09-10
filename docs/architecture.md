@@ -37,6 +37,13 @@ training-server → business-wms → platform-web-starter → platform-contracts
 
 库存行锁、余额校验、幂等记录和库存流水属于实现细节。Controller、单据领域和装配层不得直接访问库存 Repository 或修改 `InventoryBalance`。
 
+### T03 能力演进
+
+| 版本 | 移库能力 |
+| --- | --- |
+| 基线 `s2-t03-start` / `e27b3d3` | 已准备 SKU 303 在源库位的 10 件期初库存，并支持按单个或全部有效库位独立查询；没有公开移库 Interface、HTTP 入口或课堂页面。 |
+| T03 目标状态 | `InventoryOperations.transfer` 在单事务内按库位 ID 稳定加锁，原子更新两端余额，以双流水保存幂等快照，并由 `/api/wms/inventory/transfer` 和课堂移库页面提供单一入口。 |
+
 统一公开入口不等于巨型实现类。内部职责可以按锁定、校验、流水或查询等真实变化原因组织，但不得创建透传层、万能 Service 或无调用方接口。
 
 ## 3. 关键不变式

@@ -28,6 +28,13 @@ public class DemoDataConfiguration {
             StorageLocation source = locationRepository.save(
                     new StorageLocation(warehouse.getId(), area.getId(), "A01-01-01"));
             locationRepository.save(new StorageLocation(warehouse.getId(), area.getId(), "A01-01-02"));
+            locationRepository.save(StorageLocation.disabled(
+                    warehouse.getId(), area.getId(), "DISABLED-T03"));
+            Warehouse otherWarehouse = warehouseRepository.save(new Warehouse("WH-T03-OTHER", "T03 异仓测试仓"));
+            WarehouseArea otherArea = areaRepository.save(
+                    new WarehouseArea(otherWarehouse.getId(), "T03", "T03 异仓测试区"));
+            locationRepository.save(new StorageLocation(
+                    otherWarehouse.getId(), otherArea.getId(), "OTHER-WAREHOUSE-T03"));
             jdbcTemplate.update("insert into wms_inventory_balance "
                             + "(sku_id, warehouse_id, location_id, available_quantity, reserved_quantity, version) "
                             + "values (?, ?, ?, ?, ?, ?)",

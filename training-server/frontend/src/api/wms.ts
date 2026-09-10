@@ -1,5 +1,7 @@
 import type {
   InventoryBalance,
+  InventoryTransferView,
+  InventoryTransferTask,
   InboundView,
   ScenarioIdentifiers,
   ShipmentView,
@@ -23,6 +25,10 @@ export const T02_SCENARIO = Object.freeze({
   warehouseId: 1,
   locationId: 1,
   operator: 'trainer',
+});
+
+const T03_SCENARIO = Object.freeze({
+  warehouseId: 1,
 });
 
 interface ApiResponse<T> {
@@ -133,6 +139,28 @@ export async function refreshInbound(inbound: TrainingInbound): Promise<Training
     status: view.status,
     inventory,
   };
+}
+
+export async function transferInventory(input: {
+  skuId: number;
+  sourceLocationId: number;
+  targetLocationId: number;
+  quantity: number;
+  transferNo: string;
+}): Promise<InventoryTransferView> {
+  return request<InventoryTransferView>('POST', '/api/wms/inventory/transfer', {
+    idempotencyKey: `transfer-t03-${input.transferNo}`,
+    transferNo: input.transferNo,
+    skuId: input.skuId,
+    warehouseId: T03_SCENARIO.warehouseId,
+    sourceLocationId: input.sourceLocationId,
+    targetLocationId: input.targetLocationId,
+    quantity: input.quantity,
+  });
+}
+
+export function queryTransferTasks(): Promise<InventoryTransferTask[]> {
+  return request<InventoryTransferTask[]>('GET', '/api/wms/inventory/transfers');
 }
 
 export async function prepareDemoShipment(
