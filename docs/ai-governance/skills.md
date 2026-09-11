@@ -89,4 +89,10 @@ Skill 输出是检查建议和证据，不是人工批准。
 
 ## 独立测试与 QA 交接
 
-`/implement` 只生成开发 TDD 与任务回归证据；`/code-review` 只给固定 Diff 的 Spec / Standards 代码评审建议。测试工程师另行按模板生成 `functional-test.md`，QA 随后按模板生成 `qa-review.md`，业务负责人最终验收。保持第三方 Skills 原文，所有分阶段限制在项目治理层执行。
+`/implement` 只生成开发 TDD 与任务回归证据；`/code-review` 只给固定 Diff 的 Spec / Standards 代码评审建议。测试与 QA 按企业流程选择是否分别生成 `functional-test.md`、`qa-review.md`，未采用时记录 N/A、替代证据和风险；业务负责人最终验收。保持第三方 Skills 原文，所有分阶段限制在项目治理层执行。
+
+## T05 项目 Skill 产品化约束
+
+T05 提炼的 `work-item-start`、`work-item-discover`、`work-item-execute`、`work-item-review`、`work-item-decision` 必须创建在项目 `.agents/skills/`，不得修改或覆盖第三方 Skills。五个入口各用一张纵向 Ticket 实施，按 `start → discover → execute → review → decision` 顺序逐个生成和验证；不能用 Tickets N/A 或一次性生成五个目录绕过独立验收。
+
+每个项目 Skill 必须显式声明输入、读取顺序、允许写入、固定产物、停止条件、禁止动作、下一入口和验收方式，并在 `agents/openai.yaml` 中关闭隐式调用。来源、内容哈希和文件清单必须登记到 `skills-lock.json`。每个 Skill 完成后运行 `./scripts/validate-t05-skills.sh <skill-name>`，完整链路结束后运行 `./scripts/classroom-verify.sh T05`；门禁只验证确定性结构，不能替代代码 Review、测试工程师功能测试、QA 审查或业务 Decision。

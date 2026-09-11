@@ -20,8 +20,13 @@ case "$task" in
     docker compose -f compose.classroom.yml exec -T classroom \
       /workspace/docker/classroom/training-wms-mvn -o -B -ntp clean verify
     ;;
+  T05)
+    ./scripts/validate-ai-governance.sh
+    ./scripts/validate-t05-skills.sh all
+    git diff --check
+    ;;
   *)
-    echo 'Usage: ./scripts/classroom-verify.sh T01|T02|T03|T04' >&2
+    echo 'Usage: ./scripts/classroom-verify.sh T01|T02|T03|T04|T05' >&2
     exit 2
     ;;
 esac

@@ -23,6 +23,9 @@ case "$task:$scope" in
   T04:baseline)
     test_name='InventoryRegressionTest,WmsFlowIntegrationTest,T03TransferHappyPathIntegrationTest,T03TransferContractIntegrationTest,T03TransferAtomicityIntegrationTest,InventoryConcurrencyTest'
     ;;
+  T05:baseline)
+    exec ./scripts/validate-t05-skills.sh baseline
+    ;;
   T02:target)
     for test_file in \
       training-server/src/test/java/com/acme/training/T02InboundAcceptanceIntegrationTest.java \
@@ -43,7 +46,7 @@ case "$task:$scope" in
       /workspace/docker/classroom/training-wms-mvn -o -B -ntp clean verify
     ;;
   *)
-    echo 'Usage: ./scripts/classroom-test.sh T01|T02|T03 target|baseline|module|all, or T04 baseline' >&2
+    echo 'Usage: ./scripts/classroom-test.sh T01|T02|T03 target|baseline|module|all, or T04|T05 baseline' >&2
     exit 2
     ;;
 esac
