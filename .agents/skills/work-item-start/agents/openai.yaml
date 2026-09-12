@@ -1,0 +1,7 @@
+interface:
+  display_name: "启动 Work Item"
+  short_description: "显式、安全地创建标准 Work Item 基础文档"
+  default_prompt: "使用 $work-item-start 为我提供的 Work Item 建档；只创建 README.md 和 inputs/input-evidence.md，完成后停止。"
+
+policy:
+  allow_implicit_invocation: false

@@ -1,0 +1,45 @@
+T05-G01 Ticket 02 automated validation
+Executed: 2026-09-11 12:37:58 CST
+Branch: T05-G01
+Base commit: add14f73bf857604e5f738fe35111ab4ef1b3e05
+
+[RED]
+$ ./scripts/validate-t05-skills.sh work-item-discover
+[BLOCK] T05 Skill files are incomplete: .agents/skills/work-item-discover
+exit: 1
+
+[GREEN — skill package]
+$ uv run python /Users/captainmao/.codex/skills/.system/skill-creator/scripts/quick_validate.py .agents/skills/work-item-discover
+Skill is valid!
+exit: 0
+
+[GREEN — T05 contract]
+$ ./scripts/validate-t05-skills.sh work-item-discover
+work-item-discover: OK
+exit: 0
+
+[GREEN — governance]
+$ ./scripts/validate-ai-governance.sh
+[PASS] AI governance materials and project Skills are complete.
+exit: 0
+
+[GREEN — route matrix]
+T01 Bug 修复 -> repository evidence first; $grilling only for owner decisions
+T02 需求调整 -> repository investigation, then mandatory $grill-with-docs; $codebase-design only after scope confirmation
+T03 新增业务需求 -> repository investigation, then mandatory $grill-with-docs; $codebase-design only after scope confirmation
+T04 业务重构 -> repository investigation, then mandatory $grill-with-docs for kept behavior/trade-offs; then $codebase-design
+T05 组件或 Skill 复用 -> repository investigation, then mandatory $grill-with-docs for reuse/governance scope; then $codebase-design
+All four routes write the same governed 01_analysis.md skeleton and stop before scope approval.
+
+[GREEN — scope convergence gate]
+Repository investigation does not count as human scope confirmation.
+For requirement change, new requirement, business refactor, and component/Skill reuse, $grill-with-docs is mandatory before design or /to-spec.
+Unanswered owner questions keep the work item BLOCKED; no approval is inferred.
+
+[GREEN — write boundary]
+Allowed: current Work Item 01_analysis.md; conditional current-stage drafts in Workflow order; matching README state.
+Forbidden: business code/tests, third-party Skills, governance/templates/gates, 02_verification.md, 03_review.md, functional-test.md, qa-review.md, 04_decision.md, Git delivery actions.
+
+[GREEN — whitespace]
+$ git diff --check
+exit: 0

@@ -11,6 +11,76 @@
         "agents/openai.yaml": "c98f59fecc6d38397f16e0ca7e206bd5ca2d3f480e81f73d6ad47a7735e6f72b"
       }
     },
+    "work-item-start": {
+      "source": "training-wms",
+      "sourceType": "project",
+      "sourceVersion": "T05-G01-v1.1",
+      "sourceCommit": "d76cfb2a81f87834e111bf1987375dab07101d55",
+      "license": "project-internal-course-material",
+      "localModifications": false,
+      "skillPath": ".agents/skills/work-item-start/SKILL.md",
+      "computedHash": "74d68fae4548d01a8ab5425e2e24f8f957274829dcf2a266fd5f1478673536c7",
+      "files": {
+        "SKILL.md": "74d68fae4548d01a8ab5425e2e24f8f957274829dcf2a266fd5f1478673536c7",
+        "agents/openai.yaml": "04e4007e8b473476215d5c8a1d4a2f9cbbe4dbffee9e8e60c60f51d1ba31e934"
+      }
+    },
+    "work-item-discover": {
+      "source": "training-wms",
+      "sourceType": "project",
+      "sourceVersion": "T05-G01-v1.1",
+      "sourceCommit": "d76cfb2a81f87834e111bf1987375dab07101d55",
+      "license": "project-internal-course-material",
+      "localModifications": false,
+      "skillPath": ".agents/skills/work-item-discover/SKILL.md",
+      "computedHash": "43f31eaf2b0e2e39b576b8b77f7eaf1ba4fa67496df831c6f1bc72b21b7c124c",
+      "files": {
+        "SKILL.md": "43f31eaf2b0e2e39b576b8b77f7eaf1ba4fa67496df831c6f1bc72b21b7c124c",
+        "agents/openai.yaml": "1958c52ddcfc61bf4079ab42154b8ffbded6de1569fb8161a5941b28e4cc5f73"
+      }
+    },
+    "work-item-execute": {
+      "source": "training-wms",
+      "sourceType": "project",
+      "sourceVersion": "T05-G01-v1.1",
+      "sourceCommit": "d76cfb2a81f87834e111bf1987375dab07101d55",
+      "license": "project-internal-course-material",
+      "localModifications": false,
+      "skillPath": ".agents/skills/work-item-execute/SKILL.md",
+      "computedHash": "13080dad862eac113a124cc1a376c29c271f9782e6b8c713a3e9c4b8193ce305",
+      "files": {
+        "SKILL.md": "13080dad862eac113a124cc1a376c29c271f9782e6b8c713a3e9c4b8193ce305",
+        "agents/openai.yaml": "23957d5fd00cd1080b4a5c51c74f3ed2c5e7535f80e8f427460fb57fc504c8d7"
+      }
+    },
+    "work-item-review": {
+      "source": "training-wms",
+      "sourceType": "project",
+      "sourceVersion": "T05-G01-v1.1",
+      "sourceCommit": "d76cfb2a81f87834e111bf1987375dab07101d55",
+      "license": "project-internal-course-material",
+      "localModifications": false,
+      "skillPath": ".agents/skills/work-item-review/SKILL.md",
+      "computedHash": "154749de33339ff3454ae1f5d9b837a41c4d2b84cbc735dbe4d0e3b3195f134b",
+      "files": {
+        "SKILL.md": "154749de33339ff3454ae1f5d9b837a41c4d2b84cbc735dbe4d0e3b3195f134b",
+        "agents/openai.yaml": "8da684ca7be61828ae4495b8beeef2b4ad3246f0752c29dcde9026bb1ac46260"
+      }
+    },
+    "work-item-decision": {
+      "source": "training-wms",
+      "sourceType": "project",
+      "sourceVersion": "T05-G01-v1.1",
+      "sourceCommit": "d76cfb2a81f87834e111bf1987375dab07101d55",
+      "license": "project-internal-course-material",
+      "localModifications": false,
+      "skillPath": ".agents/skills/work-item-decision/SKILL.md",
+      "computedHash": "51cfd664a462a7b5c8c82ee68a1ef61e01130d6bd907ca358c78215aba94342f",
+      "files": {
+        "SKILL.md": "51cfd664a462a7b5c8c82ee68a1ef61e01130d6bd907ca358c78215aba94342f",
+        "agents/openai.yaml": "4b2036abc760f2bdd1fa00211f4782120bfb787e3dfc02aac19f0f1d3b379d02"
+      }
+    },
     "clean-comments": {
       "source": "ertugrul-dmr/clean-code-skills",
       "sourceType": "github",

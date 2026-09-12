@@ -1,0 +1,53 @@
+T05-G01 Ticket 05 automated validation
+Executed: 2026-09-11 13:53:36 CST
+Branch: T05-G01
+Base commit: add14f73bf857604e5f738fe35111ab4ef1b3e05
+
+[RED]
+$ ./scripts/validate-t05-skills.sh work-item-decision
+[BLOCK] T05 Skill files are incomplete: .agents/skills/work-item-decision
+exit: 1
+
+[GREEN — skill package]
+$ uv run python /Users/captainmao/.codex/skills/.system/skill-creator/scripts/quick_validate.py .agents/skills/work-item-decision
+Skill is valid!
+exit: 0
+
+[GREEN — current Skill]
+$ ./scripts/validate-t05-skills.sh work-item-decision
+work-item-decision: OK
+exit: 0
+
+[GREEN — all five Skills]
+$ ./scripts/validate-t05-skills.sh all
+work-item-start: OK
+work-item-discover: OK
+work-item-execute: OK
+work-item-review: OK
+work-item-decision: OK
+[PASS] all T05 project Skills are registered and structurally valid.
+exit: 0
+
+[GREEN — governance]
+$ ./scripts/validate-ai-governance.sh
+[PASS] AI governance materials and project Skills are complete.
+exit: 0
+
+[GREEN — T05 classroom gate]
+$ ./scripts/classroom-verify.sh T05
+[PASS] all T05 project Skills are registered and structurally valid.
+T05 verification passed.
+exit: 0
+
+[GREEN — decision safety]
+- Human decision text, identity/role/time, reviewed commit and per-Finding adjudication are mandatory.
+- Independent functional test, QA, business acceptance, MR/PR, checks, rollback and risk remain separate evidence.
+- Missing or conflicting required evidence blocks the final Decision; PASS does not imply ACCEPTED.
+- ACCEPTED only advises an authorized human to review and merge; merge, force-push, release and answer tags are always forbidden.
+
+[PENDING — full behavioral chain]
+The structural five-Skill chain and final gates pass. A temporary Work Item has not yet executed all five commands with human gates and a real candidate commit; no behavioral-chain PASS is claimed.
+
+[GREEN — whitespace]
+$ git diff --check
+exit: 0

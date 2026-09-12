@@ -1,0 +1,36 @@
+T05-G01 Ticket 04 automated validation
+Executed: 2026-09-11 13:48:11 CST
+Branch: T05-G01
+Base commit: add14f73bf857604e5f738fe35111ab4ef1b3e05
+
+[RED]
+$ ./scripts/validate-t05-skills.sh work-item-review
+[BLOCK] T05 Skill files are incomplete: .agents/skills/work-item-review
+exit: 1
+
+[GREEN — skill package]
+$ uv run python /Users/captainmao/.codex/skills/.system/skill-creator/scripts/quick_validate.py .agents/skills/work-item-review
+Skill is valid!
+exit: 0
+
+[GREEN — T05 contract]
+$ ./scripts/validate-t05-skills.sh work-item-review
+work-item-review: OK
+exit: 0
+
+[GREEN — governance]
+$ ./scripts/validate-ai-governance.sh
+[PASS] AI governance materials and project Skills are complete.
+exit: 0
+
+[GREEN — review contract]
+- Base SHA and candidate commit must resolve uniquely; candidate must derive from base and produce a non-empty three-dot Diff.
+- Analysis, approved scope documents, Tickets, Verification, Standards and Module rules must correspond to the candidate.
+- Existing $code-review owns the two-axis method; project output must persist to 03_review.md.
+- Spec and Standards matrices remain separate; test Green cannot replace either axis.
+- Findings retain axis, severity, location, evidence, impact and recommendation for human adjudication.
+- Review cannot edit the candidate, close Findings, create Decision, sign test/QA, deliver Git changes or operate MR/PR.
+
+[GREEN — whitespace]
+$ git diff --check
+exit: 0

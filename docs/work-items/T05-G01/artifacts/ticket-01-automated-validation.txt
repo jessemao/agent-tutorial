@@ -1,0 +1,39 @@
+T05-G01 Ticket 01 automated validation
+Executed: 2026-09-11 12:00:15 CST
+Branch: T05-G01
+Base commit: add14f73bf857604e5f738fe35111ab4ef1b3e05
+
+[RED]
+$ ./scripts/validate-t05-skills.sh work-item-start
+[BLOCK] T05 Skill files are incomplete: .agents/skills/work-item-start
+exit: 1
+
+[GREEN — skill package]
+$ uv run python /Users/captainmao/.codex/skills/.system/skill-creator/scripts/quick_validate.py .agents/skills/work-item-start
+Skill is valid!
+exit: 0
+
+[GREEN — T05 contract]
+$ ./scripts/validate-t05-skills.sh work-item-start
+work-item-start: OK
+exit: 0
+
+[GREEN — governance]
+$ ./scripts/validate-ai-governance.sh
+.agents/skills/clean-comments/SKILL.md: OK
+.agents/skills/init-work-item/SKILL.md: OK
+.agents/skills/init-work-item/agents/openai.yaml: OK
+.agents/skills/clean-functions/SKILL.md: OK
+.agents/skills/clean-general/SKILL.md: OK
+.agents/skills/clean-names/SKILL.md: OK
+.agents/skills/clean-tests/SKILL.md: OK
+.agents/skills/codebase-design/DEEPENING.md: OK
+.agents/skills/codebase-design/DESIGN-IT-TWICE.md: OK
+.agents/skills/codebase-design/SKILL.md: OK
+.agents/skills/codebase-design/agents/openai.yaml: OK
+[PASS] AI governance materials and project Skills are complete.
+exit: 0
+
+[NOT EXECUTED]
+The T01/T02 cross-session success cases and failure-path cases require independent Agent sessions.
+No new Agent task was authorized in this implementation turn, so no behavioral PASS is claimed.

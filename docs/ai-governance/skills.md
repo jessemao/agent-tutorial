@@ -89,7 +89,7 @@ Skill 输出是检查建议和证据，不是人工批准。
 
 ## 独立测试与 QA 交接
 
-`/implement` 只生成开发 TDD 与任务回归证据；`/code-review` 只给固定 Diff 的 Spec / Standards 代码评审建议。测试与 QA 按企业流程选择是否分别生成 `functional-test.md`、`qa-review.md`，未采用时记录 N/A、替代证据和风险；业务负责人最终验收。保持第三方 Skills 原文，所有分阶段限制在项目治理层执行。
+`/implement` 只生成开发 TDD 与任务回归证据；`/code-review` 只给固定 Diff 的 Spec / Standards 代码评审建议。测试工程师另行按模板生成 `functional-test.md`，QA 随后按模板生成 `qa-review.md`，业务负责人最终验收。保持第三方 Skills 原文，所有分阶段限制在项目治理层执行。
 
 ## T05 项目 Skill 产品化约束
 
