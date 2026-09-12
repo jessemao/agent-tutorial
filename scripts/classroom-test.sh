@@ -26,6 +26,16 @@ case "$task:$scope" in
   T05:baseline)
     exec ./scripts/validate-t05-skills.sh baseline
     ;;
+  T06:baseline)
+    ./scripts/validate-ai-governance.sh
+    ./scripts/validate-t05-skills.sh all
+    if rg -q 'Stocktake|stocktake|COUNT_ADJUST|adjustFromCount' \
+        business-wms/src/main training-server/src/main training-server/src/test; then
+      echo '[BLOCK] T06 answer capability leaked into the classroom baseline.' >&2
+      exit 1
+    fi
+    test_name='InventoryRegressionTest,WmsFlowIntegrationTest,T03TransferHappyPathIntegrationTest,T03TransferContractIntegrationTest,T03TransferAtomicityIntegrationTest,InventoryConcurrencyTest'
+    ;;
   T02:target)
     for test_file in \
       training-server/src/test/java/com/acme/training/T02InboundAcceptanceIntegrationTest.java \
@@ -46,7 +56,7 @@ case "$task:$scope" in
       /workspace/docker/classroom/training-wms-mvn -o -B -ntp clean verify
     ;;
   *)
-    echo 'Usage: ./scripts/classroom-test.sh T01|T02|T03 target|baseline|module|all, or T04|T05 baseline' >&2
+    echo 'Usage: ./scripts/classroom-test.sh T01|T02|T03 target|baseline|module|all, or T04|T05|T06 baseline' >&2
     exit 2
     ;;
 esac

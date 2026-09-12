@@ -3,7 +3,6 @@ package com.acme.training;
 import com.acme.training.platform.error.PlatformException;
 import com.acme.training.wms.inventory.InventoryBalanceView;
 import com.acme.training.wms.inventory.InventoryCommand;
-import com.acme.training.wms.inventory.InventoryCountAdjustmentCommand;
 import com.acme.training.wms.inventory.InventoryOperations;
 import com.acme.training.wms.inventory.InventoryTransferCommand;
 import org.junit.jupiter.api.Test;
@@ -82,32 +81,6 @@ class InventoryConcurrencyTest {
         InventoryBalanceView replay = overlappingTransactions(() -> inventory.receive(command));
         assertEquals(7, replay.getAvailableQuantity());
         assertEquals(7, inventory.getBalance(902L, 1L, 1L).getAvailableQuantity());
-    }
-
-    @Test
-    void concurrentCountAdjustmentReplaysAfterTheFirstTransactionCommits() throws Exception {
-        asOperator(() -> inventory.receive(new InventoryCommand("count-initial", "RC-904", 904L, 1L, 1L, 10)));
-        InventoryCountAdjustmentCommand command = new InventoryCountAdjustmentCommand(
-                "concurrent-count", "CT-904", 904L, 1L, 1L, 10, 0, 8);
-        InventoryBalanceView replay = overlappingTransactions(() -> inventory.adjustFromCount(command));
-        assertEquals(8, replay.getAvailableQuantity());
-        assertEquals(8, inventory.getBalance(904L, 1L, 1L).getAvailableQuantity());
-    }
-
-    @Test
-    void countReplayRejectsChangedAbsoluteQuantitiesEvenWhenTheDeltaMatches() throws Exception {
-        asOperator(() -> inventory.receive(new InventoryCommand("count-conflict-initial", "RC-905", 905L, 1L, 1L, 10)));
-        asOperator(() -> inventory.adjustFromCount(new InventoryCountAdjustmentCommand(
-                "count-conflict", "CT-905", 905L, 1L, 1L, 10, 0, 8)));
-        PlatformException differentTotals = assertThrows(PlatformException.class, () ->
-                asOperator(() -> inventory.adjustFromCount(new InventoryCountAdjustmentCommand(
-                        "count-conflict", "CT-905", 905L, 1L, 1L, 11, 0, 9))));
-        assertEquals("WMS_IDEMPOTENCY_CONFLICT", differentTotals.getCode());
-        PlatformException differentReserved = assertThrows(PlatformException.class, () ->
-                asOperator(() -> inventory.adjustFromCount(new InventoryCountAdjustmentCommand(
-                        "count-conflict", "CT-905", 905L, 1L, 1L, 10, 1, 8))));
-        assertEquals("WMS_IDEMPOTENCY_CONFLICT", differentReserved.getCode());
-        assertEquals(8, inventory.getBalance(905L, 1L, 1L).getAvailableQuantity());
     }
 
     private <T> T overlappingTransactions(Supplier<T> action) throws Exception {

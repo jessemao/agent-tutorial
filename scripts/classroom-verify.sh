@@ -25,8 +25,18 @@ case "$task" in
     ./scripts/validate-t05-skills.sh all
     git diff --check
     ;;
+  T06)
+    ./scripts/validate-ai-governance.sh
+    ./scripts/validate-t05-skills.sh all
+    docker compose -f compose.classroom.yml exec -T classroom \
+      /workspace/docker/classroom/training-wms-mvn -o -B -ntp -pl training-server -am test
+    docker compose -f compose.classroom.yml exec -T frontend npm run build
+    docker compose -f compose.classroom.yml exec -T classroom \
+      /workspace/docker/classroom/training-wms-mvn -o -B -ntp clean verify
+    git diff --check
+    ;;
   *)
-    echo 'Usage: ./scripts/classroom-verify.sh T01|T02|T03|T04|T05' >&2
+    echo 'Usage: ./scripts/classroom-verify.sh T01|T02|T03|T04|T05|T06' >&2
     exit 2
     ;;
 esac

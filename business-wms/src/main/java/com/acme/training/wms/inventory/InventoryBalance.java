@@ -83,12 +83,6 @@ class InventoryBalance {
         availableQuantity += quantity;
     }
 
-    void adjustToCountedTotal(long countedTotalQuantity) {
-        require(countedTotalQuantity >= reservedQuantity, "WMS_COUNT_BELOW_RESERVED",
-                "counted total quantity cannot be lower than reserved quantity");
-        availableQuantity = countedTotalQuantity - reservedQuantity;
-    }
-
     long getTotalQuantity() {
         return availableQuantity + reservedQuantity;
     }

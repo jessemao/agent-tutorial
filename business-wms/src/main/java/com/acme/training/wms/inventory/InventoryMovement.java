@@ -65,19 +65,6 @@ class InventoryMovement {
         this.createdAt = Instant.now();
     }
 
-    InventoryMovement(InventoryCountAdjustmentCommand command, InventoryBalance balance) {
-        this.operationType = "COUNT_ADJUST";
-        this.idempotencyKey = command.getIdempotencyKey();
-        this.referenceNo = command.getCountNo();
-        this.skuId = command.getSkuId();
-        this.warehouseId = command.getWarehouseId();
-        this.locationId = command.getLocationId();
-        this.quantity = command.getCountedTotalQuantity() - command.getExpectedTotalQuantity();
-        this.availableAfter = balance.getAvailableQuantity();
-        this.reservedAfter = balance.getReservedQuantity();
-        this.createdAt = Instant.now();
-    }
-
     InventoryMovement(String operationType, InventoryTransferCommand command,
                       Long locationId, InventoryBalance balance) {
         this.operationType = operationType;
@@ -102,17 +89,6 @@ class InventoryMovement {
                 && warehouseId.equals(command.getWarehouseId())
                 && locationId.equals(command.getLocationId())
                 && quantity == command.getQuantity();
-    }
-
-    boolean matches(InventoryCountAdjustmentCommand command) {
-        return referenceNo.equals(command.getCountNo())
-                && skuId.equals(command.getSkuId())
-                && warehouseId.equals(command.getWarehouseId())
-                && locationId.equals(command.getLocationId())
-                // Count adjustment preserves reserved stock; its result records the original physical count.
-                && command.getExpectedReservedQuantity() == reservedAfter
-                && command.getCountedTotalQuantity() == availableAfter + reservedAfter
-                && quantity == command.getCountedTotalQuantity() - command.getExpectedTotalQuantity();
     }
 
     boolean matches(InventoryTransferCommand command, Long expectedLocationId) {
