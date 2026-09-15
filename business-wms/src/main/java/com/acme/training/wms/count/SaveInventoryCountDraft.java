@@ -1,0 +1,3 @@
+package com.acme.training.wms.count;
+import java.util.List;
+public final class SaveInventoryCountDraft { private final String idempotencyKey; private final long expectedVersion; private final String note; private final List<SaveCountLine> lines; public SaveInventoryCountDraft(String key,long version,String note,List<SaveCountLine> lines){this.idempotencyKey=key;this.expectedVersion=version;this.note=note;this.lines=lines;} public String getIdempotencyKey(){return idempotencyKey;} public long getExpectedVersion(){return expectedVersion;} public String getNote(){return note;} public List<SaveCountLine> getLines(){return lines;} }

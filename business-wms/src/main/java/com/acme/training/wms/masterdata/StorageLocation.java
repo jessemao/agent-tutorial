@@ -53,6 +53,10 @@ public class StorageLocation {
         return warehouseId;
     }
 
+    public String getCode() {
+        return code;
+    }
+
     public boolean isEnabled() {
         return enabled;
     }

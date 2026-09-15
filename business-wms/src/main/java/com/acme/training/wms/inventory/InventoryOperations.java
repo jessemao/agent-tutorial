@@ -18,6 +18,8 @@ public interface InventoryOperations {
 
     InventoryTransferView transfer(InventoryTransferCommand command);
 
+    List<CountReconciliationResult> reconcileCount(CountReconciliationCommand command);
+
     /** Reads a balance without requesting an exclusive lock; missing dimensions return zero quantities. */
     InventoryBalanceView getBalance(Long skuId, Long warehouseId, Long locationId);
 

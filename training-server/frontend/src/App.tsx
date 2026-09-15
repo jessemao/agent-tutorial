@@ -8,6 +8,7 @@ import { InboundPage } from './pages/InboundPage';
 import { InventoryPage } from './pages/InventoryPage';
 import { ShipmentPage } from './pages/ShipmentPage';
 import { TransferPage } from './pages/TransferPage';
+import { CountPage } from './pages/CountPage';
 import type { ViewKey } from './types';
 
 export default function App() {
@@ -74,6 +75,7 @@ export default function App() {
           />
         )}
         {activeView === 'transfer' && <TransferPage />}
+        {activeView === 'count' && <CountPage />}
       </AppShell>
     </ConfigProvider>
   );

@@ -4,6 +4,21 @@ set -euo pipefail
 repo_dir="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$repo_dir"
 
+text_search() {
+  if command -v rg >/dev/null 2>&1; then
+    rg "$@"
+  else
+    local argument
+    for argument in "$@"; do
+      if [[ -d "$argument" ]]; then
+        grep -r "$@"
+        return
+      fi
+    done
+    grep "$@"
+  fi
+}
+
 task="${1:-}"
 scope="${2:-target}"
 
@@ -29,7 +44,7 @@ case "$task:$scope" in
   T06:baseline)
     ./scripts/validate-ai-governance.sh
     ./scripts/validate-t05-skills.sh all
-    if rg -q 'Stocktake|stocktake|COUNT_ADJUST|adjustFromCount' \
+    if text_search -q 'Stocktake|stocktake|COUNT_ADJUST|adjustFromCount' \
         business-wms/src/main training-server/src/main training-server/src/test; then
       echo '[BLOCK] T06 answer capability leaked into the classroom baseline.' >&2
       exit 1

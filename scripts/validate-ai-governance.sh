@@ -4,6 +4,21 @@ set -euo pipefail
 repo_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$repo_dir"
 
+text_search() {
+  if command -v rg >/dev/null 2>&1; then
+    rg "$@"
+  else
+    local argument
+    for argument in "$@"; do
+      if [[ -d "$argument" ]]; then
+        grep -r "$@"
+        return
+      fi
+    done
+    grep "$@"
+  fi
+}
+
 required_files=(
   "AGENTS.md"
   "docs/ai-governance/README.md"
@@ -65,7 +80,7 @@ required_governance_headings=(
 for required_governance_heading in "${required_governance_headings[@]}"; do
   governance_file="${required_governance_heading%%|*}"
   governance_heading="${required_governance_heading#*|}"
-  if ! rg -Fq "$governance_heading" "$governance_file"; then
+  if ! text_search -Fq "$governance_heading" "$governance_file"; then
     echo "[BLOCK] required governance heading missing in $governance_file: $governance_heading" >&2
     exit 1
   fi
@@ -91,7 +106,7 @@ required_heading_pairs=(
 for required_heading_pair in "${required_heading_pairs[@]}"; do
   template_file="${required_heading_pair%%|*}"
   required_heading="${required_heading_pair#*|}"
-  if ! rg -Fq "$required_heading" "$template_file"; then
+  if ! text_search -Fq "$required_heading" "$template_file"; then
     echo "[BLOCK] required heading missing in $template_file: $required_heading" >&2
     exit 1
   fi
@@ -110,7 +125,7 @@ for work_item_dir in docs/work-items/*/; do
     exit 1
   fi
   for work_item_heading in "## 任务身份" "## 版本与输入" "## 产物适用性" "## 人工批准点"; do
-    if ! rg -Fq "$work_item_heading" "$work_item_readme"; then
+    if ! text_search -Fq "$work_item_heading" "$work_item_readme"; then
       echo "[BLOCK] required Work Item heading missing in $work_item_readme: $work_item_heading" >&2
       exit 1
     fi
@@ -234,24 +249,24 @@ done
 clean_skills=(clean-comments clean-functions clean-general clean-names clean-tests)
 for clean_skill in "${clean_skills[@]}"; do
   skill_file=".agents/skills/$clean_skill/SKILL.md"
-  if [[ ! -s "$skill_file" ]] || ! rg -q "^name: $clean_skill$" "$skill_file"; then
+  if [[ ! -s "$skill_file" ]] || ! text_search -q "^name: $clean_skill$" "$skill_file"; then
     echo "[BLOCK] invalid Clean Code Skill: $skill_file" >&2
     exit 1
   fi
 done
 
-if ! rg -q '^name: project-system-of-record$' \
+if ! text_search -q '^name: project-system-of-record$' \
   .agents/skills/project-system-of-record/SKILL.md; then
   echo "[BLOCK] invalid project-level project-system-of-record Skill" >&2
   exit 1
 fi
 
-if ! rg -Fq 'project-system-of-record' AGENTS.md; then
+if ! text_search -Fq 'project-system-of-record' AGENTS.md; then
   echo "[BLOCK] AGENTS.md does not require project-system-of-record" >&2
   exit 1
 fi
 
-if ! rg -Fq 'allow_implicit_invocation: true' \
+if ! text_search -Fq 'allow_implicit_invocation: true' \
   .agents/skills/project-system-of-record/agents/openai.yaml; then
   echo "[BLOCK] project-system-of-record implicit invocation is disabled" >&2
   exit 1
@@ -261,14 +276,14 @@ fully_locked_skills=(codebase-design)
 for fully_locked_skill in "${fully_locked_skills[@]}"; do
   skill_dir=".agents/skills/$fully_locked_skill"
   skill_file="$skill_dir/SKILL.md"
-  if [[ ! -s "$skill_file" ]] || ! rg -q "^name: $fully_locked_skill$" "$skill_file"; then
+  if [[ ! -s "$skill_file" ]] || ! text_search -q "^name: $fully_locked_skill$" "$skill_file"; then
     echo "[BLOCK] invalid fully locked Skill: $skill_file" >&2
     exit 1
   fi
 
   while IFS= read -r locked_skill_file; do
     [[ -z "$locked_skill_file" ]] && continue
-    if ! rg -Fq "  $locked_skill_file" docs/ai-governance/skills.sha256; then
+    if ! text_search -Fq "  $locked_skill_file" docs/ai-governance/skills.sha256; then
       echo "[BLOCK] Skill file is missing from checksum manifest: $locked_skill_file" >&2
       exit 1
     fi
@@ -277,7 +292,7 @@ done
 
 while read -r locked_hash locked_path; do
   [[ -z "${locked_hash:-}" || -z "${locked_path:-}" ]] && continue
-  if ! rg -Fq "\"$locked_hash\"" skills-lock.json; then
+  if ! text_search -Fq "\"$locked_hash\"" skills-lock.json; then
     echo "[BLOCK] checksum is not recorded in skills-lock.json: $locked_path" >&2
     exit 1
   fi
@@ -292,20 +307,20 @@ else
   exit 1
 fi
 
-if rg -ni "baseline|基线|manifest\.sha256|BL-T" \
+if text_search -ni "baseline|基线|manifest\.sha256|BL-T" \
   AGENTS.md docs/ai-governance platform-contracts/AGENTS.md \
   platform-web-starter/AGENTS.md business-wms/AGENTS.md training-server/AGENTS.md; then
   echo "[BLOCK] removed governance terminology was reintroduced" >&2
   exit 1
 fi
 
-if rg -n "\.scratch/" AGENTS.md STANDARDS.md docs/ai-governance docs/agents docs/work-items; then
+if text_search -n "\.scratch/" AGENTS.md STANDARDS.md docs/ai-governance docs/agents docs/work-items; then
   echo "[BLOCK] retired Work Item path was reintroduced into current governance documents" >&2
   exit 1
 fi
 
-if ! rg -Fq 'STD-WMS-0.7-06' STANDARDS.md || \
-   ! rg -Fq 'docs/ai-governance/standards/ai-security.md' STANDARDS.md; then
+if ! text_search -Fq 'STD-WMS-0.7-06' STANDARDS.md || \
+   ! text_search -Fq 'docs/ai-governance/standards/ai-security.md' STANDARDS.md; then
   echo "[BLOCK] current Standards ID or AI security routing is missing" >&2
   exit 1
 fi

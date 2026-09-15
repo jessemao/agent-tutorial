@@ -83,6 +83,12 @@ class InventoryBalance {
         availableQuantity += quantity;
     }
 
+    void reconcilePhysicalTotal(long countedTotal) {
+        require(countedTotal >= reservedQuantity, "WMS_COUNT_BELOW_RESERVED",
+                "counted total cannot be below reserved inventory");
+        availableQuantity = countedTotal - reservedQuantity;
+    }
+
     long getTotalQuantity() {
         return availableQuantity + reservedQuantity;
     }
@@ -101,6 +107,8 @@ class InventoryBalance {
     long getAvailableQuantity() {
         return availableQuantity;
     }
+
+    long getVersion() { return version; }
 
     long getReservedQuantity() {
         return reservedQuantity;

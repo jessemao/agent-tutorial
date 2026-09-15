@@ -8,6 +8,7 @@ import {
   SearchOutlined,
   SendOutlined,
   SettingOutlined,
+  AuditOutlined,
   SwapOutlined,
 } from '@ant-design/icons';
 import { Avatar, Badge, Breadcrumb, Button, Layout, Menu, Space, Tabs, Tag, Tooltip } from 'antd';
@@ -42,6 +43,7 @@ const menuItems: MenuProps['items'] = [
     children: [
       { key: 'inventory', label: '库存明细' },
       { key: 'transfer', label: '移库作业' },
+      { key: 'count', icon: <AuditOutlined />, label: '库存盘点' },
     ],
   },
   { key: 'integration', icon: <SwapOutlined />, label: '平台编排', disabled: true },
@@ -53,6 +55,7 @@ const tabLabels: Record<ViewKey, string> = {
   inbound: '入库订单',
   inventory: '库存明细',
   transfer: '移库作业',
+  count: '库存盘点',
 };
 
 interface AppShellProps {
@@ -95,7 +98,7 @@ export function AppShell({ activeView, children, onViewChange }: AppShellProps) 
           defaultOpenKeys={['outbound', 'inbound-group', 'warehouse']}
           items={menuItems}
           onClick={({ key }) => {
-            if (key === 'shipment' || key === 'inbound' || key === 'inventory' || key === 'transfer') onViewChange(key);
+            if (key === 'shipment' || key === 'inbound' || key === 'inventory' || key === 'transfer' || key === 'count') onViewChange(key);
             if (mobile) setCollapsed(true);
           }}
         />

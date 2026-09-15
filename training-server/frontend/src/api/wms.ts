@@ -7,6 +7,9 @@ import type {
   ShipmentView,
   TrainingInbound,
   TrainingShipment,
+  MasterDataOption,
+  InventoryCountPage,
+  InventoryCountView,
 } from '../types';
 
 export const SCENARIO = Object.freeze({
@@ -38,10 +41,30 @@ interface ApiResponse<T> {
   data: T;
 }
 
-async function request<T>(method: string, path: string, body?: unknown): Promise<T> {
+export class ApiError extends Error {
+  code: string;
+  data: unknown;
+  constructor(code: string, message: string, data: unknown) { super(message); this.code = code; this.data = data; }
+}
+
+export const listWarehouses = () => request<MasterDataOption[]>('GET', '/api/wms/master-data/warehouses');
+export const listSkus = () => request<MasterDataOption[]>('GET', '/api/wms/master-data/skus');
+export const listLocations = (warehouseId: number) => request<MasterDataOption[]>('GET', `/api/wms/master-data/locations?warehouseId=${warehouseId}`);
+export const listInventoryCounts = (filters: {countNo?:string;warehouseId?:number;status?:string;page?:number;size?:number} = {}) => {
+  const query = new URLSearchParams();
+  Object.entries(filters).forEach(([key,value]) => { if(value !== undefined && value !== '') query.set(key,String(value)); });
+  return request<InventoryCountPage>('GET', `/api/wms/inventory-counts?${query.toString()}`);
+};
+export const createInventoryCount = (warehouseId: number, lines: Array<{skuId:number;locationId:number}>, correctionOfCountId?: number) => request<InventoryCountView>('POST', '/api/wms/inventory-counts', { idempotencyKey: `count-${crypto.randomUUID()}`, warehouseId, lines, correctionOfCountId });
+export const saveInventoryCount = (count: InventoryCountView, values: {note?:string;lines:Array<{skuId:number;locationId:number;countedTotal?:number|null;differenceReason?:string}>}, key: string) => request<InventoryCountView>('PUT', `/api/wms/inventory-counts/${count.id}`, {idempotencyKey:key,expectedVersion:count.version,...values});
+export const submitInventoryCount = (count: InventoryCountView, key: string) => request<InventoryCountView>('POST', `/api/wms/inventory-counts/${count.id}/transitions`, {action:'SUBMIT',idempotencyKey:key,expectedVersion:count.version});
+export const transitionInventoryCount = (count: InventoryCountView, action: 'REJECT'|'REOPEN'|'CANCEL', reason?: string) => request<InventoryCountView>('POST', `/api/wms/inventory-counts/${count.id}/transitions`, {action,idempotencyKey:`${action.toLowerCase()}-${crypto.randomUUID()}`,expectedVersion:count.version,reason});
+export const approveInventoryCount = (count: InventoryCountView, confirmationToken?: string) => request<InventoryCountView>('POST', `/api/wms/inventory-counts/${count.id}/approval`, {idempotencyKey:`approve-${crypto.randomUUID()}`,expectedVersion:count.version,confirmationToken}, 'count-reviewer');
+
+async function request<T>(method: string, path: string, body?: unknown, operator: string = SCENARIO.operator): Promise<T> {
   const headers: Record<string, string> = {
     Accept: 'application/json',
-    'X-Operator': SCENARIO.operator,
+    'X-Operator': operator,
   };
   const options: RequestInit = { method, headers };
   if (body !== undefined) {
@@ -64,7 +87,7 @@ async function request<T>(method: string, path: string, body?: unknown): Promise
   }
 
   if (!response.ok || !payload.success) {
-    throw new Error(`${payload.code ?? response.status}: ${payload.message ?? '请求失败'}`);
+    throw new ApiError(String(payload.code ?? response.status), payload.message ?? '请求失败', payload.data);
   }
   return payload.data;
 }

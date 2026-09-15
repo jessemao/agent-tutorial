@@ -4,6 +4,21 @@ set -euo pipefail
 repo_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$repo_dir"
 
+text_search() {
+  if command -v rg >/dev/null 2>&1; then
+    rg "$@"
+  else
+    local argument
+    for argument in "$@"; do
+      if [[ -d "$argument" ]]; then
+        grep -r "$@"
+        return
+      fi
+    done
+    grep "$@"
+  fi
+}
+
 skills=(
   work-item-start
   work-item-discover
@@ -53,7 +68,7 @@ validate_skill() {
     exit 1
   fi
 
-  if ! rg -q "^name: $skill$" "$skill_file"; then
+  if ! text_search -q "^name: $skill$" "$skill_file"; then
     echo "[BLOCK] T05 Skill frontmatter name does not match: $skill_file" >&2
     exit 1
   fi
@@ -61,20 +76,20 @@ validate_skill() {
   for heading in \
     "## 输入" "## 读取顺序" "## 允许写入" "## 固定产物" \
     "## 停止条件" "## 禁止动作" "## 下一入口" "## 验收"; do
-    if ! rg -Fq "$heading" "$skill_file"; then
+    if ! text_search -Fq "$heading" "$skill_file"; then
       echo "[BLOCK] T05 Skill contract heading is missing in $skill_file: $heading" >&2
       exit 1
     fi
   done
 
-  if ! rg -Fq 'allow_implicit_invocation: false' "$agent_file"; then
+  if ! text_search -Fq 'allow_implicit_invocation: false' "$agent_file"; then
     echo "[BLOCK] T05 stage Skill must require explicit invocation: $agent_file" >&2
     exit 1
   fi
 
   local lock_block
   lock_block="$(sed -n "/    \"$skill\": {/,/^    }/p" skills-lock.json)"
-  if [[ -z "$lock_block" ]] || ! rg -Fq '"source": "training-wms"' <<<"$lock_block"; then
+  if [[ -z "$lock_block" ]] || ! text_search -Fq '"source": "training-wms"' <<<"$lock_block"; then
     echo "[BLOCK] T05 Skill project source is not registered: $skill" >&2
     exit 1
   fi

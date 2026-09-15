@@ -9,8 +9,15 @@ import com.acme.training.wms.masterdata.StorageLocationRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 
 @Service
 class InventoryService implements InventoryOperations {
@@ -133,6 +140,57 @@ class InventoryService implements InventoryOperations {
     }
 
     @Override
+    @Transactional(noRollbackFor = CountReconciliationChangedException.class)
+    public List<CountReconciliationResult> reconcileCount(CountReconciliationCommand command) {
+        List<CountReconciliationLine> ordered = new ArrayList<>(command.getLines());
+        ordered.sort(Comparator.comparing(CountReconciliationLine::getLocationId)
+                .thenComparing(CountReconciliationLine::getSkuId));
+        ordered.stream().map(CountReconciliationLine::getLocationId).distinct()
+                .forEach(locationId -> requireCountLocation(lockLocation(locationId), command.getWarehouseId()));
+
+        List<CountReconciliationResult> results = new ArrayList<>();
+        List<InventoryBalance> balances = new ArrayList<>();
+        boolean changed = false;
+        StringBuilder facts = new StringBuilder(command.getConfirmationContext()==null?"":command.getConfirmationContext());
+        for (CountReconciliationLine line : ordered) {
+            InventoryBalance balance = balanceRepository
+                    .findLockedBySkuIdAndWarehouseIdAndLocationId(line.getSkuId(), command.getWarehouseId(), line.getLocationId())
+                    .orElseGet(() -> new InventoryBalance(line.getSkuId(), command.getWarehouseId(), line.getLocationId()));
+            long bookTotal;
+            long difference;
+            try {
+                bookTotal = Math.addExact(balance.getAvailableQuantity(), balance.getReservedQuantity());
+                difference = Math.subtractExact(line.getCountedTotal(), bookTotal);
+            } catch (ArithmeticException exception) {
+                throw new PlatformException("WMS_INVENTORY_OVERFLOW", "inventory quantity exceeds the supported range");
+            }
+            changed |= bookTotal != line.getExpectedBookTotal();
+            facts.append('|').append(line.getSkuId()).append(':').append(line.getLocationId()).append(':')
+                    .append(balance.getAvailableQuantity()).append(':').append(balance.getReservedQuantity()).append(':').append(balance.getVersion());
+            results.add(new CountReconciliationResult(line.getSkuId(), line.getLocationId(), bookTotal,
+                    difference, balance.view()));
+            balances.add(balance);
+        }
+        String currentToken=opaqueToken(facts.toString());
+        if(changed&&!currentToken.equals(command.getConfirmedFacts())){
+            throw new CountReconciliationChangedException(currentToken,results);
+        }
+        for(int i=0;i<ordered.size();i++) balances.get(i).reconcilePhysicalTotal(ordered.get(i).getCountedTotal());
+        for(int i=0;i<ordered.size();i++){
+            CountReconciliationLine line=ordered.get(i); InventoryBalance balance=balances.get(i); CountReconciliationResult before=results.get(i);
+            balanceRepository.save(balance);
+            if(before.getDifference()!=0)recordMovement(new InventoryMovement(command.getCountNo(),line.getSkuId(),command.getWarehouseId(),line.getLocationId(),before.getDifference(),balance));
+            results.set(i,new CountReconciliationResult(line.getSkuId(),line.getLocationId(),before.getBookTotal(),before.getDifference(),balance.view()));
+        }
+        return results;
+    }
+
+    private String opaqueToken(String facts){
+        try{return Base64.getUrlEncoder().withoutPadding().encodeToString(MessageDigest.getInstance("SHA-256").digest(facts.getBytes(StandardCharsets.UTF_8)));}
+        catch(NoSuchAlgorithmException impossible){throw new IllegalStateException(impossible);}
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public java.util.List<InventoryTransferTaskView> listTransferTasks() {
         return movementRepository.findTransferTasks();
@@ -196,6 +254,13 @@ class InventoryService implements InventoryOperations {
     }
 
     private void requireTransferLocation(StorageLocation location, Long warehouseId) {
+        if (!location.isEnabled() || !location.getWarehouseId().equals(warehouseId)) {
+            throw new PlatformException("WMS_INVALID_LOCATION",
+                    "storage location is unavailable or belongs to another warehouse");
+        }
+    }
+
+    private void requireCountLocation(StorageLocation location, Long warehouseId) {
         if (!location.isEnabled() || !location.getWarehouseId().equals(warehouseId)) {
             throw new PlatformException("WMS_INVALID_LOCATION",
                     "storage location is unavailable or belongs to another warehouse");

@@ -1,0 +1,3 @@
+package com.acme.training.wms.web;
+import javax.validation.constraints.*;
+public class CountTransitionRequest { @NotBlank private String action; @NotBlank private String idempotencyKey; @NotNull private Long expectedVersion; private String note; private String reason; public String getAction(){return action;} public void setAction(String v){action=v;} public String getIdempotencyKey(){return idempotencyKey;} public void setIdempotencyKey(String v){idempotencyKey=v;} public Long getExpectedVersion(){return expectedVersion;} public void setExpectedVersion(Long v){expectedVersion=v;} public String getNote(){return note;} public void setNote(String v){note=v;} public String getReason(){return reason;} public void setReason(String v){reason=v;} }

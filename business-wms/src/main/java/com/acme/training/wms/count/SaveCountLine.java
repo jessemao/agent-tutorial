@@ -1,0 +1,2 @@
+package com.acme.training.wms.count;
+public final class SaveCountLine { private final Long skuId,locationId,countedTotal; private final String differenceReason; public SaveCountLine(Long skuId,Long locationId,Long countedTotal,String reason){this.skuId=skuId;this.locationId=locationId;this.countedTotal=countedTotal;this.differenceReason=reason;} public Long getSkuId(){return skuId;} public Long getLocationId(){return locationId;} public Long getCountedTotal(){return countedTotal;} public String getDifferenceReason(){return differenceReason;} }

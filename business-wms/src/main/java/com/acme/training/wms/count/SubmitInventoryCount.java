@@ -1,0 +1,2 @@
+package com.acme.training.wms.count;
+public final class SubmitInventoryCount { private final String idempotencyKey; private final long expectedVersion; private final String note; public SubmitInventoryCount(String key,long version,String note){this.idempotencyKey=key;this.expectedVersion=version;this.note=note;} public String getIdempotencyKey(){return idempotencyKey;} public long getExpectedVersion(){return expectedVersion;} public String getNote(){return note;} }

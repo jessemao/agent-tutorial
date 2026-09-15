@@ -6,6 +6,7 @@ import com.acme.training.wms.masterdata.Warehouse;
 import com.acme.training.wms.masterdata.WarehouseArea;
 import com.acme.training.wms.masterdata.WarehouseAreaRepository;
 import com.acme.training.wms.masterdata.WarehouseRepository;
+import com.acme.training.wms.masterdata.SkuRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,8 +19,15 @@ public class DemoDataConfiguration {
     public CommandLineRunner demoWarehouse(WarehouseRepository warehouseRepository,
                                            WarehouseAreaRepository areaRepository,
                                            StorageLocationRepository locationRepository,
+                                           SkuRepository skuRepository,
                                            JdbcTemplate jdbcTemplate) {
         return args -> {
+            if (skuRepository.count() == 0) {
+                jdbcTemplate.update("insert into wms_sku (id, code, name, enabled) values (?, ?, ?, ?)",
+                        303L, "SKU-303", "培训商品 303", true);
+                jdbcTemplate.update("insert into wms_sku (id, code, name, enabled) values (?, ?, ?, ?)",
+                        304L, "SKU-304", "培训商品 304", true);
+            }
             if (warehouseRepository.count() > 0) {
                 return;
             }

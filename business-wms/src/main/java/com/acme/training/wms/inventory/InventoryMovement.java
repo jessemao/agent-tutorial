@@ -79,6 +79,20 @@ class InventoryMovement {
         this.createdAt = Instant.now();
     }
 
+    InventoryMovement(String countNo, Long skuId, Long warehouseId, Long locationId,
+                      long difference, InventoryBalance balance) {
+        this.operationType = "COUNT_ADJUSTMENT";
+        this.idempotencyKey = countNo + ":" + skuId + ":" + locationId;
+        this.referenceNo = countNo;
+        this.skuId = skuId;
+        this.warehouseId = warehouseId;
+        this.locationId = locationId;
+        this.quantity = difference;
+        this.availableAfter = balance.getAvailableQuantity();
+        this.reservedAfter = balance.getReservedQuantity();
+        this.createdAt = Instant.now();
+    }
+
     InventoryBalanceView result() {
         return new InventoryBalanceView(skuId, warehouseId, locationId, availableAfter, reservedAfter);
     }

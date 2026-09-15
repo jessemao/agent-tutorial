@@ -1,0 +1,2 @@
+package com.acme.training.wms.count;
+public final class TransitionInventoryCount { private final String action,idempotencyKey,reason; private final long expectedVersion; public TransitionInventoryCount(String action,String key,long version,String reason){this.action=action;this.idempotencyKey=key;this.expectedVersion=version;this.reason=reason;} public String getAction(){return action;} public String getIdempotencyKey(){return idempotencyKey;} public long getExpectedVersion(){return expectedVersion;} public String getReason(){return reason;} }
