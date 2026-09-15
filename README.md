@@ -66,7 +66,7 @@ training-server → business-wms → platform-web-starter → platform-contracts
 ./scripts/classroom-up.sh
 ```
 
-浏览器访问 `http://localhost:8080`。前端修改自动热更新，后端源码修改自动编译并重启 Spring Boot；不需要重启 Docker。任务测试和最终验证使用 `scripts/classroom-test.sh` 和 `scripts/classroom-verify.sh`。完整使用与限制见 [Docker 课堂环境说明](docs/training/10_Docker课堂环境使用与交付.md)。
+浏览器访问 `http://localhost:8080`。前端修改自动热更新，后端源码修改自动编译并重启 Spring Boot；不需要重启 Docker。任务测试和最终验证使用 `scripts/classroom-test.sh` 和 `scripts/classroom-verify.sh`。完整使用与限制见项目外教学材料中的 `../教学材料/教师与课程/10_Docker课堂环境使用与交付.md`。
 
 主机环境仅作为备用：
 
@@ -109,19 +109,17 @@ Review 只提供发现和建议；Decision 记录人的正式裁决；Delivery �
 
 ## 6. 培训任务入口
 
-- [任务总目录](docs/training/00_任务卡总目录与覆盖矩阵.md)
-- [六类任务定义](docs/training/02_T01-T06_任务定义卡.md)
-- [两天课程与评分](docs/training/03_两天课程映射与评分规则.md)
-- [讲师执行稿](docs/training/04_两天讲师唯一执行稿_含演示与恢复.md)
-- [UI 静态契约](docs/training/06_UI静态契约包.md)
-- [四方角色矩阵](docs/training/07_T01-T06四方角色任务矩阵.md)
+项目仓库只保留学员可直接使用的任务卡和入口手册：
+
 - [学员入口](docs/training/08_学员唯一入口手册.md)
-- [分层任务包](docs/training/09_T01-T06基础_进阶_备用任务包.md)
-- [离线 AI 与恢复包](docs/training/offline-ai-pack/README.md)
+- [T01 学员任务卡](docs/training/T01_取消出库未释放库存_学员任务卡.md)
+- [T02 学员任务卡](docs/training/T02_调整入库分批收货规则_学员任务卡.md)
+- [T03 学员任务卡](docs/training/T03_从零新建库内移库_学员任务卡.md)
+- [T04 学员任务卡](docs/training/T04_统一库存业务入口_学员任务卡.md)
+- [T05 学员任务卡](docs/training/T05_平台组件与Skill复用_学员任务卡.md)
+- [T06 学员任务卡](docs/training/T06_库存盘点与差异调整_学员任务卡.md)
 
-T01 已有 `s2-t01-start` 与 `s3-t01-answer`；T02 已有分批收货起点 `s2-t02-start` 与答案标签 `s3-t02-answer`。T03—T06 的完整内部仓库保留起点和答案标签，但 T06 课堂分发只暴露 `s2-t06-start`，讲师参考、历史答案证据和 `s3-t06-answer` 必须隔离。学员始终从指定 `s2` 标签创建独立分支，不直接在标签或答案上开发。
-
-PPT 已移出代码仓库，位于工作区上一层的 `培训教程/PPT成品/`；PPT 制作和渲染文件位于 `培训教程/PPT制作文件/`，不属于代码基座提交。
+讲师参考、评分细则、课程执行稿、PPT、离线演练包和历史课堂证据均在项目外的 `../教学材料/` 目录独立管理，不属于代码基座。学员始终从指定 `s2` 标签创建独立分支，不直接在标签或答案上开发。
 
 ## 7. 已知限制与安全约束
 

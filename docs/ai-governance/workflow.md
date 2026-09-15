@@ -26,7 +26,7 @@ Agent 只能推进自己负责的执行状态；涉及批准和最终裁决的�
 
 每个人工裁决点由 `roles-and-approvals.md` 定义有权角色。只有当所选企业流程明确要求某角色、或存在未裁决的失败/重大风险时，缺席或证据不足才会阻塞；课堂建议不构成强制签署门禁。跳过测试或 QA 时必须记录 `N/A`、采用的企业流程、替代证据和剩余风险，不得把未知结果写成 PASS。
 
-每项任务在进入 `DISCOVERING` 时先建立 `docs/work-items/<work-item-id>/README.md`。本文中的 `spec.md`、`design.md`、`interface.md`、Tickets 及所有编号产物，均相对该 Work Item 目录输出；不得写入 `docs/ai-governance/` 或 `docs/training/evidence/`。
+每项任务在进入 `DISCOVERING` 时先建立 `docs/work-items/<work-item-id>/README.md`。本文中的 `spec.md`、`design.md`、`interface.md`、Tickets 及所有编号产物，均相对该 Work Item 目录输出；不得写入 `docs/ai-governance/` 或课程教学材料目录。
 
 ## 2. 固定流水线
 

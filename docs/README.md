@@ -31,30 +31,24 @@
 - `work-items/<work-item-id>/`：单个需求、Bug、重构或复用任务的 Spec、Tickets、Design、Interface、Review、Verification、Decision 和 Delivery。
 - `work-items/README.md`：过程目录的命名、边界和使用说明。
 
-过程文档不得写入 `ai-governance/` 或 `training/evidence/`。具体输出结构以 `ai-governance/standards/documentation.md` 为准。
+过程文档不得写入 `ai-governance/` 或 `training/` 下的教学目录。具体输出结构以 `ai-governance/standards/documentation.md` 为准。
 
 ## 4. 课程执行材料
 
-- `training/00_任务卡总目录与覆盖矩阵.md`：六类任务唯一导航。
-- `training/03_两天课程映射与评分规则.md`：时间和评分。
-- `training/04_两天讲师唯一执行稿_含演示与恢复.md`：讲师/助教使用，含答案和恢复顺序。
-- `training/08_学员唯一入口手册.md`：学员环境、流程和提交入口。
-- `training/T01_*` 至 `training/T06_*`：学员卡、讲师参考和评分细则。
+项目仓库只保留 `training/08_学员唯一入口手册.md` 和 `training/T01_*` 至 `training/T06_*` 学员任务卡。讲师参考、评分细则、课程执行稿、UI 契约、任务矩阵、备用任务包、Docker 说明及 PPT 统一在项目外的 `../教学材料/教师与课程/` 管理；离线演练包在 `../教学材料/offline-ai-pack/` 管理，历史课堂证据在 `../教学材料/evidence/` 管理。
 
-T06 采用受控信息差考核。内部仓库可以保存讲师参考和历史证据，但制作学员分发包时必须排除 T06 讲师参考、历史 evidence、离线标准答案和答案 Git refs；具体分发检查由仓库外的 `培训教程/讲师材料/` 维护。
-
-讲师参考不得提前整份发给学员；T02 使用新的分批收货起点 `s2-t02-start`，答案只在本轮实操完成并评审后建立。
+学员分发只使用仓库内学员材料；讲师按需从项目外材料提供说明，不把教师答案或评分细则放回代码仓库。
 
 ## 5. 离线与异常恢复
 
-- `training/offline-ai-pack/`：固定输入、预置输出、负例、人工裁决和恢复验收。
-- `training/10_Docker课堂环境使用与交付.md`：课堂镜像构建和断网使用。
+- `../教学材料/offline-ai-pack/`：固定输入、预置输出、负例、人工裁决和恢复验收。
+- `../教学材料/教师与课程/10_Docker课堂环境使用与交付.md`：课堂镜像构建和断网使用。
 
 预置输出只用于教学对照。服务恢复后必须针对当前代码重新运行 Agent、测试和评审。
 
 ## 6. 历史证据
 
-- `training/evidence/`：特定日期、代码版本、镜像或 Skill 的执行记录。
+- `../教学材料/evidence/`：特定日期、代码版本、镜像或 Skill 的执行记录。
 
 Evidence 只读保存，不是现行操作指令。不得修改历史结果以适配当前规则，也不得用历史日志证明新代码通过。
 

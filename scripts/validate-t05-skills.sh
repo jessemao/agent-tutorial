@@ -29,8 +29,6 @@ skills=(
 
 required_baseline_files=(
   docs/training/T05_平台组件与Skill复用_学员任务卡.md
-  docs/training/T05_平台组件与Skill复用_讲师参考.md
-  docs/training/T05_平台组件与Skill复用_评分细则.md
   docs/ai-governance/templates/work-item.md
   docs/ai-governance/templates/input-evidence.md
   docs/ai-governance/templates/analysis.md
