@@ -66,7 +66,7 @@ training-server → business-wms → platform-web-starter → platform-contracts
 ./scripts/classroom-up.sh
 ```
 
-浏览器访问 `http://localhost:8080`。前端修改自动热更新，后端源码修改自动编译并重启 Spring Boot；不需要重启 Docker。任务测试和最终验证使用 `scripts/classroom-test.sh` 和 `scripts/classroom-verify.sh`。完整使用与限制见项目外教学材料中的 `../教学材料/教师与课程/10_Docker课堂环境使用与交付.md`。
+浏览器访问 `http://localhost:8080`。前端修改自动热更新，后端源码修改自动编译并重启 Spring Boot；不需要重启 Docker。任务测试和最终验证使用 `scripts/classroom-test.sh` 和 `scripts/classroom-verify.sh`。完整使用与限制见项目外教学材料中的 `../教学材料/教师与课程/09_Docker课堂环境使用与交付.md`。
 
 主机环境仅作为备用：
 
