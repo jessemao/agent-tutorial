@@ -5,7 +5,7 @@
 | 字段 | 内容 |
 | --- | --- |
 | 代码差异起点 |  |
-| 被验证分支/提交 |  |
+| 候选提交 |  |
 | Spec/Standards |  |
 | Docker/Java/Maven/DB 环境 |  |
 
@@ -17,6 +17,8 @@
 | 目标测试 |  | PASS / FAIL / BLOCKED |  |  |
 | Module 回归 |  | PASS / FAIL / BLOCKED |  |  |
 | 全量验证 | `mvn clean verify` | PASS / FAIL / BLOCKED |  |  |
+
+- 跳过项及理由：无 / <测试、Profile、理由、替代证据和剩余风险>
 
 ## 验收映射
 

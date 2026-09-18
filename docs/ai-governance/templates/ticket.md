@@ -1,9 +1,11 @@
 # <NN>：<可独立验证的任务标题>
 
-**状态：** ready-for-agent  
+**状态：** READY / IMPLEMENTING / DONE / BLOCKED
 **Blocked by：** None / <Ticket ID>  
 **Spec：** <路径与版本>  
 **Standards：** <ID与版本>
+**负责人：** <控制范围、依赖和停止条件的人>
+**执行人：** <实施并完成个人验收测试的开发者>
 
 ## 交付行为
 
@@ -26,6 +28,13 @@
 ```text
 <target test command>
 ```
+
+## 实施证据
+
+- 实施提交/证据：
+- 个人验收命令：
+- 个人验收结果：
+- 完成时间：
 
 ## 停止条件
 

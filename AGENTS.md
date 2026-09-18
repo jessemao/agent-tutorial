@@ -4,9 +4,7 @@
 
 ## 1. 规则继承
 
-### T01 教学方式例外
-
-T01 课堂使用学员卡中逐步手写的完整 Prompt，不调用第三方或项目预置 Skill，也不把步骤替换为斜杠命令。T01 仅在调用方式上采用完整手写 Prompt，由学员手动执行一键服务启动脚本；不得调用后续课程的 Skill 入口。开发 TDD、独立功能测试、QA 审核、业务验收的职责分离、模板和待确认负责人从 T01 起统一适用，不因手写 Prompt 而省略。安全、修改权限和人工裁决边界仍然生效。课程治理维护工作不属于这项课堂例外。
+V2.0 任务一必须显式完成 M1—M5，不得调用旧 T05 产出的 `work-item-start`、`work-item-discover`、`work-item-execute`、`work-item-review` 或 `work-item-decision` 聚合入口。M1 只建立 Work Item 档案，不创建 Skill；M2 可依次使用第三方 `grill-with-docs`、`to-spec`、`codebase-design`，并在 Spec、Design、AC 和范围明确后使用 `to-tickets`；M3 使用 `implement`/`tdd`，M4 使用 `code-review` 和适用的 Clean Code 专项 Skills；只有 M5 的人工结论为“复用”且批准资产边界后，才创建或更新复用资产。Skill 只能完成当前动作，不能替代阶段产物、人工批准或后续阶段。
 
 - 根目录规则始终生效。
 - 修改某个 Module 时，必须同时读取该 Module 目录下的 `AGENTS.md`。
@@ -34,21 +32,11 @@ T01 课堂使用学员卡中逐步手写的完整 Prompt，不调用第三方或
 所有任务共享同一条治理主干，但进入实施前的分析方式必须按任务类型选择，不得把新增需求或重构伪装成 Bug。
 
 ```text
-读取上下文
-→ 识别任务类型
-→ 完成该类型要求的发现、设计与影响分析
-→ 开发负责人批准对应的实施依据和修改范围
-→ 先建立验收测试或其他可验证证据
-→ 在批准范围内最小化实施
-→ 运行目标测试、Module 回归和全量验证
-→ 分开执行 Spec 与 Standards 评审
-→ 生成 Review，补齐当前阶段产物并创建草稿 MR/PR
-→ 测试工程师独立功能测试并记录 functional-test.md
-→ QA 人员质量审核并记录 qa-review.md
-→ 业务验收，人工决定接受、返工或回滚
-→ Agent 原样记录 Decision
-→ 有权限的人审核后合并
-→ 完成交付记录
+M1 建边界：固定起点、角色、范围、权限、停止条件和基线结果
+→ M2 需求规格化：调查事实，取得业务决定，形成并批准 Spec、Design 与纵向 Tickets
+→ M3 方案落地：逐 Ticket 使用 implement 完成 Red、Green、目标验证和人工验收
+→ M4 形成证据：固定候选，完成逐级验证、双轴 Review、独立验收和人工 Decision
+→ M5 复用规模化：生成 reuse-decision.md；跨任务稳定能力经批准后进入独立的 Agent 构建 Work Item
 ```
 
 各任务类型的实施依据：
@@ -66,7 +54,7 @@ T01 课堂使用学员卡中逐步手写的完整 Prompt，不调用第三方或
 
 具体阶段、裁剪规则、固定产物和人工裁决点以 `docs/ai-governance/workflow.md` 为准；产物格式必须使用 `docs/ai-governance/templates/`，不得自行创造替代格式。
 
-过程文档必须按阶段生成：建档只创建 `README.md` 和 `inputs/`；分析阶段生成 `01_analysis.md`；实施验证阶段生成 `02_verification.md`；评审和草稿 MR/PR 阶段生成 `03_review.md`；只有人完成交付裁决后，Agent 才能按原意生成 `04_decision.md`。禁止提前创建空文件占位，详细限制以 `docs/ai-governance/deliverables.md` 为准。
+过程文档必须按阶段生成：M1 只创建 `README.md` 和 `inputs/`；M2 生成 `01_analysis.md`、Spec、Design 和 Tickets；M3 只更新代码、测试和当前 Ticket 证据；M4 生成 `02_verification.md`、`03_review.md` 和人工裁决后的 `04_decision.md`；M5 生成 `reuse-decision.md`。禁止提前创建空文件占位，详细限制以 `docs/ai-governance/deliverables.md` 为准。
 
 单个任务的 Analysis、Verification、Review、Decision 及按需生成的 Spec、Tickets、Design、Interface 必须统一写入 `docs/work-items/<work-item-id>/`。禁止将任务过程产物写入 `docs/ai-governance/`、`docs/training/` 或仓库根目录。
 
@@ -110,7 +98,7 @@ Agent 不可以：
 - 实际修改未超出人工批准范围。
 - 每项验收条件都有对应代码、测试和真实结果。
 - 目标测试、受影响 Module 回归及 `mvn clean verify` 已通过；不能运行的项目已明确说明并获人工接受。
-- 独立功能测试、QA 质量审核和业务验收分别具备责任人、对象版本和结论；不能用开发 TDD 代替。
+- 所选企业流程要求的独立功能测试、QA 质量审核和业务验收分别具备责任人、对象版本和结论；未启用的测试或 QA 阶段记录 `N/A`、理由、替代证据和风险，不能用开发 TDD 冒充已启用阶段的结论。
 - Spec 与 Standards 已分别评审，所有阻塞项已关闭或有有效人工例外。
 - Review 与 Decision 分开记录，最终交付可追溯到 Spec、Standards、代码差异和验证证据。
 - 需要合并的课程任务已通过 MR/PR 交付；MR/PR 包含全部适用过程产物，并保留人工审核和合并记录。
@@ -124,4 +112,4 @@ Agent 的最终结论只能是建议；是否放行始终由人决定。
 
 ## 8. 独立质量阶段
 
-开发 TDD 仅证明任务开发完成。测试工程师与 QA 必须分别指定人员，按 Workflow 独立生成 `functional-test.md` 与 `qa-review.md`；最后由业务负责人验收。开发证据、独立测试、QA 和业务结论缺一不得宣称整体通过。
+开发 TDD 仅证明任务开发完成。独立功能测试与 QA 按企业流程选用；启用时必须分别指定人员并独立记录，未启用时在 `04_decision.md` 记录 `N/A`、理由、替代证据和风险。最后由业务负责人验收，任何已启用阶段的结论都不得由开发证据代替。

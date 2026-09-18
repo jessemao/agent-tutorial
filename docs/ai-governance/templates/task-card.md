@@ -48,6 +48,16 @@
 | --- | --- | --- | --- | --- |
 | AC-01 |  |  |  |  |
 
+## M1—M5 交付路径
+
+| 阶段 | 必需产物 | 人工批准点 |
+| --- | --- | --- |
+| M1 | Work Item、输入证据、基线结果 | 范围确认 |
+| M2 | Spec、Design、Interface、Tickets | Spec / Design 批准 |
+| M3 | 实现、测试、当前 Ticket 实施证据与执行人个人验收记录 | 负责人控制范围；执行人完成个人验收测试 |
+| M4 | 固定候选、Spec / Standards 双轴 Review、Decision；QA 按需 | `PASS / RETURN / BLOCKED` 交付决定 |
+| M5 | `reuse-decision.md` | 复用或暂缓决定 |
+
 ## 版本与批准
 
 | 字段 | 内容 |

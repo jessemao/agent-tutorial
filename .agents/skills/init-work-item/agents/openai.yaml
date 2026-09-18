@@ -1,6 +1,0 @@
-interface:
-  display_name: "初始化工作项"
-  short_description: "按项目模板建立任务目录、归档原始事实与附件并在建档后停止"
-  default_prompt: "使用 $init-work-item 按项目治理要求建立当前 Work Item，并在建档完成后停止。"
-policy:
-  allow_implicit_invocation: true

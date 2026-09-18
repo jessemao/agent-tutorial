@@ -1,7 +1,0 @@
-interface:
-  display_name: "调查 Work Item"
-  short_description: "按任务类型路由专业能力并形成受治理分析"
-  default_prompt: "使用 $work-item-discover 调查指定 Work Item；只形成发现阶段产物，并停在人工范围批准点。"
-
-policy:
-  allow_implicit_invocation: false

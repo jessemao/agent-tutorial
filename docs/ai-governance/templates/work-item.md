@@ -6,7 +6,7 @@
 | --- | --- |
 | Work Item ID |  |
 | 任务类型 | Bug / 需求调整 / 新增需求 / 重构 / 组件或 Skill 复用 / 文档配置 |
-| 状态 | DRAFT / DISCOVERING / WAITING_FOR_SCOPE_APPROVAL / APPROVED_FOR_IMPLEMENTATION / IMPLEMENTING / REVIEWING / FUNCTIONAL_TESTING / QA_REVIEWING / WAITING_FOR_DELIVERY_DECISION / ACCEPTED / REWORK / ROLLED_BACK / BLOCKED |
+| 状态 | DRAFT / DISCOVERING / WAITING_FOR_SCOPE_APPROVAL / APPROVED_FOR_IMPLEMENTATION / IMPLEMENTING / REVIEWING / FUNCTIONAL_TESTING / QA_REVIEWING / WAITING_FOR_DELIVERY_DECISION / PASS / RETURN / BLOCKED |
 | 业务/规则所有者 |  |
 | 开发负责人（实施前批准人） |  |
 | UI/契约所有者（涉及变更时） |  |
@@ -24,6 +24,7 @@
 | Standards ID/版本 |  |
 | 根及 Module `AGENTS.md` |  |
 | 原始输入路径 |  |
+| 基线验证命令与结果 |  |
 
 ## 目标与范围摘要
 
@@ -47,6 +48,7 @@
 | 独立功能测试（建议） | 按企业流程 | `functional-test.md` 或企业记录；未采用时 N/A |  |
 | QA 审核（建议） | 按企业流程 | `qa-review.md` 或企业记录；未采用时 N/A |  |
 | Decision & Delivery | 适用 | `04_decision.md` |  |
+| M5 Reuse Decision | V2.0 任务一适用 | `reuse-decision.md` |  |
 
 ## 人工批准点
 
@@ -57,6 +59,7 @@
 | QA 审核 | 流程、规范、追溯与缺陷关闭 | QA 人员 |  |
 | 业务验收 | 业务目标与风险 | 业务所有者 |  |
 | 交付前 | 评审结论、风险和是否放行 | 交付负责人 |  |
+| M5 | 是否沉淀为 Skill、模板、规则或门禁 | 开发负责人 / 业务所有者 |  |
 
 ## 当前下一步
 

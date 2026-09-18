@@ -57,7 +57,7 @@ docs/work-items/<work-item-id>/
 
 - `docs/ai-governance/` 只存放长期生效的 Workflow、Standards、Templates 和 Skill 说明，禁止写入单个任务的 Spec、Design 或 Review。
 - `docs/training/` 只存放课程教材、任务定义和课堂恢复材料，禁止作为学员当前任务的过程交付目录。
-- `docs/training/evidence/` 只保存指定日期和版本的历史课堂/环境验证，禁止放入新任务的活动 Spec、Tickets、Design 或 Decision。
+- 项目外 `../教学材料/evidence/` 只保存指定日期和版本的历史课堂/环境验证，禁止放入新任务的活动 Spec、Tickets、Design 或 Decision。
 - `docs/work-items/` 只存放任务过程与交付证据，禁止在其中定义项目级 Standards 或修改课程通用答案。
 
 ## 4. 必需状态与来源

@@ -20,6 +20,10 @@
 | `GOV-STAGE-01` | AUTOMATED | Work Item 状态对应的前置文档存在，未来阶段编号文档没有提前生成 | `scripts/validate-ai-governance.sh`、`deliverables.md` 第 4 节 | 阻断阶段推进 |
 | `GOV-SKILL-01` | AUTOMATED | Clean Code Skills 与已标记为完整锁定的课程 Skill 存在、名称正确，且全部随包文件都已进入哈希清单并通过校验 | `scripts/validate-ai-governance.sh`、`skills.sha256`、`skills-lock.json` | 阻断交付 |
 | `GOV-TERM-01` | AUTOMATED | 已废弃治理术语未重新进入现行治理文档 | `scripts/validate-ai-governance.sh` | 阻断交付 |
+| `COURSE-V2-TASK1-01` | AUTOMATED | 任务一材料覆盖 M1—M5、旧 T05 聚合 Skills 不存在、M1 不预装复用资产、起始基线不包含盘点答案 | `scripts/validate-v2-task1.sh baseline` | 阻断开课基线 |
+| `COURSE-V2-TASK1-DIST` | AUTOMATED | 学员发行仓库无远端、无历史答案引用且只包含 V2 起始标签 | `scripts/export-v2-task1-student.sh` 生成发行仓库；发行仓库内再次执行 `scripts/validate-v2-task1.sh baseline` | 阻断学员分发 |
+| `COURSE-V2-TASK1-02` | AUTOMATED | 当前 Work Item 的阶段状态、M1 角色/边界/基线、允许修改路径、M2 批准、Ticket 负责人/执行人及个人验收证据、M4 固定候选/双轴 Review/交付字段、M5 复用契约与获批资产符合 M1—M5 | `scripts/validate-v2-task1.sh m1\|m2\|m3\|m4\|m5 <work-item-id>` | 阻断阶段推进 |
+| `COURSE-V2-TASK1-M2-SKILL` | ASSISTED | M2 第三方 Skills 的默认输出已转换为当前 Work Item 路径和项目模板，且未执行外部 Tracker 发布 | `scripts/validate-v2-task1.sh m2 <work-item-id>` 自动检查本地路径与关键章节；操作记录和人工核对确认无外部发布 | 默认路径、通用模板或未经授权的外部发布均阻断 M2 |
 | `GOV-WORKITEM-01` | ASSISTED | Work Item ID、任务类型、条件产物及 `N/A` 理由匹配，状态和审批证据真实 | Agent 对照 `deliverables.md`，人审核 | 内容不实或缺失时阻断实施/交付 |
 | `GOV-AGENT-01` | ASSISTED | 受影响 Module 的 `AGENTS.md` 已读取且未与根规则冲突 | `01_analysis.md` 读取清单与人工核对 | 冲突未裁决时阻断 |
 | `GOV-REQ-DESIGN-01` | ASSISTED | 涉及 UI 或人工操作的需求在 Spec 批准前明确完整用户旅程、输入控制、标识生成、结果可见性及依赖能力归属 | `standards/requirements-design.md`、Spec、Interface、Tickets 与批准记录 | 任一关键决定缺失时阻断 Spec 批准 |
@@ -35,7 +39,7 @@
 
 ## 3. 固定执行顺序
 
-1. 在仓库根目录运行 `scripts/validate-ai-governance.sh`。
+1. 在仓库根目录运行 `scripts/validate-ai-governance.sh`；V2.0 任务一起点运行 `scripts/validate-v2-task1.sh baseline`，随后在每个阶段结束时运行 `scripts/validate-v2-task1.sh m1|m2|m3|m4|m5 <work-item-id>`。`classroom-verify.sh TASK1 <work-item-id>` 已包含 M3 门禁。
 2. 针对当前 Work Item 核对任务类型、产物适用性、状态和审批证据。
 3. 执行目标测试、受影响 Module 回归和 `mvn clean verify`。
 4. 执行架构、Clean Code 与 AI 安全检查，将结果写入 Standards 矩阵。

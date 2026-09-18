@@ -1,7 +1,0 @@
-interface:
-  display_name: "评审 Work Item"
-  short_description: "固定 Diff，执行双轴评审并将 Findings 落盘"
-  default_prompt: "使用 $work-item-review 评审指定 Work Item 的固定候选提交；将 Spec 与 Standards 两轴结果写入 03_review.md，然后停在人工 Finding 裁决点。"
-
-policy:
-  allow_implicit_invocation: false

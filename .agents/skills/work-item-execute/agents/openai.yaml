@@ -1,7 +1,0 @@
-interface:
-  display_name: "执行 Work Item"
-  short_description: "在批准范围内完成当前切片并记录开发验证"
-  default_prompt: "使用 $work-item-execute 执行指定的已批准 Work Item 或当前 Ticket；完成当前切片后停止，不评审、不提交、不进入下一 Ticket。"
-
-policy:
-  allow_implicit_invocation: false

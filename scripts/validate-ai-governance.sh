@@ -4,6 +4,12 @@ set -euo pipefail
 repo_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$repo_dir"
 
+governance_mode="${1:-full}"
+if [[ "$governance_mode" != "full" && "$governance_mode" != "baseline" ]]; then
+  echo 'Usage: ./scripts/validate-ai-governance.sh [full|baseline]' >&2
+  exit 2
+fi
+
 required_files=(
   "AGENTS.md"
   "docs/ai-governance/README.md"
@@ -31,6 +37,7 @@ required_files=(
   "docs/ai-governance/templates/review.md"
   "docs/ai-governance/templates/verification.md"
   "docs/ai-governance/templates/decision.md"
+  "docs/ai-governance/templates/reuse-decision.md"
   "docs/ai-governance/templates/functional-test.md"
   "docs/ai-governance/templates/qa-review.md"
   "platform-contracts/AGENTS.md"
@@ -41,12 +48,14 @@ required_files=(
   ".agents/skills/project-system-of-record/agents/openai.yaml"
   ".agents/skills/project-system-of-record/references/lifecycle.md"
   ".agents/skills/project-system-of-record/references/process-logging.md"
-  ".agents/skills/init-work-item/SKILL.md"
-  ".agents/skills/init-work-item/agents/openai.yaml"
   "skills-lock.json"
+  "scripts/export-v2-task1-student.sh"
 )
 
 for required_file in "${required_files[@]}"; do
+  if [[ "$governance_mode" == baseline && "$required_file" == "docs/work-items/README.md" ]]; then
+    continue
+  fi
   if [[ ! -s "$required_file" ]]; then
     echo "[BLOCK] missing or empty: $required_file" >&2
     exit 1
@@ -60,6 +69,7 @@ required_governance_headings=(
   "docs/ai-governance/exceptions.md|## 1. 当前有效例外"
   "docs/ai-governance/standards/ai-security.md|## 2. 不可信指令与 Prompt Injection"
   "docs/ai-governance/standards/requirements-design.md|## 3. Spec 批准前检查"
+  "docs/ai-governance/skills.md|## 项目编排契约"
 )
 
 for required_governance_heading in "${required_governance_headings[@]}"; do
@@ -77,6 +87,7 @@ required_heading_pairs=(
   "docs/ai-governance/templates/task-card.md|## 验收条件"
   "docs/ai-governance/templates/design.md|## 备选方案与取舍"
   "docs/ai-governance/templates/interface.md|## 错误与边界行为"
+  "docs/ai-governance/templates/analysis.md|## M2 三角色决定记录"
   "docs/ai-governance/templates/analysis.md|## 影响与边界"
   "docs/ai-governance/templates/verification.md|## 验收映射"
   "docs/ai-governance/templates/spec.md|## 审批记录"
@@ -86,6 +97,8 @@ required_heading_pairs=(
   "docs/ai-governance/templates/review.md|## Spec 符合性矩阵"
   "docs/ai-governance/templates/review.md|## 问题复盘"
   "docs/ai-governance/templates/decision.md|## 最终决定"
+  "docs/ai-governance/templates/reuse-decision.md|## 候选能力"
+  "docs/ai-governance/templates/reuse-decision.md|## 决定"
 )
 
 for required_heading_pair in "${required_heading_pairs[@]}"; do
@@ -182,13 +195,13 @@ for work_item_dir in docs/work-items/*/; do
       require_stage_file "03_review.md"
       forbid_stage_file "04_decision.md"
       ;;
-    ACCEPTED|ROLLED_BACK)
+    PASS)
       require_stage_file "01_analysis.md"
       require_stage_file "02_verification.md"
       require_stage_file "03_review.md"
       require_stage_file "04_decision.md"
       ;;
-    REWORK|BLOCKED)
+    RETURN|BLOCKED)
       # These states may occur at any stage; the README must explain the blocker.
       ;;
     *)
@@ -203,13 +216,15 @@ deprecated_process_filenames=(
   "code-review.md" "05_problem-review.md" "06_decision.md" "07_delivery.md"
 )
 
-for deprecated_process_filename in "${deprecated_process_filenames[@]}"; do
-  while IFS= read -r deprecated_file; do
-    [[ -z "$deprecated_file" ]] && continue
-    echo "[BLOCK] deprecated process document; migrate to the five-document model: $deprecated_file" >&2
-    exit 1
-  done < <(find docs/work-items -type f -name "$deprecated_process_filename" -print)
-done
+if [[ -d docs/work-items ]]; then
+  for deprecated_process_filename in "${deprecated_process_filenames[@]}"; do
+    while IFS= read -r deprecated_file; do
+      [[ -z "$deprecated_file" ]] && continue
+      echo "[BLOCK] deprecated process document; migrate to the five-document model: $deprecated_file" >&2
+      exit 1
+    done < <(find docs/work-items -type f -name "$deprecated_process_filename" -print)
+  done
+fi
 
 process_filenames=(
   "functional-test.md" "qa-review.md"
@@ -292,19 +307,23 @@ else
   exit 1
 fi
 
-if rg -ni "baseline|基线|manifest\.sha256|BL-T" \
+if rg -ni "manifest\.sha256|BL-T" \
   AGENTS.md docs/ai-governance platform-contracts/AGENTS.md \
   platform-web-starter/AGENTS.md business-wms/AGENTS.md training-server/AGENTS.md; then
   echo "[BLOCK] removed governance terminology was reintroduced" >&2
   exit 1
 fi
 
-if rg -n "\.scratch/" AGENTS.md STANDARDS.md docs/ai-governance docs/agents docs/work-items; then
+governance_scan_paths=(AGENTS.md STANDARDS.md docs/ai-governance docs/agents)
+if [[ -d docs/work-items ]]; then
+  governance_scan_paths+=(docs/work-items)
+fi
+if rg -n "\.scratch/" "${governance_scan_paths[@]}"; then
   echo "[BLOCK] retired Work Item path was reintroduced into current governance documents" >&2
   exit 1
 fi
 
-if ! rg -Fq 'STD-WMS-0.7-06' STANDARDS.md || \
+if ! rg -Fq 'STD-WMS-2.0-01' STANDARDS.md || \
    ! rg -Fq 'docs/ai-governance/standards/ai-security.md' STANDARDS.md; then
   echo "[BLOCK] current Standards ID or AI security routing is missing" >&2
   exit 1

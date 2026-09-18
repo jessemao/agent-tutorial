@@ -1,6 +1,6 @@
 # 项目工程标准（Standards）
 
-- Standards ID：`STD-WMS-0.7-06`
+- Standards ID：`STD-WMS-2.0-01`
 - 适用范围：`training-wms` 的新增和修改代码、测试、文档及评审。
 - 状态：课程工作版，不代表甲方企业标准。
 - 所有者：技术中台协调通用规则；业务和契约所有者确认对应规则；开发负责人批准实施范围；UI 测试和 QA 负责实现后的复测验收。
@@ -123,4 +123,4 @@ Review 提供事实和建议；正式接受、退回、例外、回滚及交付�
 
 ## 独立质量职责
 
-从 T01 起，开发只负责当前任务 TDD 和必要回归；测试工程师独立验证完整功能；QA 审核流程、标准、追溯与缺陷闭环。测试工程师与 QA 为不同团队、不同人员。业务验收与最终交付裁决另行记录。适用规则见 `docs/ai-governance/roles-and-approvals.md`、`standards/testing.md` 和 `standards/requirements-design.md`。
+从 T01 起，开发只负责当前任务 TDD 和必要回归。独立功能测试与 QA 按企业流程选用；同时启用时，测试工程师与 QA 由不同人员分别记录功能验证和流程、标准、追溯与缺陷闭环，未启用的阶段记录 `N/A`、理由、替代证据和风险。业务验收与最终交付裁决另行记录。适用规则见 `docs/ai-governance/roles-and-approvals.md`、`standards/testing.md` 和 `standards/requirements-design.md`。

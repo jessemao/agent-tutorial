@@ -4,43 +4,20 @@ set -euo pipefail
 repo_dir="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$repo_dir"
 
-task="${1:-}"
-case "$task" in
-  T01|T02|T03)
-    ./scripts/classroom-test.sh "$task" target
-    docker compose -f compose.classroom.yml exec -T frontend npm run build
-    ./scripts/classroom-test.sh "$task" module
-    ./scripts/classroom-test.sh "$task" all
-    ;;
-  T04)
-    ./scripts/classroom-test.sh T04 baseline
-    docker compose -f compose.classroom.yml exec -T classroom \
-      /workspace/docker/classroom/training-wms-mvn -o -B -ntp -pl business-wms -am test
-    docker compose -f compose.classroom.yml exec -T frontend npm run build
-    docker compose -f compose.classroom.yml exec -T classroom \
-      /workspace/docker/classroom/training-wms-mvn -o -B -ntp clean verify
-    ;;
-  T05)
-    ./scripts/validate-ai-governance.sh
-    ./scripts/validate-t05-skills.sh all
-    git diff --check
-    ;;
-  T06)
-    ./scripts/validate-ai-governance.sh
-    ./scripts/validate-t05-skills.sh all
-    docker compose -f compose.classroom.yml exec -T classroom \
-      /workspace/docker/classroom/training-wms-mvn -o -B -ntp -pl training-server -am test
-    docker compose -f compose.classroom.yml exec -T frontend npm run build
-    docker compose -f compose.classroom.yml exec -T classroom \
-      /workspace/docker/classroom/training-wms-mvn -o -B -ntp clean verify
-    git diff --check
-    ;;
-  *)
-    echo 'Usage: ./scripts/classroom-verify.sh T01|T02|T03|T04|T05|T06' >&2
-    exit 2
-    ;;
-esac
+if [[ "${1:-}" != "TASK1" ]] || [[ ! "${2:-}" =~ ^V2-T1-G[0-9]{2,}$ ]]; then
+  echo 'Usage: ./scripts/classroom-verify.sh TASK1 V2-T1-Gxx' >&2
+  exit 2
+fi
 
-curl -fsS http://localhost:8080/actuator/health >/dev/null
+classroom_port="${CLASSROOM_PORT:-8080}"
 
-echo "$task verification passed."
+./scripts/validate-v2-task1.sh m3 "$2"
+docker compose -f compose.classroom.yml exec -T classroom \
+  /workspace/docker/classroom/training-wms-mvn -o -B -ntp -pl training-server -am test
+docker compose -f compose.classroom.yml exec -T frontend npm run build
+docker compose -f compose.classroom.yml exec -T classroom \
+  /workspace/docker/classroom/training-wms-mvn -o -B -ntp clean verify
+git diff --check
+curl -fsS "http://localhost:${classroom_port}/actuator/health" >/dev/null
+
+echo "TASK1 candidate verification passed for $2; record M4 evidence before running the m4 gate."

@@ -1,6 +1,6 @@
 # Training WMS
 
-`training-wms` 是“AI 辅助研发实战培训 v0.7”的 Java / Spring Boot 仓储教学仓库。它用一个可在两天内理解和运行的四模块单体，训练学员在 AI Coding 中完成需求审查、边界控制、测试先行、代码评审和人工放行。
+`training-wms` 是“AI Coding 工程实战 V2.0”任务一与任务三使用的 Java / Spring Boot 目标仓库。任务一从统一基线完成“库存盘点与差异调整”的 M1—M5 全链路；任务三由独立的 `devflow-agent` 操作本仓库完成真实研发任务。
 
 本项目参考 `ruoyi-vue-pro` 的工程分层思路和 Open-WMS 类项目的仓储术语，但代码为培训独立实现，不是第三方仓库源码拼接。
 
@@ -9,9 +9,9 @@
 ### 解决什么
 
 - 演示入库、库存、出库、移库和盘点的最小业务闭环。
-- 演练 Bug 修复、需求调整、新需求、重构、平台复用和综合交付六类任务。
+- 用一个高复杂度新需求完整演练 M1 建边界、M2 需求规格化、M3 方案落地、M4 形成证据和 M5 复用判断。
 - 演示技术中台、UI、事业部和 QA 如何共同约束 Agent。
-- 提供 Docker 离线课堂环境、任务分支、答案标签和异常恢复材料。
+- 为任务三提供可由冻结版 DevFlow Agent 操作的真实仓库目标。
 
 ### 不解决什么
 
@@ -58,7 +58,20 @@ training-server → business-wms → platform-web-starter → platform-contracts
 - Maven：3.8+
 - Spring Boot：2.7.18
 - 默认数据库：H2
-- 课堂镜像：`training-wms-classroom:0.7`，`linux/amd64`
+- 课堂镜像：`training-wms-classroom:0.7`，`linux/amd64`。镜像号是运行环境版本，不等于课程版本。
+- MySQL 验证镜像：`mysql:8.0`，`linux/amd64`。离线课堂包必须同时包含课堂镜像和 MySQL 镜像。
+
+基线或 Dockerfile 变更后由讲师从标签内容重新构建镜像，并把标签提交写入镜像元数据：
+
+```bash
+image_context="$(mktemp -d /tmp/training-wms-v2-image.XXXXXX)"
+course_commit="$(git rev-parse 'v2.0-task1-start^{commit}')"
+git archive v2.0-task1-start | tar -x -C "$image_context"
+(cd "$image_context" && docker build --platform linux/amd64 -f docker/classroom/Dockerfile \
+  --build-arg COURSE_COMMIT="$course_commit" \
+  -t training-wms-classroom:0.7 .)
+rm -rf "$image_context"
+```
 
 优先使用课堂脚本，避免依赖学员主机环境：
 
@@ -66,7 +79,9 @@ training-server → business-wms → platform-web-starter → platform-contracts
 ./scripts/classroom-up.sh
 ```
 
-浏览器访问 `http://localhost:8080`。前端修改自动热更新，后端源码修改自动编译并重启 Spring Boot；不需要重启 Docker。任务测试和最终验证使用 `scripts/classroom-test.sh` 和 `scripts/classroom-verify.sh`。完整使用与限制见 [Docker 课堂环境说明](docs/training/10_Docker课堂环境使用与交付.md)。
+浏览器访问 `http://localhost:8080`。前端修改自动热更新，后端源码修改自动编译并重启 Spring Boot；不需要重启 Docker。任务一起点使用 `./scripts/classroom-test.sh TASK1 baseline`；M3 候选验证使用 `./scripts/classroom-verify.sh TASK1 V2-T1-Gxx`，随后分别完成 M4、M5 材料门禁。完整使用与限制见项目外教学材料中的 `../教学材料/教师与课程/09_Docker课堂环境使用与交付.md`。
+
+端口被占用时使用 `CLASSROOM_PORT=18080 ./scripts/classroom-up.sh`，后续验证命令保持同一个 `CLASSROOM_PORT`。需要真实 MySQL 8 并发/幂等验证时，先启动课堂环境，再运行 `./scripts/classroom-test.sh TASK1 mysql`；该命令使用 Compose 中一次性的 `mysql` 服务，不复用宿主机数据库。讲师不得把包含历史分支和答案标签的源仓库直接交给学员；从已验收标签执行 `./scripts/export-v2-task1-student.sh <新目录>`，只分发脚本生成的独立仓库。
 
 主机环境仅作为备用：
 
@@ -109,19 +124,12 @@ Review 只提供发现和建议；Decision 记录人的正式裁决；Delivery �
 
 ## 6. 培训任务入口
 
-- [任务总目录](docs/training/00_任务卡总目录与覆盖矩阵.md)
-- [六类任务定义](docs/training/02_T01-T06_任务定义卡.md)
-- [两天课程与评分](docs/training/03_两天课程映射与评分规则.md)
-- [讲师执行稿](docs/training/04_两天讲师唯一执行稿_含演示与恢复.md)
-- [UI 静态契约](docs/training/06_UI静态契约包.md)
-- [四方角色矩阵](docs/training/07_T01-T06四方角色任务矩阵.md)
-- [学员入口](docs/training/08_学员唯一入口手册.md)
-- [分层任务包](docs/training/09_T01-T06基础_进阶_备用任务包.md)
-- [离线 AI 与恢复包](docs/training/offline-ai-pack/README.md)
+项目仓库只保留 V2.0 学员执行入口：
 
-T01 已有 `s2-t01-start` 与 `s3-t01-answer`；T02 已有分批收货起点 `s2-t02-start` 与答案标签 `s3-t02-answer`。T03—T06 的完整内部仓库保留起点和答案标签，但 T06 课堂分发只暴露 `s2-t06-start`，讲师参考、历史答案证据和 `s3-t06-answer` 必须隔离。学员始终从指定 `s2` 标签创建独立分支，不直接在标签或答案上开发。
+- [学员唯一入口](docs/training/08_学员唯一入口手册.md)
+- [任务一：库存盘点与差异调整](docs/training/V2_任务一_库存盘点与差异调整_学员任务卡.md)
 
-PPT 已移出代码仓库，位于工作区上一层的 `培训教程/PPT成品/`；PPT 制作和渲染文件位于 `培训教程/PPT制作文件/`，不属于代码基座提交。
+旧 T01—T06 学员卡已从 V2.0 学员仓库移除，不是 V2.0 执行入口。V2.0 学员只使用讲师导出的独立学员仓库，从 `v2.0-task1-start` 创建分支；不得使用旧 T05 产出的 `/work-item-*` 聚合 Skills。讲师参考、评分细则、PPT、离线演练包和历史课堂证据位于项目外 `../教学材料/`。
 
 ## 7. 已知限制与安全约束
 

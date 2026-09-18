@@ -2,7 +2,8 @@
 
 ## 被审对象
 
-- 代码差异起点与被审版本：
+- 代码差异起点：
+- 候选提交：
 - `01_analysis.md`：
 - `02_verification.md`：
 - Spec/Standards：

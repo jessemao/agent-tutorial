@@ -1,10 +1,30 @@
 services:
+  mysql:
+    image: mysql:8.0
+    platform: linux/amd64
+    environment:
+      MYSQL_DATABASE: ${WMS_MYSQL_DATABASE:-training_wms}
+      MYSQL_USER: ${WMS_MYSQL_USER:-training}
+      MYSQL_PASSWORD: ${WMS_MYSQL_PASSWORD:-training}
+      MYSQL_ROOT_PASSWORD: ${WMS_MYSQL_ROOT_PASSWORD:-root}
+    command: ["--default-authentication-plugin=mysql_native_password"]
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u$${MYSQL_USER} -p$${MYSQL_PASSWORD} --silent"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+    tmpfs:
+      - /var/lib/mysql
+
   classroom:
     image: training-wms-classroom:0.7
     platform: linux/amd64
     build:
       context: .
       dockerfile: docker/classroom/Dockerfile
+      args:
+        COURSE_REF: v2.0-task1-start
+        COURSE_COMMIT: ${COURSE_COMMIT:-unknown}
     command: ["/workspace/docker/classroom/training-wms-dev"]
     working_dir: /workspace
     user: "${CLASSROOM_UID:-1000}:${CLASSROOM_GID:-1000}"
@@ -15,21 +35,29 @@ services:
       JAVA_TOOL_OPTIONS: -Djava.io.tmpdir=/workspace/.classroom-runtime
       MAVEN_ARGS: -s /opt/classroom/settings.xml
       MAVEN_OPTS: -Dmaven.repo.local=/opt/training-m2/repository
+      WMS_MYSQL_JDBC_URL: jdbc:mysql://mysql:3306/${WMS_MYSQL_DATABASE:-training_wms}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      WMS_MYSQL_USER: ${WMS_MYSQL_USER:-training}
+      WMS_MYSQL_PASSWORD: ${WMS_MYSQL_PASSWORD:-training}
     volumes:
       - .:/workspace
+    depends_on:
+      mysql:
+        condition: service_healthy
   frontend:
     image: training-wms-classroom:0.7
     platform: linux/amd64
+    shm_size: 1gb
     command: ["/workspace/docker/classroom/training-wms-frontend-dev"]
     working_dir: /workspace/training-server/frontend
     user: "${CLASSROOM_UID:-1000}:${CLASSROOM_GID:-1000}"
     environment:
       HOME: /workspace/.classroom-runtime
       npm_config_cache: /workspace/.classroom-runtime/npm
+      PLAYWRIGHT_BROWSERS_PATH: /opt/ms-playwright
     volumes:
       - .:/workspace
       - ./.classroom-runtime/frontend-node-modules:/workspace/training-server/frontend/node_modules
     ports:
-      - "8080:5173"
+      - "${CLASSROOM_PORT:-8080}:5173"
     depends_on:
       - classroom

@@ -1,6 +1,4 @@
 f17a0de4b34da585ea612240f07e49471e7c60ffbb4f47d43b507df04f4aea46  .agents/skills/clean-comments/SKILL.md
-f3e6f00fa4a8a59acaf60a639b58f3819eba6f6cb65dca2383111f99d8994eb2  .agents/skills/init-work-item/SKILL.md
-c98f59fecc6d38397f16e0ca7e206bd5ca2d3f480e81f73d6ad47a7735e6f72b  .agents/skills/init-work-item/agents/openai.yaml
 7f1f35975a462e707aeafeb942557cfc154d57e590523f506228b9f6fa50ff30  .agents/skills/clean-functions/SKILL.md
 dc8d154f595eb9cb348de417ad55f20e605d3a9b008df7b7f229296ed6cf2085  .agents/skills/clean-general/SKILL.md
 52fe6c7fb857ee90433fc756a3e4b584a3420e88861dba71118eb9cd55001060  .agents/skills/clean-names/SKILL.md

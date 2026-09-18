@@ -45,6 +45,12 @@ class ShipmentOrder {
     @Column(name = "cancel_idempotency_key", length = 80)
     private String cancelIdempotencyKey;
 
+    @Column(name = "reserve_idempotency_key", length = 80)
+    private String reserveIdempotencyKey;
+
+    @Column(name = "ship_idempotency_key", length = 80)
+    private String shipIdempotencyKey;
+
     @Version
     private long version;
 
@@ -60,16 +66,18 @@ class ShipmentOrder {
         this.status = ShipmentStatus.CREATED;
     }
 
-    void markReserved() {
+    void markReserved(String idempotencyKey) {
         require(status == ShipmentStatus.CREATED, "WMS_SHIPMENT_STATE",
                 "only a created shipment can reserve inventory");
         status = ShipmentStatus.RESERVED;
+        reserveIdempotencyKey = idempotencyKey;
     }
 
-    void markShipped() {
+    void markShipped(String idempotencyKey) {
         require(status == ShipmentStatus.RESERVED, "WMS_SHIPMENT_STATE",
                 "only a reserved shipment can be shipped");
         status = ShipmentStatus.SHIPPED;
+        shipIdempotencyKey = idempotencyKey;
     }
 
     void cancel(String idempotencyKey, String reason) {
@@ -85,6 +93,18 @@ class ShipmentOrder {
                 && cancelIdempotencyKey != null
                 && cancelIdempotencyKey.equals(idempotencyKey)
                 && cancelReason.equals(reason);
+    }
+
+    boolean matchesReservation(String idempotencyKey) {
+        return status == ShipmentStatus.RESERVED && sameKey(reserveIdempotencyKey, idempotencyKey);
+    }
+
+    boolean matchesShipment(String idempotencyKey) {
+        return status == ShipmentStatus.SHIPPED && sameKey(shipIdempotencyKey, idempotencyKey);
+    }
+
+    private boolean sameKey(String recordedKey, String requestedKey) {
+        return recordedKey != null && recordedKey.equals(requestedKey);
     }
 
     private void require(boolean condition, String code, String message) {

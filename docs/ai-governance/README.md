@@ -161,8 +161,8 @@ Skill 不是知识介绍，而是可重复执行的操作包。每个 Skill 必�
 | `domain-modeling` | 在澄清中统一领域术语、边界和不变量 | 原始需求、现有模型、业务裁决 | 写入当前 Work Item 的术语与规则决定 |
 | `codebase-design` | 提供 Module、Interface、Seam 与深度设计词汇 | 已澄清需求、架构边界、现有接口和测试面 | 写入当前 Design/Interface 的设计决定；不独立生成流程产物 |
 | `/to-spec` | 将已确认决定写成可审核 Spec | review、业务决定、契约、非目标、验收条件 | Spec 草案与审批记录 |
-| `/to-tickets` | 将已批准 Spec 拆成可独立验证的任务 | 已批准 Spec、Standards 版本、代码起点 | Ticket 文件 |
-| `/implement` | 先建立失败测试，再实施最小变更 | `01_analysis.md`、Spec、Standards | 代码/测试差异、`02_verification.md` 草案 |
+| `/to-tickets` | 前置决定明确后，把 Spec 拆成可独立验证的纵向任务 | 当前 Work Item 中已确认的 Spec、Design、AC、Standards 和范围 | 当前 Work Item 的 `tickets/`，一张 Ticket 一个文件 |
+| `/implement` | 只实施当前 Ticket，由执行人完成个人验收测试 | 已批准的 Spec、Design、当前 Ticket、负责人、执行人、Standards | 代码/测试差异、实施证据及个人验收记录 |
 | `/code-review` | 对固定差异分别做 Spec 与 Standards 评审 | 差异起点、实现版本、Spec、Standards、测试证据 | 两张符合性矩阵与阻塞清单 |
 | `/clean-names`、`/clean-functions`、`/clean-general`、`/clean-comments`、`/clean-tests` | 按变更内容执行 Clean Code 专项规则 | 固定差异、调用方、测试和各 Skill 自带规则 | 规则 ID、位置、证据、影响、建议和裁决状态 |
 

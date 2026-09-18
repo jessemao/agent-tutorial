@@ -204,6 +204,9 @@ class InventoryService implements InventoryOperations {
 
     private void requireValidTransfer(InventoryTransferCommand command) {
         if (command == null || command.getQuantity() <= 0
+                || command.getIdempotencyKey() == null || command.getIdempotencyKey().trim().isEmpty()
+                || command.getTransferNo() == null || command.getTransferNo().trim().isEmpty()
+                || command.getSkuId() == null || command.getWarehouseId() == null
                 || command.getSourceLocationId() == null || command.getTargetLocationId() == null
                 || command.getSourceLocationId().equals(command.getTargetLocationId())) {
             throw new PlatformException("INVALID_REQUEST",

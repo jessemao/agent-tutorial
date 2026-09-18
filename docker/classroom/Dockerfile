@@ -1,6 +1,6 @@
 ARG MAVEN_IMAGE=public.ecr.aws/docker/library/maven:3.9.9-eclipse-temurin-17
 ARG NODE_IMAGE=node:22-bookworm-slim
-ARG COURSE_REF=s2-t01-start
+ARG COURSE_REF=v2.0-task1-start
 ARG COURSE_COMMIT=unknown
 
 FROM ${NODE_IMAGE} AS node-runtime
@@ -35,13 +35,12 @@ COPY platform-web-starter/src platform-web-starter/src
 COPY business-wms/src business-wms/src
 COPY training-server/src training-server/src
 
-# Run and install the intentionally failing course starting version while warming all
-# test providers and runtime dependencies. T01's expected test failures are
-# recorded but do not abort image creation; learners reproduce them offline.
+# Run and install the mounted course baseline while warming all test providers
+# and runtime dependencies. Test failures never abort dependency-cache creation.
 RUN mvn -s /seed/settings.xml -B -ntp \
     -Dmaven.repo.local=/cache/repository \
     -Dmaven.wagon.http.retryHandler.count=5 \
-    -Dmaven.test.failure.ignore=true clean install \
+    -Pmysql-verification -DskipTests clean install \
     && find /seed -type d -name target -prune -exec rm -rf '{}' + \
     && rm -f /seed/settings.xml
 
@@ -60,10 +59,14 @@ ENV MAVEN_OPTS="-Dmaven.repo.local=/opt/training-m2/repository" \
     MAVEN_CONFIG="/workspace/.classroom-runtime" \
     HOME="/workspace/.classroom-runtime" \
     TMPDIR="/workspace/.classroom-runtime" \
-    JAVA_TOOL_OPTIONS="-Djava.io.tmpdir=/workspace/.classroom-runtime"
+    JAVA_TOOL_OPTIONS="-Djava.io.tmpdir=/workspace/.classroom-runtime" \
+    PLAYWRIGHT_BROWSERS_PATH="/opt/ms-playwright"
 
 COPY --from=dependency-cache /cache/repository /opt/training-m2/repository
 COPY --from=dependency-cache /seed /workspace
+# Historical scenario patches are kept only for instructor source workflows;
+# never package them into the learner classroom image.
+RUN rm -rf /workspace/scenarios
 COPY --from=node-runtime /usr/local/bin/node /usr/local/bin/node
 COPY --from=node-runtime /usr/local/lib/node_modules /usr/local/lib/node_modules
 COPY --from=frontend-dependency-cache /frontend/node_modules /opt/training-node-modules
@@ -74,10 +77,11 @@ COPY docker/classroom/training-wms-frontend-dev /usr/local/bin/training-wms-fron
 COPY docker/classroom/training-wms-mvn /usr/local/bin/training-wms-mvn
 
 RUN mkdir -p /workspace/.classroom-runtime \
-    && ln -s ../lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm \
-    && ln -s ../lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx \
-    && chmod -R a+rX /opt/training-m2 \
-    && chmod -R a+rX /opt/training-node-modules \
+    && ln -sf ../lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm \
+    && ln -sf ../lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx \
+    && node /opt/training-node-modules/playwright/cli.js install --with-deps chromium \
+    && chmod a+rX /opt/training-m2 /opt/training-node-modules \
+    && chmod -R a+rX /opt/ms-playwright \
     && chmod a+r /opt/classroom/settings.xml \
     && chmod a+rx /usr/local/bin/training-wms-start /usr/local/bin/training-wms-dev /usr/local/bin/training-wms-frontend-dev /usr/local/bin/training-wms-mvn \
     && chmod 1777 /workspace/.classroom-runtime
@@ -85,6 +89,6 @@ RUN mkdir -p /workspace/.classroom-runtime \
 WORKDIR /workspace
 EXPOSE 8080
 
-# The image is built from the immutable s2-t01-start course starting version. Its
-# default action verifies that embedded starting code without network access.
+# The image is built for the V2 task-one baseline. Its default action verifies
+# the embedded starting code without network access.
 CMD ["mvn", "-o", "-B", "-ntp", "clean", "verify"]

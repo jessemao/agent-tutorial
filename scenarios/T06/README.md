@@ -1,8 +1,8 @@
-# T06 代码版本说明
+# V2.0 任务一代码版本说明
 
 | 版本 | 内容 |
 | --- | --- |
-| S2-T06 | 分支 `scenario/t06-start`、`baseline/t06`，标签 `s2-t06-start`；T01—T05 功能、治理与五个项目级阶段 Skills 已就绪，盘点领域、API 和答案测试尚不存在 |
-| S3-T06 | 标签 `s3-t06-answer`；需求澄清、盘点实现、自动化验收、代码评审和交付证据完整 |
+| V2 起点 | 分支 `baseline/v2-task1`，标签 `v2.0-task1-start`；既有 WMS 能力和底层 Skills 可用，旧 T05 `/work-item-*` 聚合 Skills、盘点领域、盘点 API 和答案测试均不存在 |
+| 历史参考 | `s2-t06-start` 与 `s3-t06-answer` 只保留在讲师源仓库；V2.0 学员只接收导出的独立仓库 |
 
-起始版先用 `/work-item-start` 建档，再由 `/work-item-discover` 完成仓库调查和必须留痕的 `grill-with-docs` 问答；设计、Spec、Tickets、逐票实施、固定版本 Review、独立测试、QA、业务验收和 Decision 必须分别完成。未完成问题收敛或实施批准即编码，即使测试通过也不能通过 T06。
+V2.0 起始版显式执行 M1—M5：建边界、需求规格化、逐票 TDD、固定版本验证与 Review、复用判断。底层 Skill 只能完成当前动作；未完成问题收敛或实施批准即编码，即使测试通过也不能通过任务一。

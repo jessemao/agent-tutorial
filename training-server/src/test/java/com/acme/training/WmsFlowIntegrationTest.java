@@ -124,6 +124,22 @@ class WmsFlowIntegrationTest {
     }
 
     @Test
+    void repeatedReserveAndShipRequireTheOriginalIdempotencyKey() throws Exception {
+        receive(109L, 10, "receive-109");
+        Long shipmentId = createShipment("SO-109", 109L, 6);
+
+        action(shipmentId, "reserve", "reserve-109", null).andExpect(status().isOk());
+        action(shipmentId, "reserve", "another-reserve-109", null)
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.code").value("WMS_IDEMPOTENCY_CONFLICT"));
+
+        action(shipmentId, "ship", "ship-109", null).andExpect(status().isOk());
+        action(shipmentId, "ship", "another-ship-109", null)
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.code").value("WMS_IDEMPOTENCY_CONFLICT"));
+    }
+
+    @Test
     void shippedShipmentCannotBeCancelled() throws Exception {
         receive(107L, 10, "receive-107");
         Long shipmentId = createShipment("SO-107", 107L, 6);

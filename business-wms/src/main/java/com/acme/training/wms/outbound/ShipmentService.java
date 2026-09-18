@@ -39,11 +39,15 @@ class ShipmentService implements ShipmentOperations {
     @Override
     @Transactional
     public ShipmentView reserve(Long shipmentId, String idempotencyKey) {
+        requireIdempotencyKey(idempotencyKey);
         ShipmentOrder order = locked(shipmentId);
         if (order.getStatus() == ShipmentStatus.RESERVED) {
+            if (!order.matchesReservation(idempotencyKey)) {
+                throw idempotencyConflict("shipment was already reserved by another request");
+            }
             return new ShipmentView(order);
         }
-        order.markReserved();
+        order.markReserved(idempotencyKey);
         inventoryOperations.reserve(inventoryCommand(order, idempotencyKey));
         audit("RESERVE", order);
         return new ShipmentView(order);
@@ -52,11 +56,15 @@ class ShipmentService implements ShipmentOperations {
     @Override
     @Transactional
     public ShipmentView ship(Long shipmentId, String idempotencyKey) {
+        requireIdempotencyKey(idempotencyKey);
         ShipmentOrder order = locked(shipmentId);
         if (order.getStatus() == ShipmentStatus.SHIPPED) {
+            if (!order.matchesShipment(idempotencyKey)) {
+                throw idempotencyConflict("shipment was already shipped by another request");
+            }
             return new ShipmentView(order);
         }
-        order.markShipped();
+        order.markShipped(idempotencyKey);
         inventoryOperations.ship(inventoryCommand(order, idempotencyKey));
         audit("SHIP", order);
         return new ShipmentView(order);
@@ -105,5 +113,15 @@ class ShipmentService implements ShipmentOperations {
 
     private void audit(String action, ShipmentOrder order) {
         auditRecorder.record(action, "SHIPMENT", order.getOrderNo());
+    }
+
+    private void requireIdempotencyKey(String idempotencyKey) {
+        if (idempotencyKey == null || idempotencyKey.trim().isEmpty()) {
+            throw new PlatformException("WMS_IDEMPOTENCY_REQUIRED", "idempotency key is required");
+        }
+    }
+
+    private PlatformException idempotencyConflict(String message) {
+        return new PlatformException("WMS_IDEMPOTENCY_CONFLICT", message);
     }
 }
